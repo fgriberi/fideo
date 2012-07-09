@@ -33,7 +33,6 @@ if ( weff )
                 set ( lib_srcs     src/RNABackendProxy.cpp
                       src/RNAFold.cpp
                       src/SecStructure.cpp
-                      src/RNABackendsFactory.cpp
                     )
 
                 set ( fideo_header fideo.h )
@@ -44,7 +43,6 @@ if ( weff )
                       fideo/RNABackendProxy.h
                       fideo/rna_backends_exceptions.h
                       fideo/rna_backends_types.h
-                      fideo/RNABackendsFactory.h
                     )
 
                 install ( FILES  ${fideo_header} DESTINATION include/fideo )

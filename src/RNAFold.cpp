@@ -28,7 +28,6 @@
 #include <mili/mili.h>
 #include "../fideo/RNAFold.h"
 #include "../fideo/RNABackendsConfig.h"
-#include "../fideo/RNABackendsFactory.h"
 
 using std::stringstream;
 
@@ -36,13 +35,7 @@ const FilePath RNAFold::IN = "fold.in";
 const FilePath RNAFold::OUT = "fold.out";
 const FileLineNo RNAFold::LINE_NO = 1;
 
-class RNAFoldRegisterer
-{
-public:
-    RNAFoldRegisterer() { RNABackendsFactory::Instance()->Register<RNAFold>("rnafold"); }
-//    static RNAFoldRegisterer _hiden;
-};
-static RNAFoldRegisterer _hiden;
+REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bool circ) const throw(RNABackendException)
 {
@@ -53,11 +46,12 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bo
     write(IN, sseq);
 
     stringstream ss;
-    ss << "RNAfold" << " -noPS ";
+    ss << "RNAfold" << " -noPS "; //RNAfold_PROG
     if (circ)
         ss << "-circ ";
     ss << "< " << IN << " > " << OUT;
     const Command CMD = ss.str();
+    //system();
     exec(CMD);
 
     /* fold.out look like this:

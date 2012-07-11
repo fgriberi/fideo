@@ -38,7 +38,6 @@ if ( weff )
                 set ( fideo_header fideo.h )
 
                 set ( fideo_private_headers    fideo/IFold.h
-                      fideo/RNAFold.h
                       fideo/RNABackendsConfig.h
                       fideo/RNABackendProxy.h
                       fideo/rna_backends_exceptions.h

@@ -41,7 +41,6 @@
 #define FIDEO_H
  
 #include ".private/IFold.h"
-#include ".private/RNAFold.h"
 #include ".private/RNABackendsConfig.h"
 #include ".private/RNABackendProxy.h"
 #include ".private/rna_backends_exceptions.h"

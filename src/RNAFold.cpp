@@ -26,10 +26,21 @@
 #include <string>
 #include <sstream>
 #include <mili/mili.h>
-#include "../fideo/RNAFold.h"
+#include "../fideo/IFold.h"
+#include "../fideo/RNABackendProxy.h"
 #include "../fideo/RNABackendsConfig.h"
 
 using std::stringstream;
+
+//Vienna package
+class RNAFold : public IFold
+{
+    static const FilePath IN;
+    static const FilePath OUT;
+    static const FileLineNo LINE_NO;
+    size_t read_free_energy(FileLine&, size_t, Fe&) const throw(RNABackendException);
+    virtual Fe fold(const biopp::NucSequence&, SecStructure&, bool circ) const throw(RNABackendException);
+};
 
 const FilePath RNAFold::IN = "fold.in";
 const FilePath RNAFold::OUT = "fold.out";
@@ -51,7 +62,7 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bo
         ss << "-circ ";
     ss << "< " << IN << " > " << OUT;
     const Command CMD = ss.str();
-    //system();
+	// int system ( const char * command );
     exec(CMD);
 
     /* fold.out look like this:

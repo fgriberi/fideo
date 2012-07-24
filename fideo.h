@@ -10,6 +10,9 @@
  *  @author     Diego Diaz
  *  @email      diazdiego86 AT gmail.com
  *
+ *  @author     Franco Riberi
+ *  @email      fgriberi AT gmail.com
+ *
  *  @date       August 2010
  *  @version    0.1
  *

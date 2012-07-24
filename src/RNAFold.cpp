@@ -63,7 +63,7 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bo
     ss << "< " << IN << " > " << OUT;
     const Command CMD = ss.str();
 	// int system ( const char * command );
-    exec(CMD);
+    execute(CMD);
 
     /* fold.out look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA

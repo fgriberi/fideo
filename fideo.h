@@ -51,7 +51,3 @@
 #include ".private/RNABackendsFactory.h"
 
 #endif
-
-/*
-** comentario de prueba
-*/

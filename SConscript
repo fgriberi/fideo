@@ -8,6 +8,3 @@ deps = ['mili', 'biopp', 'stl-debug']
 
 env.CreateSharedLibrary(name, inc, ext_inc, src, deps)
 
-
-
-

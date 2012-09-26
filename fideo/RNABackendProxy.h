@@ -39,7 +39,7 @@ using std::string;
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-inline void execute(const Command& cmd) throw(RNABackendException)
+inline void runCommand(const Command& cmd) throw(RNABackendException)
 {
     const int status = system(cmd.c_str());
     if (status != SUCCESS_EXEC)

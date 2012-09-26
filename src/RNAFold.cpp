@@ -39,7 +39,7 @@ class RNAFold : public IFold
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
     size_t read_free_energy(FileLine&, size_t, Fe&) const throw(RNABackendException);
-    virtual Fe fold(const biopp::NucSequence&, SecStructure&, bool circ) const throw(RNABackendException);
+    virtual Fe fold(const biopp::NucSequence&, SecStructure&, bool circ) const;
 };
 
 const FilePath RNAFold::IN = "fold.in";
@@ -48,7 +48,7 @@ const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
-Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bool circ) const throw(RNABackendException)
+Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bool circ) const 
 {
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
@@ -62,9 +62,8 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bo
         ss << "-circ ";
     ss << "< " << IN << " > " << OUT;
     const Command CMD = ss.str();
-	// int system ( const char * command );
-    execute(CMD);
-
+    runCommand(CMD);
+	
     /* fold.out look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)

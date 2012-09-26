@@ -48,6 +48,5 @@
 #include ".private/RNABackendProxy.h"
 #include ".private/rna_backends_exceptions.h"
 #include ".private/rna_backends_types.h"
-#include ".private/RNABackendsFactory.h"
 
 #endif

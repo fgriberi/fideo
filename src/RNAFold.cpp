@@ -42,6 +42,9 @@ class RNAFold : public IFold
     static const FilePath IN;
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
+	static const char OPEN_PAIR = '(';
+	static const char CLOSE_PAIR = ')';
+	static const char UNPAIR = '.';
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
     virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const;
@@ -50,10 +53,6 @@ class RNAFold : public IFold
 const FilePath RNAFold::IN = "fold.in";
 const FilePath RNAFold::OUT = "fold.out";
 const FileLineNo RNAFold::LINE_NO = 1;
-
-static const char OPEN_PAIR = '(';
-static const char CLOSE_PAIR = ')';
-static const char UNPAIR = '.';
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 

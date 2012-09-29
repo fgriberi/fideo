@@ -30,9 +30,9 @@ if ( weff )
 
                 include_directories( . fideo src )
 
-                set ( lib_srcs     src/RNABackendProxy.cpp
-                      src/RNAFold.cpp
-                      src/SecStructure.cpp
+                set ( lib_srcs     
+				      src/RNABackendProxy.cpp
+                      src/RNAFold.cpp				
                     )
 
                 set ( fideo_header fideo.h )

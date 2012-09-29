@@ -43,7 +43,7 @@ public:
      * @param circ if the structure it's circular.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence&, SecStructure&, bool) const = 0;
+    virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool) const = 0;
 
     virtual ~IFold() {}
 };

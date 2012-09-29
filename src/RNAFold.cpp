@@ -25,11 +25,14 @@
 
 #include <string>
 #include <sstream>
+#include <stack>
 #include <mili/mili.h>
 #include "../fideo/IFold.h"
 #include "../fideo/RNABackendProxy.h"
 #include "../fideo/RNABackendsConfig.h"
+#include "../fideo/rna_backends_types.h"
 
+using std::stack;
 using std::stringstream;
 
 //Vienna package
@@ -38,24 +41,27 @@ class RNAFold : public IFold
     static const FilePath IN;
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
-    size_t read_free_energy(FileLine&, size_t, Fe&) const throw(RNABackendException);
-    virtual Fe fold(const biopp::NucSequence&, SecStructure&, bool circ) const;
+    size_t read_free_energy(FileLine&, size_t, Fe&) const;
+	void parse_structure(std::string& str, biopp::SecStructure& secStructure) const; 	 
+    virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const;
 };
 
 const FilePath RNAFold::IN = "fold.in";
-const FilePath RNAFold::OUT = "fold.out";
+const FilePath RNAFold::OUT = "fold.out";	
 const FileLineNo RNAFold::LINE_NO = 1;
+
+static const char OPEN_PAIR = '(';
+static const char CLOSE_PAIR = ')';
+static const char UNPAIR = '.';
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
-Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bool circ) const 
+Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const 
 {
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
         sseq += sequence[i].as_char();
-
     write(IN, sseq);
-
     stringstream ss;
     ss << "RNAfold" << " -noPS "; //RNAfold_PROG
     if (circ)
@@ -72,15 +78,15 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, SecStructure& structure, bo
     read_line(OUT, LINE_NO, aux);
 
     string str;
-    read_value(aux, 0, sequence.length(), str);
-    structure = str;
-
+    read_value(aux, 0, sequence.length(), str);	
+	parse_structure(str,structure);
+	
     Fe energy;
     read_free_energy(aux, sequence.length(), energy);
     return energy;
 }
 
-size_t RNAFold::read_free_energy(FileLine& line, size_t offset, Fe& energy) const throw(RNABackendException)
+size_t RNAFold::read_free_energy(FileLine& line, size_t offset, Fe& energy) const 
 {
     try
     {
@@ -93,4 +99,38 @@ size_t RNAFold::read_free_energy(FileLine& line, size_t offset, Fe& energy) cons
     {
         throw RNABackendException("Could not read free energy");
     }
+}	
+
+void RNAFold::parse_structure(std::string& str, biopp::SecStructure &secStructure) const
+{
+	secStructure.set_sequence_size(str.length());	
+    stack<biopp::SeqIndex> s;
+   	for (size_t i = 0; i < str.length(); ++i)
+    {
+        biopp::SeqIndex open;
+        switch (str[i])
+        {
+            case UNPAIR:
+     			secStructure.unpair(i);           
+                break;
+            case OPEN_PAIR:
+                s.push(i);
+                break;
+            case CLOSE_PAIR:
+                if (!s.empty())
+                {
+                    open = s.top();
+                    secStructure.pair(open, i);
+                    s.pop();
+                }
+                else
+                    throw(InvalidStructureException(" Unexpected closing pair"));
+                break;
+            default:
+                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
+                break;
+        }
+    }
+    if (!s.empty())
+        throw(InvalidStructureException(" Pairs pending to close"));
 }

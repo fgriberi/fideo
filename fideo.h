@@ -39,10 +39,10 @@
  * along with CombEng .  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
+
 #ifndef FIDEO_H
 #define FIDEO_H
- 
+
 #include ".private/IFold.h"
 #include ".private/RNABackendsConfig.h"
 #include ".private/RNABackendProxy.h"

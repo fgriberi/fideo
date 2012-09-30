@@ -31,16 +31,16 @@
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
-    biopp::SecStructure str;
+    biopp::SecStructure secStructure;
 
     IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
-    EXPECT_NO_THROW(p->fold(seq, str, true));
+    EXPECT_NO_THROW(p->fold(seq, secStructure, true));
     delete p;
 
-    EXPECT_EQ(32, str.size());
-    EXPECT_TRUE(str.is_circular());
+    EXPECT_EQ(32, secStructure.size());
+    EXPECT_TRUE(secStructure.is_circular());
 
     EXPECT_FALSE(std::ifstream("fold.in.ct"));
     EXPECT_FALSE(std::ifstream("fold.in.dG"));

@@ -23,9 +23,11 @@
  *
  */
 
+#include "errno.h"
+#include "string.h"
 #include "fideo/RNABackendProxy.h"
 
-void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException)
+void write(const FilePath& file, FileLinesCt& lines)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -45,7 +47,7 @@ void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException)
     }
 }
 
-void write(const FilePath& file, FileLine& line) throw(RNABackendException)
+void write(const FilePath& file, FileLine& line)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -60,7 +62,7 @@ void write(const FilePath& file, FileLine& line) throw(RNABackendException)
     }
 }
 
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RNABackendException)
+void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
     std::ifstream in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -81,4 +83,10 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RN
     {
         throw RNABackendException("An error ocurred trying to read " + file);
     }
+}
+
+void remove_file(const std::string& file_name)
+{
+    if(unlink(("./" + file_name).c_str()) == FILE_ERROR)
+        throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
 }

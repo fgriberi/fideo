@@ -54,6 +54,7 @@ REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
 {
+    structure.set_circular(circ);
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
         sseq += sequence[i].as_char();

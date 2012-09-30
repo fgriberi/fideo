@@ -1,7 +1,7 @@
 /*
  * File:   RNABackendProxy.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
- *		   Franco Riberi   <fgriberi at gmail.com>	
+ *		   Franco Riberi   <fgriberi at gmail.com>
  *
  * Created on October 26, 2010, 2012, 4:31 PM
  *
@@ -26,11 +26,12 @@
 
 #ifndef _RNABACKENDPROXY_H
 #define _RNABACKENDPROXY_H
+#include <errno.h>
+#include <unistd.h>
 #include <cstdlib>
 #include <fstream>
 #include <string>
 #include <mili/mili.h>
-
 #include "rna_backends_types.h"
 #include "rna_backends_exceptions.h"
 
@@ -38,113 +39,65 @@ using std::string;
 
 static const FilePath IN;
 static const FilePath OUT;
+static const int SYSTEM_ERROR = -1;
+static const int FILE_ERROR = -1;
 
 /**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-inline void runCommand(const Command& cmd) throw(RNABackendException)
+inline int runCommand(const Command& cmd) throw(RNABackendException)
 {
     const int status = system(cmd.c_str());
-    if (status != SUCCESS_EXEC)
-        throw RNABackendException("An error ocurred trying to execute: " + cmd);
+    if (status == SYSTEM_ERROR)
+        throw RNABackendException("System call failed");
+    else
+    {
+        if (WIFEXITED(status))
+            return WEXITSTATUS(status);
+        else
+        {
+            if (WIFSIGNALED(status))
+                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
+            else
+                throw RNABackendException("Non termination for some reason");
+        }
+    }
 }
 
 /**
  * Return input file name
  * @param
 */
-static const FilePath get_input_file_name()
+inline const FilePath get_input_file_name()
 {
-	return "fold.in";
+    return "fold.in";
 }
 
 /**
  * Return output file name
  * @param
 */
-static const FilePath get_output_file_name() 
+inline const FilePath get_output_file_name()
 {
-	return "fold.out";
+    return "fold.out";
 }
 
-static const FilePath get_file_name_dot_det() 
-{
-	return "fold.in.det";
-}
-
-static const FilePath get_file_name_dot_dg() 
-{
-	return "fold.in.dG";
-}
-
-static const FilePath get_file_name_dot_h_num() 
-{
-	return "fold.in.h-num";
-}
-
-static const FilePath get_file_name_dot_log() 
-{
-	return "fold.in.log";
-}
-
-static const FilePath get_file_name_dot_plot() 
-{
-	return "fold.in.plot";
-}
-
-static const FilePath get_file_name_dot_run() 
-{
-	return "fold.in.run";
-}
-
-static const FilePath get_file_name_dot_ss_count() 
-{
-	return "fold.in.ss-count";
-}
-
-static const FilePath get_file_name_dot_ann() 
-{
-	return "fold.in.ann";
-}
-
-static const FilePath get_file_name_dot_ct() 
-{
-	return "fold.in.ct";
-}
-
-static void remove_file(const char* name_file)
-{
-	if(unlink(name_file) == -1)
-		throw RNABackendException("Could not delete file.");
-}
-
-static void delete_all_files()
-{
-	remove_file(get_file_name_dot_ct().c_str());
-	remove_file(get_file_name_dot_det().c_str());
-	remove_file(get_file_name_dot_dg().c_str());
-	remove_file(get_file_name_dot_h_num().c_str());
-	remove_file(get_file_name_dot_log().c_str());
-	remove_file(get_file_name_dot_plot().c_str());
-	remove_file(get_file_name_dot_run().c_str());
-	remove_file(get_file_name_dot_ss_count().c_str());
-	remove_file(get_file_name_dot_ann().c_str());
-}
+void remove_file(const std::string& file_name);
 
 /**
  * Write a file with multiple lines.
  * @param file the file path
  * @param lines the lines to write
  */
-void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException);
+void write(const FilePath& file, FileLinesCt& lines);
 
 /**
  * Write a file with a single line.
  * @param file the file path
  * @param line the line to write
  */
-void write(const FilePath& file, FileLine& line) throw(RNABackendException);
+void write(const FilePath& file, FileLine& line);
 
 /**
  * Read a line from a file
@@ -152,7 +105,7 @@ void write(const FilePath& file, FileLine& line) throw(RNABackendException);
  * @param lineno the line number to read
  * @param line where to write the read line
  */
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RNABackendException);
+void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
 
 /**
  * Read a value from a file line using offset and length
@@ -162,7 +115,7 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RN
  * @param t where to write the value.
  */
 template<class T>
-inline void read_value(const FileLine& line, FileLine::size_type offset, size_t n, T& t) throw(RNABackendException)
+inline void read_value(const FileLine& line, FileLine::size_type offset, size_t n, T& t)
 {
     const bool success = mili::from_string(line.substr(offset, n), t);
     if (!success)
@@ -175,7 +128,7 @@ inline void read_value(const FileLine& line, FileLine::size_type offset, size_t 
  * @param t where to write the value
  */
 template<class T>
-inline void read_value(const FileLine& line, T& t) throw(RNABackendException)
+inline void read_value(const FileLine& line, T& t)
 {
     const bool success = from_string(line, t);
     if (!success)
@@ -185,8 +138,8 @@ inline void read_value(const FileLine& line, T& t) throw(RNABackendException)
 template<class T>
 void convert_from_string(const std::string& from, T& to)
 {
-	if (!mili::from_string(from,to))
-		throw RNABackendException("Wrong column type.");
+    if (!mili::from_string(from,to))
+        throw RNABackendException("Wrong column type.");
 }
 
 #endif  /* _RNABACKENDPROXY_H */

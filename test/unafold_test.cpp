@@ -30,25 +30,26 @@
 
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
-    biopp::NucSequence sec1 ("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
-    biopp::SecStructure str1;
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure str;
 
-    IFold* p1 = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
-    ASSERT_TRUE(p1 != NULL);
+    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
+    ASSERT_TRUE(p != NULL);
 
-    EXPECT_NO_THROW(p1->fold(sec1,str1,true));
+    EXPECT_NO_THROW(p->fold(seq, str, true));
+    delete p;
 
-    ASSERT_EQ(32, str1.size());
+    EXPECT_EQ(32, str.size());
+    EXPECT_TRUE(str.is_circular());
 
-    ASSERT_FALSE(std::ifstream("fold.in.ct"));
-    ASSERT_FALSE(std::ifstream("fold.in.dG"));
-    ASSERT_FALSE(std::ifstream("fold.in.h-num"));
-    ASSERT_FALSE(std::ifstream("fold.in.log"));
-    ASSERT_FALSE(std::ifstream("fold.in.plot"));
-    ASSERT_FALSE(std::ifstream("fold.in.run"));
-    ASSERT_FALSE(std::ifstream("fold.in.ss-count"));
-    ASSERT_FALSE(std::ifstream("fold.in.ann"));
-    ASSERT_FALSE(std::ifstream("fold.in.det"));
-
-    delete(p1);
+    EXPECT_FALSE(std::ifstream("fold.in.ct"));
+    EXPECT_FALSE(std::ifstream("fold.in.dG"));
+    EXPECT_FALSE(std::ifstream("fold.in.h-num"));
+    EXPECT_FALSE(std::ifstream("fold.in.log"));
+    EXPECT_FALSE(std::ifstream("fold.in.plot"));
+    EXPECT_FALSE(std::ifstream("fold.in.run"));
+    EXPECT_FALSE(std::ifstream("fold.in.ss-count"));
+    EXPECT_FALSE(std::ifstream("fold.in.ann"));
+    EXPECT_FALSE(std::ifstream("fold.in.det"));
 }
+

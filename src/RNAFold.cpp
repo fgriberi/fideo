@@ -36,6 +36,8 @@
 using std::stack;
 using std::stringstream;
 
+static const FilePath OUT;
+
 //Vienna package
 class RNAFold : public IFold
 {
@@ -107,25 +109,25 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
         biopp::SeqIndex open;
         switch (str[i])
         {
-        case UNPAIR:
-            secStructure.unpair(i);
-            break;
-        case OPEN_PAIR:
-            s.push(i);
-            break;
-        case CLOSE_PAIR:
-            if (!s.empty())
-            {
-                open = s.top();
-                secStructure.pair(open, i);
-                s.pop();
-            }
-            else
-                throw(InvalidStructureException(" Unexpected closing pair"));
-            break;
-        default:
-            throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
-            break;
+            case UNPAIR:
+                secStructure.unpair(i);
+                break;
+            case OPEN_PAIR:
+                s.push(i);
+                break;
+            case CLOSE_PAIR:
+                if (!s.empty())
+                {
+                    open = s.top();
+                    secStructure.pair(open, i);
+                    s.pop();
+                }
+                else
+                    throw(InvalidStructureException(" Unexpected closing pair"));
+                break;
+            default:
+                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
+                break;
         }
     }
     if (!s.empty())

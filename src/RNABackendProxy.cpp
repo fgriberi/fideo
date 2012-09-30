@@ -23,9 +23,15 @@
  *
  */
 
-#include "errno.h"
-#include "string.h"
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
 #include "fideo/RNABackendProxy.h"
+
+//static const FilePath IN;
+//static const FilePath OUT;
+static const int SYSTEM_ERROR = -1;
+static const int FILE_ERROR = -1;
 
 void write(const FilePath& file, FileLinesCt& lines)
 {
@@ -85,8 +91,27 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
     }
 }
 
+int runCommand(const Command& cmd)
+{
+    const int status = system(cmd.c_str());
+    if (status == SYSTEM_ERROR)
+        throw RNABackendException("System call failed");
+    else
+    {
+        if (WIFEXITED(status))
+            return WEXITSTATUS(status);
+        else
+        {
+            if (WIFSIGNALED(status))
+                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
+            else
+                throw RNABackendException("Non termination for some reason");
+        }
+    }
+}
+
 void remove_file(const std::string& file_name)
 {
-    if(unlink(("./" + file_name).c_str()) == FILE_ERROR)
+    if (unlink(("./" + file_name).c_str()) == FILE_ERROR)
         throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
 }

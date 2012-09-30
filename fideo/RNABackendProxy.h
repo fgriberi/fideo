@@ -1,7 +1,7 @@
 /*
  * File:   RNABackendProxy.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
- *		   Franco Riberi   <fgriberi at gmail.com>
+ *         Franco Riberi   <fgriberi at gmail.com>
  *
  * Created on October 26, 2010, 2012, 4:31 PM
  *
@@ -26,44 +26,19 @@
 
 #ifndef _RNABACKENDPROXY_H
 #define _RNABACKENDPROXY_H
-#include <errno.h>
-#include <unistd.h>
 #include <cstdlib>
 #include <fstream>
-#include <string>
 #include <mili/mili.h>
 #include "rna_backends_types.h"
 #include "rna_backends_exceptions.h"
 
 using std::string;
 
-static const FilePath IN;
-static const FilePath OUT;
-static const int SYSTEM_ERROR = -1;
-static const int FILE_ERROR = -1;
-
 /**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-inline int runCommand(const Command& cmd) throw(RNABackendException)
-{
-    const int status = system(cmd.c_str());
-    if (status == SYSTEM_ERROR)
-        throw RNABackendException("System call failed");
-    else
-    {
-        if (WIFEXITED(status))
-            return WEXITSTATUS(status);
-        else
-        {
-            if (WIFSIGNALED(status))
-                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
-            else
-                throw RNABackendException("Non termination for some reason");
-        }
-    }
-}
+int runCommand(const Command& cmd);
 
 /**
  * Return input file name
@@ -138,7 +113,7 @@ inline void read_value(const FileLine& line, T& t)
 template<class T>
 void convert_from_string(const std::string& from, T& to)
 {
-    if (!mili::from_string(from,to))
+    if (!mili::from_string(from, to))
         throw RNABackendException("Wrong column type.");
 }
 

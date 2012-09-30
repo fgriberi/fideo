@@ -68,21 +68,69 @@ static const FilePath get_output_file_name()
 	return "fold.out";
 }
 
-/**
- * Remove input file 
- * @param
-*/
-/*void remove_input_file()
+static const FilePath get_file_name_dot_det() 
 {
-}*/
+	return "fold.in.det";
+}
 
-/**
- * Remove output file
- * @param
-*/
-/*void remove_output_file()
+static const FilePath get_file_name_dot_dg() 
 {
-}*/
+	return "fold.in.dG";
+}
+
+static const FilePath get_file_name_dot_h_num() 
+{
+	return "fold.in.h-num";
+}
+
+static const FilePath get_file_name_dot_log() 
+{
+	return "fold.in.log";
+}
+
+static const FilePath get_file_name_dot_plot() 
+{
+	return "fold.in.plot";
+}
+
+static const FilePath get_file_name_dot_run() 
+{
+	return "fold.in.run";
+}
+
+static const FilePath get_file_name_dot_ss_count() 
+{
+	return "fold.in.ss-count";
+}
+
+static const FilePath get_file_name_dot_ann() 
+{
+	return "fold.in.ann";
+}
+
+static const FilePath get_file_name_dot_ct() 
+{
+	return "fold.in.ct";
+}
+
+static void remove_file(const char* name_file)
+{
+	if(unlink(name_file) == -1)
+		throw RNABackendException("Could not delete file.");
+}
+
+static void delete_all_files()
+{
+	remove_file(get_file_name_dot_ct().c_str());
+	remove_file(get_file_name_dot_det().c_str());
+	remove_file(get_file_name_dot_dg().c_str());
+	remove_file(get_file_name_dot_h_num().c_str());
+	remove_file(get_file_name_dot_log().c_str());
+	remove_file(get_file_name_dot_plot().c_str());
+	remove_file(get_file_name_dot_run().c_str());
+	remove_file(get_file_name_dot_ss_count().c_str());
+	remove_file(get_file_name_dot_ann().c_str());
+}
 
 /**
  * Write a file with multiple lines.
@@ -135,7 +183,7 @@ inline void read_value(const FileLine& line, T& t) throw(RNABackendException)
 }
 
 template<class T>
-void convert_from_string(const std:string& from, T& to)
+void convert_from_string(const std::string& from, T& to)
 {
 	if (!mili::from_string(from,to))
 		throw RNABackendException("Wrong column type.");

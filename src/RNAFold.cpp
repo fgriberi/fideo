@@ -28,10 +28,10 @@
 #include <sstream>
 #include <stack>
 #include <mili/mili.h>
-#include "../fideo/IFold.h"
-#include "../fideo/RNABackendProxy.h"
-#include "../fideo/RNABackendsConfig.h"
-#include "../fideo/rna_backends_types.h"
+#include "fideo/IFold.h"
+#include "fideo/RNABackendProxy.h"
+#include "fideo/RNABackendsConfig.h"
+#include "fideo/rna_backends_types.h"
 
 using std::stack;
 using std::stringstream;
@@ -45,7 +45,7 @@ class RNAFold : public IFold
     static const char UNPAIR = '.';
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
-    virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const;
+    virtual Fe fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const;
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
@@ -56,7 +56,7 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
 {
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
-        sseq += sequence[i].as_char();		  
+        sseq += sequence[i].as_char();
     write(get_input_file_name(), sseq);
     stringstream ss;
     ss << "RNAfold" << " -noPS "; //RNAfold_PROG

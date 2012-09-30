@@ -23,7 +23,7 @@
  *
  */
 
-#include "../fideo/RNABackendProxy.h"
+#include "fideo/RNABackendProxy.h"
 
 void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException)
 {

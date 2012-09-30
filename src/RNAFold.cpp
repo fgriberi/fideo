@@ -3,7 +3,7 @@
  * Author: Santiago Videla <santiago.videla at gmail.com>
  *         Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on November 10, 2010, 2012 4:26 PM
  *
  * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
  *
@@ -28,45 +28,44 @@
 #include <sstream>
 #include <stack>
 #include <mili/mili.h>
-#include "../fideo/IFold.h"
-#include "../fideo/RNABackendProxy.h"
-#include "../fideo/RNABackendsConfig.h"
-#include "../fideo/rna_backends_types.h"
+#include "fideo/IFold.h"
+#include "fideo/RNABackendProxy.h"
+#include "fideo/RNABackendsConfig.h"
+#include "fideo/rna_backends_types.h"
 
 using std::stack;
 using std::stringstream;
 
+static const FilePath OUT;
+
 //Vienna package
 class RNAFold : public IFold
 {
-    static const FilePath IN;
-    static const FilePath OUT;
     static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';
     static const char CLOSE_PAIR = ')';
     static const char UNPAIR = '.';
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
-    virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const;
+    virtual Fe fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const;
 };
 
-const FilePath RNAFold::IN = "fold.in";
-const FilePath RNAFold::OUT = "fold.out";
 const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
 {
+    structure.set_circular(circ);
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
         sseq += sequence[i].as_char();
-    write(IN, sseq);
+    write(get_input_file_name(), sseq);
     stringstream ss;
-    ss << "RNAfold" << " -noPS "; //RNAfold_PROG
+    ss << "RNAfold" << " -noPS ";
     if (circ)
         ss << "-circ ";
-    ss << "< " << IN << " > " << OUT;
+    ss << "< " << get_input_file_name() << " > " << get_output_file_name();
     const Command CMD = ss.str();
     runCommand(CMD);
 
@@ -110,25 +109,25 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
         biopp::SeqIndex open;
         switch (str[i])
         {
-        case UNPAIR:
-            secStructure.unpair(i);
-            break;
-        case OPEN_PAIR:
-            s.push(i);
-            break;
-        case CLOSE_PAIR:
-            if (!s.empty())
-            {
-                open = s.top();
-                secStructure.pair(open, i);
-                s.pop();
-            }
-            else
-                throw(InvalidStructureException(" Unexpected closing pair"));
-            break;
-        default:
-            throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
-            break;
+            case UNPAIR:
+                secStructure.unpair(i);
+                break;
+            case OPEN_PAIR:
+                s.push(i);
+                break;
+            case CLOSE_PAIR:
+                if (!s.empty())
+                {
+                    open = s.top();
+                    secStructure.pair(open, i);
+                    s.pop();
+                }
+                else
+                    throw(InvalidStructureException(" Unexpected closing pair"));
+                break;
+            default:
+                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
+                break;
         }
     }
     if (!s.empty())

@@ -1,10 +1,11 @@
 /*
  * File:   RNABackendProxy.cpp
  * Author: Santiago Videla <santiago.videla at gmail.com>
+ *         Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on November 10, 2010, 2012 4:26 PM
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -23,9 +24,15 @@
  *
  */
 
-#include "../fideo/RNABackendProxy.h"
+#include <errno.h>
+#include <string.h>
+#include <unistd.h>
+#include "fideo/RNABackendProxy.h"
 
-void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException)
+static const int SYSTEM_ERROR = -1;
+static const int FILE_ERROR = -1;
+
+void write(const FilePath& file, FileLinesCt& lines)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -45,7 +52,7 @@ void write(const FilePath& file, FileLinesCt& lines) throw(RNABackendException)
     }
 }
 
-void write(const FilePath& file, FileLine& line) throw(RNABackendException)
+void write(const FilePath& file, FileLine& line)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -60,7 +67,7 @@ void write(const FilePath& file, FileLine& line) throw(RNABackendException)
     }
 }
 
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RNABackendException)
+void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
     std::ifstream in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -81,4 +88,29 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line) throw(RN
     {
         throw RNABackendException("An error ocurred trying to read " + file);
     }
+}
+
+int runCommand(const Command& cmd)
+{
+    const int status = system(cmd.c_str());
+    if (status == SYSTEM_ERROR)
+        throw RNABackendException("System call failed");
+    else
+    {
+        if (WIFEXITED(status))
+            return WEXITSTATUS(status);
+        else
+        {
+            if (WIFSIGNALED(status))
+                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
+            else
+                throw RNABackendException("Non termination for some reason");
+        }
+    }
+}
+
+void remove_file(const std::string& file_name)
+{
+    if (unlink(("./" + file_name).c_str()) == FILE_ERROR)
+        throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
 }

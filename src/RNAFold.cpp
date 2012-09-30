@@ -39,8 +39,6 @@ using std::stringstream;
 //Vienna package
 class RNAFold : public IFold
 {
-    static const FilePath IN;
-    static const FilePath OUT;
     static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';
     static const char CLOSE_PAIR = ')';
@@ -50,8 +48,6 @@ class RNAFold : public IFold
     virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const;
 };
 
-const FilePath RNAFold::IN = "fold.in";
-const FilePath RNAFold::OUT = "fold.out";
 const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
@@ -60,13 +56,13 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
 {
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
-        sseq += sequence[i].as_char();
-    write(IN, sseq);
+        sseq += sequence[i].as_char();		  
+    write(get_input_file_name(), sseq);
     stringstream ss;
     ss << "RNAfold" << " -noPS "; //RNAfold_PROG
     if (circ)
         ss << "-circ ";
-    ss << "< " << IN << " > " << OUT;
+    ss << "< " << get_input_file_name() << " > " << get_output_file_name();
     const Command CMD = ss.str();
     runCommand(CMD);
 

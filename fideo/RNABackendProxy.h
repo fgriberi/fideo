@@ -1,10 +1,11 @@
 /*
  * File:   RNABackendProxy.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
+ *		   Franco Riberi   <fgriberi at gmail.com>	
  *
- * Created on October 26, 2010, 4:31 PM
+ * Created on October 26, 2010, 2012, 4:31 PM
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Copyright (C) 2010  Santiago Videla, Franco Riberi FuDePAN
  *
  * This file is part of fideo
  *
@@ -35,6 +36,9 @@
 
 using std::string;
 
+static const FilePath IN;
+static const FilePath OUT;
+
 /**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
@@ -45,6 +49,40 @@ inline void runCommand(const Command& cmd) throw(RNABackendException)
     if (status != SUCCESS_EXEC)
         throw RNABackendException("An error ocurred trying to execute: " + cmd);
 }
+
+/**
+ * Return input file name
+ * @param
+*/
+static const FilePath get_input_file_name()
+{
+	return "fold.in";
+}
+
+/**
+ * Return output file name
+ * @param
+*/
+static const FilePath get_output_file_name() 
+{
+	return "fold.out";
+}
+
+/**
+ * Remove input file 
+ * @param
+*/
+/*void remove_input_file()
+{
+}*/
+
+/**
+ * Remove output file
+ * @param
+*/
+/*void remove_output_file()
+{
+}*/
 
 /**
  * Write a file with multiple lines.
@@ -96,6 +134,12 @@ inline void read_value(const FileLine& line, T& t) throw(RNABackendException)
         throw RNABackendException("Could not read the value from given line");
 }
 
+template<class T>
+void convert_from_string(const std:string& from, T& to)
+{
+	if (!mili::from_string(from,to))
+		throw RNABackendException("Wrong column type.");
+}
 
 #endif  /* _RNABACKENDPROXY_H */
 

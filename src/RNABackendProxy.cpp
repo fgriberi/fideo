@@ -1,10 +1,11 @@
 /*
  * File:   RNABackendProxy.cpp
  * Author: Santiago Videla <santiago.videla at gmail.com>
+ *         Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on November 10, 2010, 2012 4:26 PM
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -28,8 +29,6 @@
 #include <unistd.h>
 #include "fideo/RNABackendProxy.h"
 
-//static const FilePath IN;
-//static const FilePath OUT;
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 

@@ -3,7 +3,7 @@
  * Author: Santiago Videla <santiago.videla at gmail.com>
  *         Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on November 10, 2010, 2012 4:26 PM
  *
  * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
  *
@@ -62,7 +62,7 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
         sseq += sequence[i].as_char();
     write(get_input_file_name(), sseq);
     stringstream ss;
-    ss << "RNAfold" << " -noPS "; //RNAfold_PROG
+    ss << "RNAfold" << " -noPS ";
     if (circ)
         ss << "-circ ";
     ss << "< " << get_input_file_name() << " > " << get_output_file_name();

@@ -56,6 +56,7 @@ REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
 {    
+    secStructure.clear();
     structure.set_circular(circ);
     FileLine sseq;
     for (size_t i = 0; i < sequence.length(); ++i)
@@ -102,7 +103,6 @@ size_t RNAFold::read_free_energy(FileLine& line, size_t offset, Fe& energy) cons
 
 void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructure)
 {
-    secStructure.clear();
     secStructure.set_sequence_size(str.length());
     stack<biopp::SeqIndex> s;
     for (size_t i = 0; i < str.length(); ++i)

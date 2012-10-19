@@ -149,10 +149,11 @@ Fe UNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
         sseq += sequence[i].as_char();
     write(get_input_file_name(), sseq);
     stringstream ss;
-    ss << "UNAFold.pl ";
+    ss << "UNAFold.pl --max=1 ";
     if (circ)
         ss << "--circular ";
     ss << get_input_file_name();
+
     const Command CMD = ss.str();
     runCommand(CMD);
 
@@ -166,7 +167,6 @@ Fe UNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
     std::ifstream file_in((get_input_file_name() + ".ct").c_str());
     if (!file_in)
         throw RNABackendException("output file not found.");
-    delete_all_files();
     HeaderLine headerLine;
     headerLine.parse(file_in);
     structure.set_sequence_size(headerLine.number_of_bases);
@@ -177,5 +177,7 @@ Fe UNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
         fillStructure(bodyLine, structure);
     }
     structure.set_circular(circ);
+    file_in.close();
+    delete_all_files();
     return 0;
 }

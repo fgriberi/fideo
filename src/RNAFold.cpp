@@ -55,7 +55,7 @@ const FileLineNo RNAFold::LINE_NO = 1;
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
-{    
+{
     structure.clear();
     structure.set_circular(circ);
     FileLine sseq;
@@ -127,7 +127,7 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
                     throw(InvalidStructureException(" Unexpected closing pair"));
                 break;
             default:
-                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.get_paired(i)));
+                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.paired_with(i)));
                 break;
         }
     }

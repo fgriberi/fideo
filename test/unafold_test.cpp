@@ -52,4 +52,3 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_FALSE(std::ifstream("fold.in.ann"));
     EXPECT_FALSE(std::ifstream("fold.in.det"));
 }
-

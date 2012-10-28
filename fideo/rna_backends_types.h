@@ -45,7 +45,7 @@ typedef float Similitude;
 /**
  * Free eneregy in secodary structure
  */
-typedef float Fe;
+typedef double Fe;
 
 /**
  * Container of raw (string) RNA sequences

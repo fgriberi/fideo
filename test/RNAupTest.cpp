@@ -34,8 +34,8 @@ TEST(RNAupBackendTestSuite, BasicTest)
     IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAup");
     ASSERT_TRUE(p != NULL);
 
-    float dG = p->hybridize(seq1, seq2);
-    ASSERT_FLOAT_EQ(dG, -6.72);
+    double dG = p->hybridize(seq1, seq2);
+    ASSERT_DOUBLE_EQ(dG, -6.72);
     delete p;
 
     EXPECT_FALSE(std::ifstream("outputHybridize.out"));

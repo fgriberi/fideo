@@ -90,13 +90,13 @@ Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) c
 
     stringstream cmd1;
     ofstream toHybridize("toHybridize");
-    toHybridize << "\"" << seq1 << "&" << seq2 << "\"";
+    toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
     stringstream cmd2;
     cmd2 << "RNAup -u 3,4 -c SH ";
     cmd2 << "< " << "toHybridize ";
-    cmd2 << "> " << "outputHybridize.out";
+    cmd2 << "> " << FILE_NAME_OUTPUT;
 
     const Command CMD2 = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
     runCommand(CMD2);

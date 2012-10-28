@@ -78,16 +78,16 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
         seq2 += secondSeq[i].as_char();
 
     stringstream cmd1;
-    ofstream toHybridize("toHybridize");
+    ofstream toHybridize("toHybridizeCofold");
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
     stringstream cmd2;
     cmd2 << "RNAcofold ";
-    cmd2 << "< " << "toHybridize ";
+    cmd2 << "< " << "toHybridizeCofold ";
     cmd2 << "> " << FILE_NAME_OUTPUT;
 
-    const Command CMD2 = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > FILE_NAME_OUTPUT
+    const Command CMD2 = cmd2.str();  
     runCommand(CMD2);
 
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());

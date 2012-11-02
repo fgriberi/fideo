@@ -76,8 +76,7 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     string seq2;
     for (size_t i = 0; i < secondSeq.length(); ++i)
         seq2 += secondSeq[i].as_char();
-
-    stringstream cmd1;
+   
     ofstream toHybridize("toHybridizeCofold");
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();

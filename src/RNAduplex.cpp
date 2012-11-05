@@ -58,10 +58,10 @@ class RNAduplex : public IHybridize
         {
             stringstream ss(line);
             vector<string> result;
-            ss >> result;            
-            if (result.size() != NumberOfColumns)            
+            ss >> result;
+            if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAup.");
-            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].length()-2);
+            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].length() - 2);
             from_string(deltaG, dG);
         }
     };
@@ -82,7 +82,7 @@ Fe RNAduplex::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
 
     ofstream toHybridize("toHybridizeDuplex");
     toHybridize << seq1;
-    toHybridize << "\n";     
+    toHybridize << "\n";
     toHybridize << seq2;
     toHybridize.close();
 
@@ -91,7 +91,7 @@ Fe RNAduplex::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     cmd2 << "< " << "toHybridizeDuplex ";
     cmd2 << "> " << FILE_NAME_OUTPUT;
 
-    const Command CMD2 = cmd2.str(); 
+    const Command CMD2 = cmd2.str();
     runCommand(CMD2);
 
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
@@ -99,7 +99,7 @@ Fe RNAduplex::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
         throw RNABackendException("Output file not found.");
     ParseBody body;
     string line;
-    getline(fileOutput,line);
+    getline(fileOutput, line);
     body.parse(line);
     remove_file(FILE_NAME_OUTPUT.c_str());
     return body.dG;

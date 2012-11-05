@@ -55,10 +55,10 @@ class RNAcofold : public IHybridize
         {
             stringstream ss(line);
             vector<string> result;
-            ss >> mili::Separator(result, ' ');            
+            ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAup.");
-            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].size()-2);
+            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].size() - 2);
             from_string(deltaG, dG);
         }
     };
@@ -76,7 +76,7 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     string seq2;
     for (size_t i = 0; i < secondSeq.length(); ++i)
         seq2 += secondSeq[i].as_char();
-   
+
     ofstream toHybridize("toHybridizeCofold");
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
@@ -86,17 +86,17 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     cmd2 << "< " << "toHybridizeCofold ";
     cmd2 << "> " << FILE_NAME_OUTPUT;
 
-    const Command CMD2 = cmd2.str();  
+    const Command CMD2 = cmd2.str();
     runCommand(CMD2);
 
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
 
-    string temp;        
-    getline(fileOutput,temp);
-    getline(fileOutput,temp);
-               
+    string temp;
+    getline(fileOutput, temp);
+    getline(fileOutput, temp);
+
     ParseBody body;
     body.parse(temp);
     remove_file(FILE_NAME_OUTPUT.c_str());

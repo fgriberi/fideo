@@ -36,6 +36,7 @@ using namespace std;
 //Vienna package (version 1.8.5)
 class IntaRNA : public IHybridize
 {
+    static const unsigned int OBSOLETE_LINES = 8;
     string argPath;
     virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const;
     void setArgument(const string& arg);
@@ -51,7 +52,6 @@ class IntaRNA : public IHybridize
         };
 
     public:
-        static const size_t DELTA_G = 2;
         Fe dG;
 
         void parse(std::ifstream& file)
@@ -60,18 +60,17 @@ class IntaRNA : public IHybridize
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
-                    throw RNABackendException("Invalid output RNAup.");
-                string deltaG = aux[DELTA_G];
+                    throw RNABackendException("Invalid output IntaRNA.");
+                string deltaG = aux[ColdG];
                 from_string(deltaG, dG);
             }
             else
-                throw RNABackendException("Failured operation >>.");
+                throw RNABackendException("Failed operation >>.");
         }
     };
 };
 
 static const string FILE_NAME_OUTPUT = "outputIntaRNA.out";
-static const unsigned int LINE = 8;
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
@@ -97,7 +96,7 @@ Fe IntaRNA::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq)
 
     //move to the directory where is the humanizer
     if (chdir(argPath.c_str()) != 0)
-        throw RNABackendException("Invalid path of IntaRNA execute.");
+        throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command CMD = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
     runCommand(CMD);
@@ -107,7 +106,7 @@ Fe IntaRNA::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     string temp;
-    for (size_t i = 0; i < LINE; ++i)
+    for (size_t i = 0; i < OBSOLETE_LINES; ++i)
         getline(fileOutput, temp);
     body.parse(fileOutput);
     remove_file(FILE_NAME_OUTPUT.c_str());

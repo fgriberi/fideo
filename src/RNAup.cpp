@@ -55,7 +55,6 @@ class RNAup : public IHybridize
         };
 
     public:
-        static const size_t DELTA_G = 4;
         Fe dG;
 
         void parse(std::ifstream& file)
@@ -65,7 +64,7 @@ class RNAup : public IHybridize
             {
                 if (aux.size() != NumberOfColumns)
                     throw RNABackendException("Invalid output RNAup.");
-                string deltaG = aux[DELTA_G].substr(1, aux[DELTA_G].length());
+                const string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
                 from_string(deltaG, dG);
             }
             else

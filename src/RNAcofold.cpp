@@ -48,7 +48,6 @@ class RNAcofold : public IHybridize
         };
 
     public:
-        static const size_t DELTA_G = 1;
         Fe dG;
 
         void parse(string& line)
@@ -58,7 +57,7 @@ class RNAcofold : public IHybridize
             ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAup.");
-            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].size() - 2);
+            const string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
             from_string(deltaG, dG);
         }
     };

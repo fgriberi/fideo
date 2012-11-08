@@ -51,7 +51,6 @@ class RNAduplex : public IHybridize
         };
 
     public:
-        static const size_t DELTA_G = 4;
         Fe dG;
 
         void parse(string& line)
@@ -61,7 +60,7 @@ class RNAduplex : public IHybridize
             ss >> result;
             if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAup.");
-            string deltaG = result[DELTA_G].substr(1, result[DELTA_G].length() - 2);
+            const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
             from_string(deltaG, dG);
         }
     };

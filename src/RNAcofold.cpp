@@ -64,6 +64,7 @@ class RNAcofold : public IHybridize
 };
 
 static const string FILE_NAME_OUTPUT = "outputRNAcofold.out";
+static const string FILE_AUX = "toHybridizeCofold";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
@@ -76,14 +77,14 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     for (size_t i = 0; i < secondSeq.length(); ++i)
         seq2 += secondSeq[i].as_char();
 
-    ofstream toHybridize("toHybridizeCofold");
+    ofstream toHybridize(FILE_AUX.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
     stringstream cmd2;
     cmd2 << "RNAcofold ";
-    cmd2 << "< " << "toHybridizeCofold ";
-    cmd2 << "> " << FILE_NAME_OUTPUT;
+    cmd2 << "< " << FILE_AUX;
+    cmd2 << " > " << FILE_NAME_OUTPUT;
 
     const Command CMD2 = cmd2.str();
     runCommand(CMD2);
@@ -99,5 +100,6 @@ Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSe
     ParseBody body;
     body.parse(temp);
     remove_file(FILE_NAME_OUTPUT.c_str());
+    remove_file(FILE_AUX);
     return body.dG;
 }

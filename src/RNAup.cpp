@@ -75,6 +75,7 @@ class RNAup : public IHybridize
 };
 
 static const string FILE_NAME_OUTPUT = "outputHybridize.out";
+static const string FILE_AUX = "toHybridizeUp";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 
@@ -87,14 +88,14 @@ Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) c
     for (size_t i = 0; i < secondSeq.length(); ++i)
         seq2 += secondSeq[i].as_char();
 
-    ofstream toHybridize("toHybridizeUp");
+    ofstream toHybridize(FILE_AUX.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
     stringstream cmd2;
     cmd2 << "RNAup ";
-    cmd2 << "< " << "toHybridizeUp ";
-    cmd2 << "> " << FILE_NAME_OUTPUT;
+    cmd2 << "< " << FILE_AUX;
+    cmd2 << " > " << FILE_NAME_OUTPUT;
 
     const Command CMD2 = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
     runCommand(CMD2);
@@ -105,5 +106,6 @@ Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) c
     ParseBody body;
     body.parse(fileOutput);
     remove_file(FILE_NAME_OUTPUT.c_str());
+    remove_file(FILE_AUX);
     return body.dG;
 }

@@ -34,7 +34,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2);
+    double dG = p->hybridize(seq1, seq2, false);
     ASSERT_DOUBLE_EQ(dG, -8.30);
     delete p;
 

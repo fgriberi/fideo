@@ -38,7 +38,7 @@ class IntaRNA : public IHybridize
 {
     static const unsigned int OBSOLETE_LINES = 8;
     string argPath;
-    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const;
+    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const;
     void setArgument(const string& arg);
 
     class ParseBody
@@ -79,8 +79,10 @@ void IntaRNA::setArgument(const string& arg)
     argPath = arg;
 }
 
-Fe IntaRNA::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const
+Fe IntaRNA::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const
 {
+    if (circ)
+        throw RNABackendException("Unsupported Sequence.");
     string seq1;
     for (size_t i = 0; i < firstSeq.length(); ++i)
         seq1 += firstSeq[i].as_char();

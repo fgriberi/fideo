@@ -36,7 +36,7 @@ using namespace std;
 //Vienna package
 class RNAduplex : public IHybridize
 {
-    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const;
+    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const;
 
     class ParseBody
     {
@@ -71,8 +71,10 @@ static const string FILE_AUX = "toHybridizeDuplex";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-Fe RNAduplex::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const
+Fe RNAduplex::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const
 {
+    if (circ)
+        throw RNABackendException("Unsupported Sequence.");
     string seq1;
     for (size_t i = 0; i < firstSeq.length(); ++i)
         seq1 += firstSeq[i].as_char();

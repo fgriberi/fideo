@@ -36,7 +36,7 @@ using namespace std;
 //Vienna package
 class RNAcofold : public IHybridize
 {
-    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const;
+    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const;
 
     class ParseBody
     {
@@ -68,8 +68,10 @@ static const string FILE_AUX = "toHybridizeCofold";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
-Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq) const
+Fe RNAcofold::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const
 {
+    if (circ)
+        throw RNABackendException("Unsupported Sequence.");
     string seq1;
     for (size_t i = 0; i < firstSeq.length(); ++i)
         seq1 += firstSeq[i].as_char();

@@ -83,8 +83,8 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
-    string seq1 = longerSeq.getString();
-    string seq2 = shorterSeq.getString();
+    const string seq1 = longerSeq.getString();
+    const string seq2 = shorterSeq.getString();
     stringstream cmd;
     cmd << "./IntaRNA ";
     cmd << seq1;

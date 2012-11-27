@@ -72,8 +72,8 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
-    string seq1 = longerSeq.getString();
-    string seq2 = shorterSeq.getString();
+    const string seq1 = longerSeq.getString();
+    const string seq2 = shorterSeq.getString();
 
     ofstream toHybridize(FILE_AUX.c_str());
     toHybridize << seq1 << "&" << seq2;

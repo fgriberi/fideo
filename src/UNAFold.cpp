@@ -121,16 +121,16 @@ REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
 void UNAFold::delete_all_files()
 {
-    remove_file((get_input_file_name() + ".ct"));
-    remove_file((get_input_file_name() + ".dG"));
-    remove_file((get_input_file_name() + ".h-num"));
-    remove_file((get_input_file_name() + ".log"));
-    remove_file((get_input_file_name() + ".plot"));
-    remove_file((get_input_file_name() + ".run"));
-    remove_file((get_input_file_name() + ".ss-count"));
-    remove_file((get_input_file_name() + ".ann"));
-    remove_file((get_input_file_name() + ".det"));
-    remove_file((get_input_file_name()));
+    remove_file(get_input_file_name() + ".ct");
+    remove_file(get_input_file_name() + ".dG");
+    remove_file(get_input_file_name() + ".h-num");
+    remove_file(get_input_file_name() + ".log");
+    remove_file(get_input_file_name() + ".plot");
+    remove_file(get_input_file_name() + ".run");
+    remove_file(get_input_file_name() + ".ss-count");
+    remove_file(get_input_file_name() + ".ann");
+    remove_file(get_input_file_name() + ".det");
+    remove_file(get_input_file_name());
 }
 
 

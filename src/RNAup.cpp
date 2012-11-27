@@ -36,7 +36,7 @@ using namespace std;
 //Vienna package
 class RNAup : public IHybridize
 {
-    virtual Fe hybridize(const biopp::NucSequence& firstSeq, const biopp::NucSequence& secondSeq, bool firstSeqIsCirc) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
     class ParseBody
     {
@@ -79,16 +79,16 @@ static const string FILE_AUX = "toHybridizeUp";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 
-Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool firstSeqIsCirc) const
+Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq, bool longerCirc) const
 {
-    if (firstSeqIsCirc)
+    if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
     string seq1;
-    for (size_t i = 0; i < firstSeq.length(); ++i)
-        seq1 += firstSeq[i].as_char();
+    for (size_t i = 0; i < longerSeq.length(); ++i)
+        seq1 += longerSeq[i].as_char();
     string seq2;
-    for (size_t i = 0; i < secondSeq.length(); ++i)
-        seq2 += secondSeq[i].as_char();
+    for (size_t i = 0; i < shorterSeq.length(); ++i)
+        seq2 += shorterSeq[i].as_char();
 
     ofstream toHybridize(FILE_AUX.c_str());
     toHybridize << seq1 << "&" << seq2;

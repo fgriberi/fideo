@@ -130,6 +130,7 @@ void UNAFold::delete_all_files()
     remove_file((get_input_file_name() + ".ss-count").c_str());
     remove_file((get_input_file_name() + ".ann").c_str());
     remove_file((get_input_file_name() + ".det").c_str());
+    remove_file((get_input_file_name()).c_str());
 }
 
 

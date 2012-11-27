@@ -36,7 +36,7 @@ using namespace std;
 //Vienna package
 class RNAup : public IHybridize
 {
-    virtual Fe hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const;
+    virtual Fe hybridize(const biopp::NucSequence& firstSeq, const biopp::NucSequence& secondSeq, bool firstSeqIsCirc) const;
 
     class ParseBody
     {
@@ -79,9 +79,9 @@ static const string FILE_AUX = "toHybridizeUp";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 
-Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool circ) const
+Fe RNAup::hybridize(const NucSequence& firstSeq, const NucSequence& secondSeq, bool firstSeqIsCirc) const
 {
-    if (circ)
+    if (firstSeqIsCirc)
         throw RNABackendException("Unsupported Sequence.");
     string seq1;
     for (size_t i = 0; i < firstSeq.length(); ++i)

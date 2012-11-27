@@ -33,7 +33,7 @@
 /**
  * Interface for sequence's folding services.
  */
-class IFold
+struct IFold
 {
 public:
     /**
@@ -43,7 +43,7 @@ public:
      * @param circ if the structure it's circular.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence&, biopp::SecStructure& structure, bool circ) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
 
     virtual ~IFold() {}
 };

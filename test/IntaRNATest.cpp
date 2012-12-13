@@ -27,19 +27,39 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(RNAupBackendTestSuite, BasicTest1)
+TEST(IntaRNABackendTestSuite, BasicTest1)
 {
-//    const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
-//    const biopp::NucSequence seq2("AGGACAACCUUUGC");
+    const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-//    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
-//    ASSERT_TRUE(p != NULL);
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
+    ASSERT_TRUE(p != NULL);
 
-//    std::string pathIntaRNA = "/home/gringusi/Escritorio/IntaRNA/intarna-1.2.5/src";
-//    p->setArgument(pathIntaRNA);
-//    double dG = p->hybridize(seq1, seq2);
-//    ASSERT_DOUBLE_EQ(dG, -5.23621);
-//    delete p;
+    double dG = p->hybridize(seq1, seq2, false);
+    ASSERT_DOUBLE_EQ(dG, -5.23621);
+    delete p;
 
-//    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
+    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
+}
+
+TEST(RNAupBackendTestSuite, BasicTest2)
+{
+    const std::string sequence1 = "AAGGTCAGTTCCACATTGGCATCTGAACTCGGTATCACGGCCGAGGATGCAAGGCTTGTTTCAGAGATTG"
+    "CAATGCATACTACTGAGGACAGGATCAGTAGAGCGGTTGGACCCAGGCAAGCCCAAGTGTCATTTCTACACGGTGATCAAAGTGAGAATGAGCTACCGG"
+    "GATTGGGAGGTAAGGAAGATAAGAGAGTCAAACAGAGTCGAGGAGAAGCCAGGGAGAGCTATAGAGAAACTGGGCACAGCAGAGCAAATGATGCGAGAG"
+    "CTGCTGACCTTCCAACCGGCACACCCCTAGACATTGACACTGCATCGGAGTTCAGCCAAGACCCACAGGACAGTCGAAGGTCAGCTGACGCCCTGCTCA"
+    "GGCTGCAAGCCATGGCAGGGATCCCGGAAGAACAAGGCTCAGACATGGACACCCCTAGAGTGTACAATGACAGAGATCTTCTAGACTAG";
+    const std::string sequence2 = "AAGAUGUGGAAAAAUUGGAAUC";
+
+    const biopp::NucSequence seq1(sequence1);
+    const biopp::NucSequence seq2(sequence2);
+
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
+    ASSERT_TRUE(p != NULL);
+
+    double dG = p->hybridize(seq1, seq2, false);
+    ASSERT_DOUBLE_EQ(dG, -7.34977);
+    delete p;
+
+    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
 }

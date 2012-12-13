@@ -41,7 +41,7 @@ public:
      * @param second sequence the RNA sequence to Hybridize
      * @return The free energy.
      */
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;    
 
     /**
      * Destroyer

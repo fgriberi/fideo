@@ -28,18 +28,16 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/FideoConfig.h"
 
 using namespace biopp;
 using namespace mili;
 using namespace std;
 
-//Vienna package (version 1.8.5)
 class IntaRNA : public IHybridize
 {
-    static const unsigned int OBSOLETE_LINES = 8;
-    string argPath;
+    static const unsigned int OBSOLETE_LINES = 9;
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
-    void setArgument(const string& arg);
 
     class ParseBody
     {
@@ -55,34 +53,35 @@ class IntaRNA : public IHybridize
         Fe dG;
 
         void parse(std::ifstream& file)
-        {
-            vector<string> aux;
-            if (file >> aux)
-            {
-                if (aux.size() != NumberOfColumns)
-                    throw RNABackendException("Invalid output IntaRNA.");
-                string deltaG = aux[ColdG];
-                from_string(deltaG, dG);
-            }
+        {          
+            string temp;
+            for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+                getline(file, temp);
+
+            stringstream ss(temp);
+            vector<string> result;
+            ss >> Separator(result, ' ');
+            if (result.size() != 3)
+                  dG = 1000; //no significant hybridization found      
             else
-                throw RNABackendException("Failed operation >>.");
+            {
+                string deltaG = result[1];
+                from_string(deltaG, dG);    
+            }
         }
     };
 };
 
 static const string FILE_NAME_OUTPUT = "outputIntaRNA.out";
+static const string INTA_RNA = "runIntaRNA";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
-
-void IntaRNA::setArgument(const string& arg)
-{
-    argPath = arg;
-}
 
 Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
+
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
     stringstream cmd;
@@ -91,8 +90,8 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " " << seq2;
     cmd << " > " << FILE_NAME_OUTPUT;
 
-    //move to the directory where is the humanizer
-    if (chdir(argPath.c_str()) != 0)
+    //move to the directory where is the folding   
+    if (chdir(FideoConfig::getPath(INTA_RNA).c_str()) != 0)
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command CMD = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
@@ -101,10 +100,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
-    ParseBody body;
-    string temp;
-    for (size_t i = 0; i < OBSOLETE_LINES; ++i)
-        getline(fileOutput, temp);
+    ParseBody body;   
     body.parse(fileOutput);
     remove_file(FILE_NAME_OUTPUT.c_str());
     return body.dG;

@@ -41,7 +41,7 @@ class UNAFold : public IFold
 {
     std::ifstream file_in;
     static void delete_all_files();
-    virtual Fe fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
 
     class HeaderLine
     {
@@ -121,15 +121,16 @@ REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
 void UNAFold::delete_all_files()
 {
-    remove_file((get_input_file_name() + ".ct").c_str());
-    remove_file((get_input_file_name() + ".dG").c_str());
-    remove_file((get_input_file_name() + ".h-num").c_str());
-    remove_file((get_input_file_name() + ".log").c_str());
-    remove_file((get_input_file_name() + ".plot").c_str());
-    remove_file((get_input_file_name() + ".run").c_str());
-    remove_file((get_input_file_name() + ".ss-count").c_str());
-    remove_file((get_input_file_name() + ".ann").c_str());
-    remove_file((get_input_file_name() + ".det").c_str());
+    remove_file(get_input_file_name() + ".ct");
+    remove_file(get_input_file_name() + ".dG");
+    remove_file(get_input_file_name() + ".h-num");
+    remove_file(get_input_file_name() + ".log");
+    remove_file(get_input_file_name() + ".plot");
+    remove_file(get_input_file_name() + ".run");
+    remove_file(get_input_file_name() + ".ss-count");
+    remove_file(get_input_file_name() + ".ann");
+    remove_file(get_input_file_name() + ".det");
+    remove_file(get_input_file_name());
 }
 
 
@@ -141,16 +142,14 @@ void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secSt
         secStructure.pair(bodyLine.nucNumber - 1, bodyLine.pairedNuc - 1);
 }
 
-Fe UNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
 {
-    structure.clear();
-    FileLine sseq;
-    for (size_t i = 0; i < sequence.length(); ++i)
-        sseq += sequence[i].as_char();
+    structureRNAm.clear();
+    FileLine sseq = seqRNAm.getString();    
     write(get_input_file_name(), sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
-    if (circ)
+    if (isCircRNAm)
         ss << "--circular ";
     ss << get_input_file_name();
 
@@ -169,14 +168,14 @@ Fe UNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
         throw RNABackendException("output file not found.");
     HeaderLine headerLine;
     headerLine.parse(file_in);
-    structure.set_sequence_size(headerLine.number_of_bases);
+    structureRNAm.set_sequence_size(headerLine.number_of_bases);
 
     BodyLine bodyLine;
     while (bodyLine.parse(file_in))
     {
-        fillStructure(bodyLine, structure);
+        fillStructure(bodyLine, structureRNAm);
     }
-    structure.set_circular(circ);
+    structureRNAm.set_circular(isCircRNAm);
     file_in.close();
     delete_all_files();
     return 0;

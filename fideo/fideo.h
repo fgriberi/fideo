@@ -44,9 +44,11 @@
 #define FIDEO_H
 
 #include "IFold.h"
+#include "IHybridize.h"
 #include "RNABackendsConfig.h"
 #include "RNABackendProxy.h"
 #include "rna_backends_exceptions.h"
 #include "rna_backends_types.h"
+#include "FideoConfig.h"
 
 #endif

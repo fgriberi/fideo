@@ -1,10 +1,10 @@
 /*
- * File:   IFold.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
+ * File:   IHybridize.h
+ * Author: Franco Riberi <fgriberi at gmail.com>
  *
- * Created on September 26, 2010, 5:25 PM
+ * Created on October 26, 2012, 7:37 PM
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Copyright (C) 2012  Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -23,29 +23,30 @@
  *
  */
 
-#ifndef _IFOLD_H
-#define _IFOLD_H
+#ifndef _IHYBRIDIZE_H
+#define _IHYBRIDIZE_H
 
 #include <biopp/biopp.h>
 #include "rna_backends_types.h"
-#include "rna_backends_exceptions.h"
 
 /**
- * Interface for sequence's folding services.
+ * Interface for sequence's hybridize services.
  */
-struct IFold
+struct IHybridize
 {
 public:
     /**
-     * Fold an ARN sequence
-     * @param sequence the ARN sequence to fold.
-     * @param structure the structure where to write the folding.
-     * @param circ if the structure it's circular.
-     * @return The free energy in the structure.
+     * Hybridize an RNA sequence
+     * @param firt sequence the RNA sequence to Hybridize.
+     * @param second sequence the RNA sequence to Hybridize
+     * @return The free energy.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;    
 
-    virtual ~IFold() {}
+    /**
+     * Destroyer
+     */
+    virtual ~IHybridize() {}
 };
 
-#endif  /* _IFOLD_H */
+#endif  /* _IHYBRIDIZE_H */

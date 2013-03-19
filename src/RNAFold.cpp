@@ -47,24 +47,22 @@ class RNAFold : public IFold
     static const char UNPAIR = '.';
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
-    virtual Fe fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
-Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& structure, bool circ) const
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
 {
-    structure.clear();
-    structure.set_circular(circ);
-    FileLine sseq;
-    for (size_t i = 0; i < sequence.length(); ++i)
-        sseq += sequence[i].as_char();
+    structureRNAm.clear();
+    structureRNAm.set_circular(isCircRNAm);
+    FileLine sseq = seqRNAm.getString();
     write(get_input_file_name(), sseq);
     stringstream ss;
-    ss << "RNAfold" << " -noPS ";
-    if (circ)
+    ss << "RNAfold" << " --noPS ";
+    if (isCircRNAm)
         ss << "-circ ";
     ss << "< " << get_input_file_name() << " > " << get_output_file_name();
     const Command CMD = ss.str();
@@ -78,11 +76,11 @@ Fe RNAFold::fold(const biopp::NucSequence& sequence, biopp::SecStructure& struct
     read_line(OUT, LINE_NO, aux);
 
     string str;
-    read_value(aux, 0, sequence.length(), str);
-    parse_structure(str, structure);
+    read_value(aux, 0, seqRNAm.length(), str);
+    parse_structure(str, structureRNAm);
 
     Fe energy;
-    read_free_energy(aux, sequence.length(), energy);
+    read_free_energy(aux, seqRNAm.length(), energy);
     return energy;
 }
 

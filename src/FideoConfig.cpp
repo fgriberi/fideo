@@ -24,23 +24,24 @@
  */
 
 #include <iostream>
-#include <fstream>  
+#include <fstream>
 #include <mili/mili.h>
 #include "fideo/FideoConfig.h"
 #include "fideo/RNABackendProxy.h"
 
 using namespace std;
-using namespace mili; 
+using namespace mili;
 
 const string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
 FideoConfig* FideoConfig::instance = NULL;
 
 FideoConfig* FideoConfig::getInstance()
 {
-	if (instance== NULL) {
-		instance = new FideoConfig();
-	}
-	return instance;
+    if (instance == NULL)
+    {
+        instance = new FideoConfig();
+    }
+    return instance;
 }
 
 
@@ -52,22 +53,22 @@ void FideoConfig::readPathsFile()
         throw RNABackendException("The file cannot be read.");
     else
     {
-        string temp;            
-        while (getline(pathsFile,temp).good())
+        string temp;
+        while (getline(pathsFile, temp).good())
         {
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
-            config.insert(pair<string,string>(result[0],result[1])); //<executable,path>
+            config.insert(pair<string, string>(result[0], result[1])); //<executable,path>
         }
     }
-    pathsFile.close();    
+    pathsFile.close();
 }
 
 string FideoConfig::getPath(const string& exec)
 {
     const map<string, string>::const_iterator it = getInstance()->config.find(exec);
-    if ( it == getInstance()->config.end())
+    if (it == getInstance()->config.end())
         throw RNABackendException("Path not specified in the file <.paths>");
     else
         return it->second;

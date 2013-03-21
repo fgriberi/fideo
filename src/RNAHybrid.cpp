@@ -34,9 +34,9 @@ using namespace mili;
 using namespace std;
 
 class RNAHybrid : public IHybridize
-{ 
+{
     static const unsigned int OBSOLETE_LINES = 6;
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;   
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
     class ParseBody
     {
@@ -44,7 +44,7 @@ class RNAHybrid : public IHybridize
         Fe dG;
 
         void parse(std::ifstream& file)
-        {          
+        {
             string temp;
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
                 getline(file, temp);
@@ -52,11 +52,11 @@ class RNAHybrid : public IHybridize
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != 3)
-                  dG = 1000; //no significant hybridization found      
+                dG = 1000; //no significant hybridization found
             else
             {
                 string deltaG = result[1];
-                from_string(deltaG, dG);    
+                from_string(deltaG, dG);
             }
         }
     };
@@ -75,7 +75,7 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
-   
+
     write(FILE_TARGET, targetSequence);
     write(FILE_QUERY, querySequence);
 
@@ -91,7 +91,7 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
-    ParseBody body;   
+    ParseBody body;
     body.parse(fileOutput);
     remove_file(FILE_NAME_OUTPUT.c_str());
     remove_file(FILE_TARGET.c_str());

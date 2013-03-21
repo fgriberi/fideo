@@ -53,7 +53,7 @@ class IntaRNA : public IHybridize
         Fe dG;
 
         void parse(std::ifstream& file)
-        {          
+        {
             string temp;
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
                 getline(file, temp);
@@ -62,11 +62,11 @@ class IntaRNA : public IHybridize
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != 3)
-                  dG = 1000; //no significant hybridization found      
+                dG = 1000; //no significant hybridization found
             else
             {
                 string deltaG = result[1];
-                from_string(deltaG, dG);    
+                from_string(deltaG, dG);
             }
         }
     };
@@ -90,7 +90,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " " << seq2;
     cmd << " > " << FILE_NAME_OUTPUT;
 
-    //move to the directory where is the folding   
+    //move to the directory where is the folding
     if (chdir(FideoConfig::getPath(INTA_RNA).c_str()) != 0)
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
@@ -100,7 +100,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
-    ParseBody body;   
+    ParseBody body;
     body.parse(fileOutput);
     remove_file(FILE_NAME_OUTPUT.c_str());
     return body.dG;

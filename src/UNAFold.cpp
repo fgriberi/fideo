@@ -145,7 +145,7 @@ void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secSt
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
 {
     structureRNAm.clear();
-    FileLine sseq = seqRNAm.getString();    
+    FileLine sseq = seqRNAm.getString();
     write(get_input_file_name(), sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";

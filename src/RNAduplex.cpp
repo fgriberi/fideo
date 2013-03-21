@@ -75,7 +75,7 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
-    const string seq1 = longerSeq.getString();    
+    const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
     ofstream toHybridize(FILE_AUX.c_str());

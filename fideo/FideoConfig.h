@@ -32,14 +32,14 @@
 class FideoConfig
 {
     /*
-     * Path of configuration file    
+     * Path of configuration file
      */
-    static const std::string FILE_NAME; 
-    
+    static const std::string FILE_NAME;
+
     std::map<std::string, std::string> config;
 
     /*
-     * Read diferent paths 
+     * Read diferent paths
      */
     void readPathsFile();
 
@@ -54,7 +54,7 @@ class FideoConfig
     /*
      * Concrete instance of class
      */
-    static FideoConfig *instance;
+    static FideoConfig* instance;
 
 public:
     /*
@@ -64,13 +64,13 @@ public:
 
     /*
      * Destroyer of class
-     */    
-    ~FideoConfig(){};
+     */
+    ~FideoConfig() {};
 
     /*
      * Get specific path
      */
-    static std::string getPath(const std::string& exec);  
+    static std::string getPath(const std::string& exec);
 };
 
 #endif  /* _FIDEO_CONFIG_H */

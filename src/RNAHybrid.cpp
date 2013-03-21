@@ -42,6 +42,9 @@ class RNAHybrid : public IHybridize
     {
     public:
         Fe dG;
+        static const unsigned int OBSOLETE_dG = 1000;
+        static const unsigned int SIZE_LINE = 6;
+        static const unsigned int DELTA_G = 1;
 
         void parse(std::ifstream& file)
         {
@@ -51,12 +54,14 @@ class RNAHybrid : public IHybridize
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
-            if (result.size() != 3)
-                dG = 1000; //no significant hybridization found
+            if (result.size() != SIZE_LINE)
+                dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-                string deltaG = result[1];
-                from_string(deltaG, dG);
+                string deltaG = result[DELTA_G];
+                bool convertion = from_string(deltaG, dG);
+                if (!convertion)
+                    throw RNABackendException("Failed to convert the string to value type.");
             }
         }
     };

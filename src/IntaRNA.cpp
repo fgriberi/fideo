@@ -25,6 +25,7 @@
 
 #include <sstream>
 #include <string>
+#include <unistd.h>
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"

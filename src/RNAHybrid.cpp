@@ -43,7 +43,7 @@ class RNAHybrid : public IHybridize
     public:
         Fe dG;
         static const unsigned int OBSOLETE_dG = 1000;
-        static const unsigned int SIZE_LINE = 6;
+        static const unsigned int SIZE_LINE = 3;
         static const unsigned int DELTA_G = 1;
 
         void parse(std::ifstream& file)

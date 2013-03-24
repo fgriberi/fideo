@@ -42,6 +42,10 @@ class IntaRNA : public IHybridize
 
     class ParseBody
     {
+        static const unsigned int DELTA_G = 1;
+        static const unsigned int SIZE_LINE = 3;
+        static const unsigned int OBSOLETE_dG = 1000;
+
         enum Columns
         {
             ColEnergy,
@@ -62,11 +66,11 @@ class IntaRNA : public IHybridize
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
-            if (result.size() != 3)
-                dG = 1000; //no significant hybridization found
+            if (result.size() != SIZE_LINE)
+                dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-                string deltaG = result[1];
+                string deltaG = result[DELTA_G];
                 from_string(deltaG, dG);
             }
         }

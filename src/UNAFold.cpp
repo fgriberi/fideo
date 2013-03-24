@@ -32,6 +32,7 @@
 #include "fideo/RNABackendProxy.h"
 #include "fideo/RNABackendsConfig.h"
 #include "fideo/rna_backends_types.h"
+#include "fideo/TmpFile.h"  
 
 using std::stringstream;
 using namespace mili;
@@ -40,7 +41,7 @@ using namespace mili;
 class UNAFold : public IFold
 {
     std::ifstream file_in;
-    static void delete_all_files();
+    static void delete_all_files(const string nameFile);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
 
     class HeaderLine
@@ -119,18 +120,17 @@ class UNAFold : public IFold
 
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
-void UNAFold::delete_all_files()
+void UNAFold::delete_all_files(const string nameFile)
 {
-    remove_file(get_input_file_name() + ".ct");
-    remove_file(get_input_file_name() + ".dG");
-    remove_file(get_input_file_name() + ".h-num");
-    remove_file(get_input_file_name() + ".rnaml");
-    remove_file(get_input_file_name() + ".plot");
-    remove_file(get_input_file_name() + ".run");
-    remove_file(get_input_file_name() + ".ss-count");
-    remove_file(get_input_file_name() + ".ann");
-    remove_file(get_input_file_name() + ".det");
-    remove_file(get_input_file_name());
+    remove_file(nameFile + ".ct");
+    remove_file(nameFile + ".dG");
+    remove_file(nameFile + ".h-num");
+    remove_file(nameFile + ".rnaml");
+    remove_file(nameFile + ".plot");
+    remove_file(nameFile + ".run");
+    remove_file(nameFile + ".ss-count");
+    remove_file(nameFile + ".ann");
+    remove_file(nameFile + ".det");
 }
 
 
@@ -146,12 +146,13 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
-    write(get_input_file_name(), sseq);
+	TmpFile temporalFile;
+    write(temporalFile.getTmpName(), sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
         ss << "--circular ";
-    ss << get_input_file_name();
+	ss << temporalFile.getTmpName();
 
     const Command CMD = ss.str();
     runCommand(CMD);
@@ -163,7 +164,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      *       .                .        .     .       .             .           .    .
     */
 
-    std::ifstream file_in((get_input_file_name() + ".ct").c_str());
+   	std::ifstream file_in((temporalFile.getTmpName() + ".ct").c_str());
     if (!file_in)
         throw RNABackendException("output file not found.");
     HeaderLine headerLine;
@@ -177,6 +178,6 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     }
     structureRNAm.set_circular(isCircRNAm);
     file_in.close();
-    delete_all_files();
+    delete_all_files(temporalFile.getTmpName());
     return 0;
 }

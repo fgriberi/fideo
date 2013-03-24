@@ -56,17 +56,17 @@ class FideoConfig
      */
     static FideoConfig* instance;
 
-public:
     /*
      * Get concrete instance
      */
     static FideoConfig* getInstance();
 
     /*
-     * Destroyer of class
+     * Destructor of class
      */
     ~FideoConfig() {};
 
+public:
     /*
      * Get specific path
      */

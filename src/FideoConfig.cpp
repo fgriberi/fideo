@@ -50,26 +50,25 @@ void FideoConfig::readPathsFile()
     ifstream pathsFile;
     pathsFile.open(FILE_NAME.c_str());
     if (!pathsFile)
-        throw RNABackendException("The file cannot be read.");
+        throw RNABackendException("The config file couldn't be read.");
     else
     {
         string temp;
-        while (getline(pathsFile, temp).good())
+        while (getline(pathsFile, temp))
         {
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
-            config.insert(pair<string, string>(result[0], result[1])); //<executable,path>
+            config[result[0]] = result[1]; //<executable,path>
         }
     }
-    pathsFile.close();
 }
 
 string FideoConfig::getPath(const string& exec)
 {
     const map<string, string>::const_iterator it = getInstance()->config.find(exec);
     if (it == getInstance()->config.end())
-        throw RNABackendException("Path not specified in the file <.paths>");
+        return string();
     else
         return it->second;
 }

@@ -36,8 +36,6 @@
 using std::stack;
 using std::stringstream;
 
-static const FilePath OUT;
-
 //Vienna package
 class RNAFold : public IFold
 {
@@ -73,10 +71,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
     FileLine aux;
-//    read_line(OUT, LINE_NO, aux);
-
     read_line(get_output_file_name(), LINE_NO, aux);
-
 
     string str;
     read_value(aux, 0, seqRNAm.length(), str);

@@ -91,7 +91,7 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     toHybridize.close();
 
     stringstream cmd2;
-    cmd2 << "RNAup ";
+    cmd2 << "RNAup -u 3,4 -c SH ";
     cmd2 << "< " << FILE_AUX;
     cmd2 << " > " << FILE_NAME_OUTPUT;
 

@@ -43,6 +43,7 @@ class RNAcofold : public IHybridize
         enum Columns
         {
             ColRNAcofoldResult,
+            ColOpenParenthesis,
             ColdG,
             NumberOfColumns
         };
@@ -56,8 +57,8 @@ class RNAcofold : public IHybridize
             vector<string> result;
             ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAup.");
-            const string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
+                throw RNABackendException("Invalid output RNAcofold.");
+            const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
             from_string(deltaG, dG);
         }
     };

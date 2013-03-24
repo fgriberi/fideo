@@ -61,7 +61,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     FileLine sseq = seqRNAm.getString();
     write(get_input_file_name(), sseq);
     stringstream ss;
-    ss << "RNAfold" << " --noPS ";
+    ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
         ss << "-circ ";
     ss << "< " << get_input_file_name() << " > " << get_output_file_name();
@@ -73,7 +73,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
     FileLine aux;
-    read_line(OUT, LINE_NO, aux);
+//    read_line(OUT, LINE_NO, aux);
+
+    read_line(get_output_file_name(), LINE_NO, aux);
+
 
     string str;
     read_value(aux, 0, seqRNAm.length(), str);

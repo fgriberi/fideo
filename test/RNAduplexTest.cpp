@@ -35,7 +35,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -8.30);
+    ASSERT_DOUBLE_EQ(dG, -7.80);
     delete p;
 
     EXPECT_FALSE(std::ifstream("outputRNAduplex.out"));

@@ -35,7 +35,7 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -10);
+    ASSERT_DOUBLE_EQ(dG, -9.80);
     delete p;
 
     EXPECT_FALSE(std::ifstream("outputRNAcofold.out"));

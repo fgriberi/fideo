@@ -59,7 +59,7 @@ class RNAduplex : public IHybridize
             vector<string> result;
             ss >> result;
             if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAup.");
+                throw RNABackendException("Invalid output RNAduplex.");
             const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
             from_string(deltaG, dG);
         }

@@ -35,7 +35,7 @@ TEST(RNAupBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -6.72);
+    ASSERT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
     EXPECT_FALSE(std::ifstream("outputHybridize.out"));

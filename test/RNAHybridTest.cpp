@@ -72,7 +72,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
                              "CACCTCAAACTTCAGTGCGTTCTTCTGTCATCATGTACAATTTTCTTTCTTCGAATTTTGATTCGAATGTCAATTTATCA"
                              "ATTTATAAAAACTCCAATAAAAAAGCATCTTGAAGCATCTTGTTTTACCACATATATCAAAACTTCAAAGTACACAATTA"
                              "ATCGGATCATCAGAAAAA";
-    const std::string seq2 = "ugagguaguagguuguauaguu";
+    const std::string seq2 = "UGAGGUAGUAGGUUGUAUAGUU";
 
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);

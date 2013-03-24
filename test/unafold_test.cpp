@@ -45,7 +45,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_FALSE(std::ifstream("fold.in.ct"));
     EXPECT_FALSE(std::ifstream("fold.in.dG"));
     EXPECT_FALSE(std::ifstream("fold.in.h-num"));
-    EXPECT_FALSE(std::ifstream("fold.in.log"));
+    EXPECT_FALSE(std::ifstream("fold.in.rnaml"));
     EXPECT_FALSE(std::ifstream("fold.in.plot"));
     EXPECT_FALSE(std::ifstream("fold.in.run"));
     EXPECT_FALSE(std::ifstream("fold.in.ss-count"));

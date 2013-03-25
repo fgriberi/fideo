@@ -26,6 +26,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <unistd.h>
 #include <mili/mili.h>
 #include "errno.h"
 #include "fideo/IFold.h"
@@ -118,6 +119,7 @@ class UNAFold : public IFold
 
 };
 
+static const string PATH_TMP = "/tmp/";
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
 void UNAFold::delete_all_files(const string nameFile)
@@ -132,7 +134,6 @@ void UNAFold::delete_all_files(const string nameFile)
     remove_file(nameFile + ".ann");
     remove_file(nameFile + ".det");
 }
-
 
 void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure)
 {
@@ -154,6 +155,8 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
         ss << "--circular ";
 	ss << temporalFile.getTmpName();
 
+	if (chdir(PATH_TMP.c_str()) != 0)
+        throw RNABackendException("Invalid path of temp files.");
     const Command CMD = ss.str();
     runCommand(CMD);
 

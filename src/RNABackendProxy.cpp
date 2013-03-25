@@ -111,6 +111,6 @@ int runCommand(const Command& cmd)
 
 void remove_file(const std::string& file_name)
 {
-    if (unlink(("./" + file_name).c_str()) == FILE_ERROR)
+    if (unlink(file_name.c_str()) == FILE_ERROR)
         throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
 }

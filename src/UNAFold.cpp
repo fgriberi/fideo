@@ -42,7 +42,7 @@ using namespace mili;
 class UNAFold : public IFold
 {
     std::ifstream file_in;
-    static void delete_all_files(const string nameFile);
+    static void delete_all_files(const string& nameFile);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
 
     class HeaderLine
@@ -122,7 +122,7 @@ class UNAFold : public IFold
 static const string PATH_TMP = "/tmp/";
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
-void UNAFold::delete_all_files(const string nameFile)
+void UNAFold::delete_all_files(const string& nameFile)
 {
     remove_file(nameFile + ".ct");
     remove_file(nameFile + ".dG");

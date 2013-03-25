@@ -40,13 +40,15 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-//    EXPECT_FALSE(std::ifstream("fold.in.ct"));
-//    EXPECT_FALSE(std::ifstream("fold.in.dG"));
-//    EXPECT_FALSE(std::ifstream("fold.in.h-num"));
-//    EXPECT_FALSE(std::ifstream("fold.in.rnaml"));
-//    EXPECT_FALSE(std::ifstream("fold.in.plot"));
-//    EXPECT_FALSE(std::ifstream("fold.in.run"));
-//    EXPECT_FALSE(std::ifstream("fold.in.ss-count"));
-//    EXPECT_FALSE(std::ifstream("fold.in.ann"));
-//    EXPECT_FALSE(std::ifstream("fold.in.det"));
+    std::string prefixTmpFile = TmpFile::getTmpName();
+
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ct").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".dG").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".h-num").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".rnaml").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".plot").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".run").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ss-count").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ann").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".det").c_str()));
 }

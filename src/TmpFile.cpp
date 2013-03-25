@@ -44,8 +44,7 @@ void TmpFile::getTmpFile()
         throw RNABackendException("Creation of temp file failed with error.");
 }
 
-const FilePath TmpFile::getTmpName() const
+FilePath TmpFile::getTmpName()
 {
     return tmpFileName;
 }
-

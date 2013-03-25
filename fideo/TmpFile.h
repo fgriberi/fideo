@@ -53,5 +53,6 @@ public:
     /**
     * Method that returns the name of the temporary file
     */
-    const FilePath getTmpName() const;
+    static FilePath getTmpName();
+
 };

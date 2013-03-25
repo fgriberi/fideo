@@ -70,8 +70,9 @@ class IntaRNA : public IHybridize
                 dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-                string deltaG = result[DELTA_G];
-                from_string(deltaG, dG);
+                const string deltaG = result[DELTA_G];
+                if (!from_string(deltaG, dG))
+                    throw RNABackendException("Failed to convert the string to value type.");
             }
         }
     };

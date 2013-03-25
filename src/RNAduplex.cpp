@@ -61,7 +61,8 @@ class RNAduplex : public IHybridize
             if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAduplex.");
             const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-            from_string(deltaG, dG);
+            if (!from_string(deltaG, dG))
+                throw RNABackendException("Failed to convert the string to value type.");
         }
     };
 };

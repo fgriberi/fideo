@@ -29,24 +29,24 @@ char TmpFile::tmpFileName[] = "/tmp/myTmpFile-XXXXXX";
 
 TmpFile::TmpFile()
 {
-	getTmpFile();
+    getTmpFile();
 }
 
 TmpFile::~TmpFile()
 {
-	unlink(tmpFileName); 
+    unlink(tmpFileName);
 }
 
 void TmpFile::getTmpFile()
 {
-	int fileDescriptor = -1;
-	fileDescriptor = mkstemp(tmpFileName);
-	if (fileDescriptor < 1)
-		throw RNABackendException("Creation of temp file failed with error.");
+    int fileDescriptor = -1;
+    fileDescriptor = mkstemp(tmpFileName);
+    if (fileDescriptor < 1)
+        throw RNABackendException("Creation of temp file failed with error.");
 }
 
 const FilePath TmpFile::getTmpName() const
 {
-	return tmpFileName;
+    return tmpFileName;
 }
 

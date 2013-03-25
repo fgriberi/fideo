@@ -33,7 +33,7 @@
 #include "fideo/RNABackendProxy.h"
 #include "fideo/RNABackendsConfig.h"
 #include "fideo/rna_backends_types.h"
-#include "fideo/TmpFile.h"  
+#include "fideo/TmpFile.h"
 
 using std::stringstream;
 using namespace mili;
@@ -147,15 +147,15 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
-	TmpFile temporalFile;
+    TmpFile temporalFile;
     write(temporalFile.getTmpName(), sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
         ss << "--circular ";
-	ss << temporalFile.getTmpName();
+    ss << temporalFile.getTmpName();
 
-	if (chdir(PATH_TMP.c_str()) != 0)
+    if (chdir(PATH_TMP.c_str()) != 0)
         throw RNABackendException("Invalid path of temp files.");
     const Command CMD = ss.str();
     runCommand(CMD);
@@ -167,7 +167,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      *       .                .        .     .       .             .           .    .
     */
 
-   	std::ifstream file_in((temporalFile.getTmpName() + ".ct").c_str());
+    std::ifstream file_in((temporalFile.getTmpName() + ".ct").c_str());
     if (!file_in)
         throw RNABackendException("output file not found.");
     HeaderLine headerLine;

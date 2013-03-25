@@ -32,26 +32,26 @@ using namespace std;
 
 class TmpFile
 {
-	static char tmpFileName[32];  // buffer to hold the temporary file name
-	
-	/**
-	* Method that is responsible for creating a temporary file
-	*/
-    void getTmpFile();   
+    static char tmpFileName[32];  // buffer to hold the temporary file name
+
+    /**
+    * Method that is responsible for creating a temporary file
+    */
+    void getTmpFile();
 
 public:
-	/**
-	* Constructor of class
-	*/
+    /**
+    * Constructor of class
+    */
     TmpFile();
 
-	/**
-	* Destructor of class
-	*/
+    /**
+    * Destructor of class
+    */
     ~TmpFile();
-	
-	/**
-	* Method that returns the name of the temporary file
-	*/
-	const FilePath getTmpName() const;
+
+    /**
+    * Method that returns the name of the temporary file
+    */
+    const FilePath getTmpName() const;
 };

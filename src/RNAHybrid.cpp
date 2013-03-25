@@ -58,9 +58,8 @@ class RNAHybrid : public IHybridize
                 dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-                string deltaG = result[DELTA_G];
-                bool convertion = from_string(deltaG, dG);
-                if (!convertion)
+                const string deltaG = result[DELTA_G];
+                if (!from_string(deltaG, dG))
                     throw RNABackendException("Failed to convert the string to value type.");
             }
         }

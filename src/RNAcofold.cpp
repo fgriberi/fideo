@@ -59,7 +59,8 @@ class RNAcofold : public IHybridize
             if (result.size() != NumberOfColumns)
                 throw RNABackendException("Invalid output RNAcofold.");
             const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
-            from_string(deltaG, dG);
+            if (!from_string(deltaG, dG))
+                throw RNABackendException("Failed to convert the string to value type.");
         }
     };
 };

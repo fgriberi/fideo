@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2012 Franco Riberi, FuDePAN
+    Copyright (C) 2013 Franco Riberi, FuDePAN
 
     This file is part of the Fideo Library.
 
@@ -39,7 +39,7 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     Fe result = p->fold(seq, secStructure, true);
     delete p;
 
-    EXPECT_EQ(-18.70, result);
+    ASSERT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
 
 }

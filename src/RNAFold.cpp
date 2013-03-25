@@ -32,6 +32,7 @@
 #include "fideo/RNABackendProxy.h"
 #include "fideo/RNABackendsConfig.h"
 #include "fideo/rna_backends_types.h"
+#include "fideo/TmpFile.h"
 
 using std::stack;
 using std::stringstream;
@@ -49,7 +50,7 @@ class RNAFold : public IFold
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
-
+static const string PATH_TMP = "/tmp/";
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
@@ -57,12 +58,21 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
-    write(get_input_file_name(), sseq);
+
+    TmpFile temporalFile;
+	const string fileInput = temporalFile.getTmpName();
+	const string fileOutput = fileInput + ".out";
+
+    write(fileInput, sseq);
     stringstream ss;
     ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
         ss << "-circ ";
-    ss << "< " << get_input_file_name() << " > " << get_output_file_name();
+    ss << "< " << fileInput << " > " << fileOutput;
+
+    if (chdir(PATH_TMP.c_str()) != 0)
+        throw RNABackendException("Invalid path of temp files.");
+
     const Command CMD = ss.str();
     runCommand(CMD);
 
@@ -71,7 +81,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
     FileLine aux;
-    read_line(get_output_file_name(), LINE_NO, aux);
+    read_line(fileOutput, LINE_NO, aux);
 
     string str;
     read_value(aux, 0, seqRNAm.length(), str);
@@ -79,6 +89,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 
     Fe energy;
     read_free_energy(aux, seqRNAm.length(), energy);
+	remove_file(fileOutput.c_str());
     return energy;
 }
 

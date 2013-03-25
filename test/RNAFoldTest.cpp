@@ -27,7 +27,6 @@
 #include <gmock/gmock.h>
 
 
-
 TEST(RNAFoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
@@ -41,5 +40,7 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
 
     ASSERT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
+    std::string prefixTmpFile = TmpFile::getTmpName();
 
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
 }

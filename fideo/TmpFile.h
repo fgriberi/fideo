@@ -32,7 +32,7 @@ using namespace std;
 
 class TmpFile
 {
-    static char tmpFileName[32];  // buffer to hold the temporary file name
+    static char tmpFileName[];  // buffer to hold the temporary file name
 
     /**
     * Method that is responsible for creating a temporary file

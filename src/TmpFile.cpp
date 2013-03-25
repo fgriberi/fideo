@@ -39,8 +39,7 @@ TmpFile::~TmpFile()
 
 void TmpFile::getTmpFile()
 {
-    int fileDescriptor = -1;
-    fileDescriptor = mkstemp(tmpFileName);
+    const int fileDescriptor = mkstemp(tmpFileName);
     if (fileDescriptor < 1)
         throw RNABackendException("Creation of temp file failed with error.");
 }

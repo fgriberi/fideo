@@ -119,12 +119,12 @@ class UNAFold : public IFold
 
 };
 
-static const string PATH_TMP = "/tmp/";
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
 void UNAFold::delete_all_files(const string& nameFile)
 {
     remove_file(nameFile + ".ct");
+    remove_file(nameFile + "_1.ct");
     remove_file(nameFile + ".dG");
     remove_file(nameFile + ".h-num");
     remove_file(nameFile + ".rnaml");
@@ -155,10 +155,9 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
         ss << "--circular ";
     ss << temporalFile.getTmpName();
 
-    if (chdir(PATH_TMP.c_str()) != 0)
-        throw RNABackendException("Invalid path of temp files.");
-    const Command CMD = ss.str();
-    runCommand(CMD);
+    temporalFile.changeDirectory();
+    const Command cmd = ss.str();
+    runCommand(cmd);
 
     /* fold.in.ct look like this:
      * amountOfNucleotids dG = 'value'  nameSequence

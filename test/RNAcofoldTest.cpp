@@ -35,8 +35,9 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -9.80);
+    EXPECT_DOUBLE_EQ(dG, -9.80);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputRNAcofold.out"));
+    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
+    EXPECT_FALSE(std::ifstream((TmpFile::getTmpName() + ".out").c_str()));
 }

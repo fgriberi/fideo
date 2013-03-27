@@ -43,12 +43,13 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);
-    ASSERT_DOUBLE_EQ(dG, -16.4);
+    EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
+    const string prefixTmpFile = TmpFile::getTmpName();
 
-    EXPECT_FALSE(std::ifstream("outputRNAHybrid.out"));
-    EXPECT_FALSE(std::ifstream("targetSequence.fasta"));
-    EXPECT_FALSE(std::ifstream("querySequence.fasta"));
+    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".query").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
 }
 
 TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
@@ -81,10 +82,11 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);
-    ASSERT_DOUBLE_EQ(dG, -28.2);
+    EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
+    const string prefixTmpFile = TmpFile::getTmpName();
 
-    EXPECT_FALSE(std::ifstream("outputRNAHybrid.out"));
-    EXPECT_FALSE(std::ifstream("targetSequence.fasta"));
-    EXPECT_FALSE(std::ifstream("querySequence.fasta"));
+    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".query").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
 }

@@ -36,10 +36,11 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -5.23621);
+    EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
+    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
+
 }
 
 TEST(IntaRNABackendTestSuite, BasicTest2)
@@ -60,8 +61,8 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -7.34977);
+    EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
+    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
 }

@@ -40,9 +40,11 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-    std::string prefixTmpFile = TmpFile::getTmpName();
+    const std::string prefixTmpFile = TmpFile::getTmpName();
 
+    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
     EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ct").c_str()));
+    EXPECT_FALSE(std::ifstream((prefixTmpFile + "_1.ct").c_str()));
     EXPECT_FALSE(std::ifstream((prefixTmpFile + ".dG").c_str()));
     EXPECT_FALSE(std::ifstream((prefixTmpFile + ".h-num").c_str()));
     EXPECT_FALSE(std::ifstream((prefixTmpFile + ".rnaml").c_str()));

@@ -38,9 +38,11 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     Fe result = p->fold(seq, secStructure, true);
     delete p;
 
-    ASSERT_DOUBLE_EQ(result, -18.70);
+    EXPECT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
-    std::string prefixTmpFile = TmpFile::getTmpName();
 
+    const std::string prefixTmpFile = TmpFile::getTmpName();
+
+    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
     EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
 }

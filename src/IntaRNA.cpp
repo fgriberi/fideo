@@ -30,6 +30,7 @@
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
 #include "fideo/FideoConfig.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -78,7 +79,6 @@ class IntaRNA : public IHybridize
     };
 };
 
-static const string FILE_NAME_OUTPUT = "outputIntaRNA.out";
 static const string INTA_RNA = "runIntaRNA";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
@@ -90,24 +90,27 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
 
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
+
+    TmpFile temporalFile;
+    const string tmpFileOutput = temporalFile.getTmpName();
+
     stringstream cmd;
     cmd << "./IntaRNA ";
     cmd << seq1;
     cmd << " " << seq2;
-    cmd << " > " << FILE_NAME_OUTPUT;
+    cmd << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
     if (chdir(FideoConfig::getPath(INTA_RNA).c_str()) != 0)
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
-    const Command CMD = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
-    runCommand(CMD);
+    const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
+    runCommand(command);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(FILE_NAME_OUTPUT.c_str());
     return body.dG;
 }

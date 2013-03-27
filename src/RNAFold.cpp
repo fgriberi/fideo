@@ -50,7 +50,6 @@ class RNAFold : public IFold
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
-static const string PATH_TMP = "/tmp/";
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
@@ -60,8 +59,8 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     FileLine sseq = seqRNAm.getString();
 
     TmpFile temporalFile;
-	const string fileInput = temporalFile.getTmpName();
-	const string fileOutput = fileInput + ".out";
+    const string fileInput = temporalFile.getTmpName();
+    const string fileOutput = fileInput + ".out";
 
     write(fileInput, sseq);
     stringstream ss;
@@ -70,11 +69,8 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
         ss << "-circ ";
     ss << "< " << fileInput << " > " << fileOutput;
 
-    if (chdir(PATH_TMP.c_str()) != 0)
-        throw RNABackendException("Invalid path of temp files.");
-
-    const Command CMD = ss.str();
-    runCommand(CMD);
+    const Command cmd = ss.str();
+    runCommand(cmd);
 
     /* fold.out look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
@@ -89,7 +85,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 
     Fe energy;
     read_free_energy(aux, seqRNAm.length(), energy);
-	remove_file(fileOutput.c_str());
+    remove_file(fileOutput.c_str());
     return energy;
 }
 

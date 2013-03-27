@@ -25,7 +25,8 @@
 
 #include <fideo/TmpFile.h>
 
-char TmpFile::tmpFileName[] = "/tmp/myTmpFile-XXXXXX";
+string TmpFile::tmpFileName = "";
+static const string PATH_TMP = "/tmp/";
 
 TmpFile::TmpFile()
 {
@@ -34,17 +35,26 @@ TmpFile::TmpFile()
 
 TmpFile::~TmpFile()
 {
-    unlink(tmpFileName);
+    unlink(tmpFileName.c_str());
 }
 
 void TmpFile::getTmpFile()
 {
-    const int fileDescriptor = mkstemp(tmpFileName);
+    char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
+    const int fileDescriptor = mkstemp(nameFileAux);
     if (fileDescriptor < 1)
         throw RNABackendException("Creation of temp file failed with error.");
+    tmpFileName = nameFileAux;
 }
 
 FilePath TmpFile::getTmpName()
 {
     return tmpFileName;
+}
+
+void TmpFile::changeDirectory()
+{
+    if (chdir(PATH_TMP.c_str()) != 0)
+        throw RNABackendException("Invalid path of temp files.");
+
 }

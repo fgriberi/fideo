@@ -28,6 +28,7 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -66,9 +67,9 @@ class RNAHybrid : public IHybridize
     };
 };
 
-static const string FILE_TARGET = "targetSequence.fasta";
-static const string FILE_QUERY = "querySequence.fasta";
-static const string FILE_NAME_OUTPUT = "outputRNAHybrid.out";
+//static const string FILE_TARGET = "targetSequence.fasta";
+//static const string FILE_QUERY = "querySequence.fasta";
+//static const string FILE_NAME_OUTPUT = "outputRNAHybrid.out";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
@@ -80,25 +81,29 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
-    write(FILE_TARGET, targetSequence);
-    write(FILE_QUERY, querySequence);
+    TmpFile temporalFile;
+    const string fileTmpTarget = temporalFile.getTmpName();
+    const string fileTmpQuery = fileTmpTarget + ".query";
+    const string fileTmpOutput = fileTmpTarget + ".out";
+
+    write(fileTmpTarget, targetSequence);
+    write(fileTmpQuery, querySequence);
 
     stringstream cmd;
     cmd << "RNAhybrid -s 3utr_human ";
-    cmd << "-t " << FILE_TARGET;
-    cmd << " -q " << FILE_QUERY;
-    cmd << " > " << FILE_NAME_OUTPUT;
+    cmd << "-t " << fileTmpTarget;
+    cmd << " -q " << fileTmpQuery;
+    cmd << " > " << fileTmpOutput;
 
-    const Command CMD = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
-    runCommand(CMD);
+    const Command command = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
+    runCommand(command);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(FILE_NAME_OUTPUT.c_str());
-    remove_file(FILE_TARGET.c_str());
-    remove_file(FILE_QUERY.c_str());
+    remove_file(fileTmpQuery);
+    remove_file(fileTmpOutput);
     return body.dG;
 }

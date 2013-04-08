@@ -1,6 +1,7 @@
 /*
  * File:   IFold.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
+ *		   Franco Riberi <fgriberi at gmail.com>
  *
  * Created on September 26, 2010, 5:25 PM
  *
@@ -45,8 +46,16 @@ public:
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
 
+	/**
+	 * Class destructor
+	 */
     virtual ~IFold() {}
 
+	/**
+	 * Method that provide the available backends for hybridize service.
+	 * @param List to fill with different backends
+     * @return 
+	 */	
 	void getAvailableBackends(StringList& slist) const
 	{
 		mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());

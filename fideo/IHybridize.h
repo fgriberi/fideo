@@ -47,6 +47,16 @@ public:
      * Destroyer
      */
     virtual ~IHybridize() {}
+
+	void getAvailableBackends(StringList& slist) const
+	{
+		mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+		while(!it.end())
+	    {
+    	    slist.push_back(*it);
+    	    it++;
+    	}
+	}
 };
 
 #endif  /* _IHYBRIDIZE_H */

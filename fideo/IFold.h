@@ -46,6 +46,16 @@ public:
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
 
     virtual ~IFold() {}
+
+	void getAvailableBackends(StringList& slist) const
+	{
+		mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+		while(!it.end())
+	    {
+    	    slist.push_back(*it);
+    	    it++;
+    	}
+	}
 };
 
 #endif  /* _IFOLD_H */

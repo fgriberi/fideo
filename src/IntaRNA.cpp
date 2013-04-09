@@ -101,7 +101,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
-    if (chdir(FideoConfig::getPath(INTA_RNA).c_str()) != 0)
+    if (chdir(FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out

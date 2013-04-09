@@ -39,8 +39,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
-    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
-
+//    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
 }
 
 TEST(IntaRNABackendTestSuite, BasicTest2)
@@ -64,5 +63,5 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 
-    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
+//    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
 }

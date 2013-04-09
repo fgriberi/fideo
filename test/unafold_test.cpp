@@ -26,6 +26,39 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+bool isMyTmpFile (const std::string& fileTmpName)  
+{
+	bool ret = false;
+	stringstream ss(fileTmpName);
+    vector<string> result;  //typedef vector<string> Result
+    ss >> mili::Separator(result, '-');
+    if (result.size() == 2 && result[0] == "myTmpFile")
+		ret = true;
+    return ret; 
+}
+
+static const std::string DIRECTORY_PATH = "/tmp";
+
+bool existFiles()
+{
+	bool ret = false;
+	DIR *dir;
+	struct dirent *ent;
+	dir = opendir(DIRECTORY_PATH.c_str());
+	if (dir == NULL) 
+  		std::cout << "Can not open directory " << DIRECTORY_PATH << std::endl; 
+	while ((ent = readdir (dir)) != NULL && !ret) 
+	{
+		ret = isMyTmpFile(ent->d_name);
+	}
+	closedir (dir);
+	return ret;
+}
+
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
@@ -40,17 +73,5 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-    const std::string prefixTmpFile = TmpFile::getTmpName();
-
-    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ct").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + "_1.ct").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".dG").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".h-num").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".rnaml").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".plot").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".run").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ss-count").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".ann").c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".det").c_str()));
+	EXPECT_FALSE(existFiles());
 }

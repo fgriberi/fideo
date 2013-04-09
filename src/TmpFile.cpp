@@ -2,9 +2,9 @@
  * File:   TmpFile.cpp
  * Author: Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on April 2013.
  *
- * Copyright (C) 2012 Franco Riberi, FuDePAN
+ * Copyright (C) 2013 Franco Riberi, FuDePAN
  *
  * This file is part of fideo.
  *
@@ -25,7 +25,6 @@
 
 #include <fideo/TmpFile.h>
 
-string TmpFile::tmpFileName = "";
 static const string PATH_TMP = "/tmp/";
 
 TmpFile::TmpFile()

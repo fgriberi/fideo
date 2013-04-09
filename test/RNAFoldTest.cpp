@@ -41,8 +41,8 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
 
-    const std::string prefixTmpFile = TmpFile::getTmpName();
+//    const std::string prefixTmpFile = TmpFile::getTmpName();
 
-    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
-    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
+//    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
+//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
 }

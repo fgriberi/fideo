@@ -2,9 +2,9 @@
  * File:   TmpFile.h
  * Author: Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 4:26 PM
+ * Created on April 2013.
  *
- * Copyright (C) 2012 Franco Riberi, FuDePAN
+ * Copyright (C) 2013 Franco Riberi, FuDePAN
  *
  * This file is part of fideo.
  *
@@ -26,13 +26,12 @@
 #include <string>
 #include <cstdlib>
 #include "fideo/rna_backends_types.h"
-#include "fideo/rna_backends_types.h"
 
 using namespace std;
 
 class TmpFile
 {
-    static string tmpFileName; // buffer to hold the temporary file name
+    string tmpFileName; // buffer to hold the temporary file name
 
     /**
     * Method that is responsible for creating a temporary file
@@ -53,10 +52,10 @@ public:
     /**
     * Method that returns the name of the temporary file
     */
-    static FilePath getTmpName();
+    FilePath getTmpName();
 
     /**
     * Method that change current directory to /tmp
     */
-    void changeDirectory();
+    void changeDirectory();  //ponerlo en el cod solo se usa en el unafold
 };

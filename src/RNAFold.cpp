@@ -58,9 +58,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
 
-    TmpFile temporalFile;
-    const string fileInput = temporalFile.getTmpName();
-    const string fileOutput = fileInput + ".out";
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+    const string fileInput = temporalInputFile.getTmpName();
+    const string fileOutput = temporalOutputFile.getTmpName();
 
     write(fileInput, sseq);
     stringstream ss;
@@ -85,7 +86,6 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 
     Fe energy;
     read_free_energy(aux, seqRNAm.length(), energy);
-    remove_file(fileOutput.c_str());
     return energy;
 }
 

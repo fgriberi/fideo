@@ -86,9 +86,10 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    TmpFile temporalFile;
-    const string inputTmpFile = temporalFile.getTmpName();
-    const string outputTmpFile = inputTmpFile + ".out";
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+    const string inputTmpFile = temporalInputFile.getTmpName();
+    const string outputTmpFile = temporalOutputFile.getTmpName();
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -107,7 +108,6 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(outputTmpFile.c_str());
     remove_file(OUT_FILE.c_str());
     return body.dG;
 }

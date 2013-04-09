@@ -67,10 +67,6 @@ class RNAHybrid : public IHybridize
     };
 };
 
-//static const string FILE_TARGET = "targetSequence.fasta";
-//static const string FILE_QUERY = "querySequence.fasta";
-//static const string FILE_NAME_OUTPUT = "outputRNAHybrid.out";
-
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
 Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
@@ -81,10 +77,13 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
-    TmpFile temporalFile;
-    const string fileTmpTarget = temporalFile.getTmpName();
-    const string fileTmpQuery = fileTmpTarget + ".query";
-    const string fileTmpOutput = fileTmpTarget + ".out";
+    TmpFile temporalTargetFile;
+    TmpFile temporalQueryFile;
+    TmpFile temporalOutputFile;
+
+    const string fileTmpTarget = temporalTargetFile.getTmpName();
+    const string fileTmpQuery = temporalQueryFile.getTmpName();
+    const string fileTmpOutput = temporalOutputFile.getTmpName();
 
     write(fileTmpTarget, targetSequence);
     write(fileTmpQuery, querySequence);
@@ -103,7 +102,5 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(fileTmpQuery);
-    remove_file(fileTmpOutput);
     return body.dG;
 }

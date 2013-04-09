@@ -41,5 +41,7 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidStructureException, RNABackendExceptionRoo
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Out of range");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
+
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
 

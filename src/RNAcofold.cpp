@@ -66,9 +66,6 @@ class RNAcofold : public IHybridize
     };
 };
 
-//static const string FILE_NAME_OUTPUT = "outputRNAcofold.out";
-//static const string FILE_AUX = "toHybridizeCofold";
-
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
 Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
@@ -78,9 +75,11 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    TmpFile temporalFile;
-    const string inputTmpFile = temporalFile.getTmpName();
-    const string outputTmpFile = inputTmpFile + ".out";
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+
+    const string inputTmpFile = temporalInputFile.getTmpName();
+    const string outputTmpFile = temporalOutputFile.getTmpName();
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -104,6 +103,5 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     ParseBody body;
     body.parse(temp);
-    remove_file(outputTmpFile.c_str());
     return body.dG;
 }

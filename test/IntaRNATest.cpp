@@ -26,6 +26,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(IntaRNABackendTestSuite, BasicTest1)
 {
@@ -39,7 +40,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
-//    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
+	EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(IntaRNABackendTestSuite, BasicTest2)
@@ -63,5 +64,5 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 
-//    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
+	EXPECT_FALSE(HelperTest::checkDirTmp());
 }

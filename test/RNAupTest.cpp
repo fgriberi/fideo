@@ -25,6 +25,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(RNAupBackendTestSuite, BasicTest)
 {
@@ -38,9 +39,6 @@ TEST(RNAupBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
-//    const std::string prefixTmpFile = TmpFile::getTmpName();
-
-//    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
-//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
-//    EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
-}
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
+}	

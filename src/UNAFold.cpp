@@ -121,6 +121,8 @@ class UNAFold : public IFold
 
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
+static const string PATH_TMP = "/tmp/";
+
 void UNAFold::delete_all_files(const string& nameFile)
 {
     remove_file(nameFile + ".ct");
@@ -155,7 +157,8 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
         ss << "--circular ";
     ss << temporalFile.getTmpName();
 
-    temporalFile.changeDirectory();
+	if (chdir(PATH_TMP.c_str()) != 0)
+        throw RNABackendException("Invalid path of temp files.");
     const Command cmd = ss.str();
     runCommand(cmd);
 

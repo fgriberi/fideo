@@ -26,6 +26,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(RNAHybridBackendTestSuite, BasicTest1)
 {
@@ -45,11 +46,8 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     double dG = p->hybridize(targetSequence, querySequence, false);
     EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
-//    const string prefixTmpFile = TmpFile::getTmpName();
 
-//    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
-//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".query").c_str()));
-//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
@@ -84,9 +82,6 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     double dG = p->hybridize(targetSequence, querySequence, false);
     EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
-//    const string prefixTmpFile = TmpFile::getTmpName();
 
-//    EXPECT_FALSE(std::ifstream(prefixTmpFile.c_str()));
-//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".query").c_str()));
-//    EXPECT_FALSE(std::ifstream((prefixTmpFile + ".out").c_str()));
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

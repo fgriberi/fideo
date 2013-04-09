@@ -1,5 +1,5 @@
 /*
- * File:   TmpFile.h
+ * File:   HelperTest.cpp
  * Author: Franco Riberi <fgriberi at gmail.com>
  *
  * Created on April 2013.
@@ -19,39 +19,38 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o. If not, see <http://www.gnu.org/licenses/>.
+ * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string>
-#include <cstdlib>
-#include "fideo/rna_backends_types.h"
+#include <HelperTest.h>
 
-using namespace std;
+static const std::string DIRECTORY_PATH = "/tmp";
 
-class TmpFile
+bool HelperTest::isMyTmpFile (const std::string& fileTmpName)  
 {
-    string tmpFileName; // buffer to hold the temporary file name
+	bool ret = false;
+	stringstream ss(fileTmpName);
+    ParserResult result;  
+    ss >> mili::Separator(result, '-');
+    if (result.size() == 2 && result[0] == "myTmpFile")
+		ret = true;
+    return ret; 
+}
 
-    /**
-    * Method that is responsible for creating a temporary file
-    */
-    void getTmpFile();
+bool HelperTest::checkDirTmp()
+{
+	bool ret = false;
+	DIR *dir;
+	struct dirent *ent;
+	dir = opendir(DIRECTORY_PATH.c_str());
+	if (dir == NULL) 
+  		throw SeparatorException();
+	while ((ent = readdir (dir)) != NULL && !ret) 
+	{
+		ret = isMyTmpFile(ent->d_name);
+	}
+	closedir (dir);
+	return ret;
+}
 
-public:
-    /**
-    * Constructor of class
-    */
-    TmpFile();
-
-    /**
-    * Destructor of class
-    */
-    ~TmpFile();
-
-    /**
-    * Method that returns the name of the temporary file
-    */
-    FilePath getTmpName();
-
-};

@@ -25,6 +25,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(RNAduplexBackendTestSuite, BasicTest)
 {
@@ -38,6 +39,5 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -7.80);
     delete p;
 
-//    EXPECT_FALSE(std::ifstream(TmpFile::getTmpName().c_str()));
-//    EXPECT_FALSE(std::ifstream((TmpFile::getTmpName() + ".out").c_str()));
+	EXPECT_FALSE(HelperTest::checkDirTmp());
 }

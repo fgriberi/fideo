@@ -25,8 +25,6 @@
 
 #include <fideo/TmpFile.h>
 
-static const string PATH_TMP = "/tmp/";
-
 TmpFile::TmpFile()
 {
     getTmpFile();
@@ -51,9 +49,3 @@ FilePath TmpFile::getTmpName()
     return tmpFileName;
 }
 
-void TmpFile::changeDirectory()
-{
-    if (chdir(PATH_TMP.c_str()) != 0)
-        throw RNABackendException("Invalid path of temp files.");
-
-}

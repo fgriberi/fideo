@@ -1,5 +1,5 @@
 /*
- * File:   TmpFile.h
+ * File:   HelperTest.h
  * Author: Franco Riberi <fgriberi at gmail.com>
  *
  * Created on April 2013.
@@ -19,39 +19,29 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o. If not, see <http://www.gnu.org/licenses/>.
+ * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#include <string>
-#include <cstdlib>
-#include "fideo/rna_backends_types.h"
+#ifndef _HELPER_TEST_H
+#define _HELPER_TEST_H
+
+#include <vector>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <mili/mili.h>
+#include <fideo/rna_backends_exceptions.h>
 
 using namespace std;
 
-class TmpFile
+typedef vector<string> ParserResult;
+
+class HelperTest
 {
-    string tmpFileName; // buffer to hold the temporary file name
-
-    /**
-    * Method that is responsible for creating a temporary file
-    */
-    void getTmpFile();
-
 public:
-    /**
-    * Constructor of class
-    */
-    TmpFile();
-
-    /**
-    * Destructor of class
-    */
-    ~TmpFile();
-
-    /**
-    * Method that returns the name of the temporary file
-    */
-    FilePath getTmpName();
-
+	static bool isMyTmpFile (const std::string& fileTmpName);
+	static bool checkDirTmp(); 
 };
+
+#endif  /* _HELPER_TEST_H */

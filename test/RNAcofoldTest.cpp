@@ -32,7 +32,7 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAcofold");
+    fideo::IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);

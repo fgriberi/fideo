@@ -33,7 +33,9 @@
 using namespace biopp;
 using namespace mili;
 using namespace std;
-
+	
+namespace fideo
+{
 //Vienna package
 class RNAcofold : public IHybridize
 {
@@ -104,4 +106,5 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     ParseBody body;
     body.parse(temp);
     return body.dG;
+}
 }

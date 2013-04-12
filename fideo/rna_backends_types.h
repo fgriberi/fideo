@@ -32,6 +32,8 @@
 
 #include "rna_backends_exceptions.h"
 
+namespace fideo
+{
 /**
  * Distance between sequences
  */
@@ -78,5 +80,5 @@ typedef std::list<std::string> StringList;
 #define SUCCESS_EXEC 0
 #define MATRIX_SIZE 4
 
+}
 #endif  /* _RNA_BACKENDS_TYPES_H */
-

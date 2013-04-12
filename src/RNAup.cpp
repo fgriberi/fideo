@@ -34,6 +34,8 @@ using namespace biopp;
 using namespace mili;
 using namespace std;
 
+namespace fideo
+{
 //Vienna package
 class RNAup : public IHybridize
 {
@@ -110,4 +112,5 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     body.parse(fileOutput);
     remove_file(OUT_FILE.c_str());
     return body.dG;
+}
 }

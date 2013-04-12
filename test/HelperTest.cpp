@@ -45,7 +45,7 @@ bool HelperTest::checkDirTmp()
 	struct dirent *ent;
 	dir = opendir(DIRECTORY_PATH.c_str());
 	if (dir == NULL) 
-  		throw SeparatorException();
+  		throw fideo::SeparatorException();
 	while ((ent = readdir (dir)) != NULL && !ret) 
 	{
 		ret = isMyTmpFile(ent->d_name);

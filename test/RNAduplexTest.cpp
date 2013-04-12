@@ -32,7 +32,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    fideo::IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAduplex");
+    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);

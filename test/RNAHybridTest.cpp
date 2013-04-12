@@ -40,7 +40,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    fideo::IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
+    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);
@@ -76,7 +76,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    fideo::IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
+    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);

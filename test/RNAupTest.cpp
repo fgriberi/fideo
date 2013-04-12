@@ -25,6 +25,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(RNAupBackendTestSuite, BasicTest)
 {
@@ -32,11 +33,12 @@ TEST(RNAupBackendTestSuite, BasicTest)
     const biopp::NucSequence seq2("AGGACAACCU");
 
     IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAup");
-    ASSERT_TRUE(p != NULL);
+    EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, seq2, false);
-    ASSERT_DOUBLE_EQ(dG, -6.72);
+    EXPECT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputHybridize.out"));
-}
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
+}	

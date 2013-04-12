@@ -26,6 +26,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "HelperTest.h"
 
 TEST(RNAHybridBackendTestSuite, BasicTest1)
 {
@@ -33,7 +34,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
                              "TCAAGAGTGTGATGTCGGATTTGGTGTTTTATGATGTCGCATCAACAGGTGCAAATGGATTTGATCCTGA"
                              "TGCAGGGTATATGGACTTCTGTGTTAAAAATGCAGAATTACTCAACCTTGCTGCAGTTAGGATCTTCTTC"
                              "CTCAATGCCGCAAAGGCCAAGGCTGCTCTCTCGCGTAAGCCAGAGAGGAAGGCTAACCCTAAATTTGGAG"
-                             "AGTGGCAGGTGGAGGTTATCAATAATCATT";          
+                             "AGTGGCAGGTGGAGGTTATCAATAATCATT";
     const std::string seq2 = "AAGAUGUGGAAAAAUUGGAAUC";
 
     const biopp::NucSequence targetSequence(seq1);
@@ -43,12 +44,10 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);
-    ASSERT_DOUBLE_EQ(dG, -16.4);
+    EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputRNAHybrid.out"));
-    EXPECT_FALSE(std::ifstream("targetSequence.fasta"));
-    EXPECT_FALSE(std::ifstream("querySequence.fasta"));
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
@@ -72,7 +71,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
                              "CACCTCAAACTTCAGTGCGTTCTTCTGTCATCATGTACAATTTTCTTTCTTCGAATTTTGATTCGAATGTCAATTTATCA"
                              "ATTTATAAAAACTCCAATAAAAAAGCATCTTGAAGCATCTTGTTTTACCACATATATCAAAACTTCAAAGTACACAATTA"
                              "ATCGGATCATCAGAAAAA";
-    const std::string seq2 = "ugagguaguagguuguauaguu";
+    const std::string seq2 = "UGAGGUAGUAGGUUGUAUAGUU";
 
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
@@ -81,10 +80,8 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, querySequence, false);
-    ASSERT_DOUBLE_EQ(dG, -28.2);
+    EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
 
-    EXPECT_FALSE(std::ifstream("outputRNAHybrid.out"));
-    EXPECT_FALSE(std::ifstream("targetSequence.fasta"));
-    EXPECT_FALSE(std::ifstream("querySequence.fasta"));
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

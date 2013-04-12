@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2012 Franco Riberi, FuDePAN
+    Copyright (C) 2013 Franco Riberi, FuDePAN
 
     This file is part of the Fideo Library.
 
@@ -10,11 +10,11 @@
 
     Fideo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Fideo. If not, see <http://www.gnu.org/licenses/>.
+    along with Fideo.  If not, see <http://www.gnu.org/licenses/>.
 
     This is a test file.
 */
@@ -27,17 +27,19 @@
 #include <gmock/gmock.h>
 #include "HelperTest.h"
 
-TEST(RNAcofoldBackendTestSuite, BasicTest)
+TEST(RNAFoldBackendTestSuite, BasicTest)
 {
-    const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
-    const biopp::NucSequence seq2("AGGACAACCU");
+    const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAcofold");
+    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2, false);
-    EXPECT_DOUBLE_EQ(dG, -9.80);
+    Fe result = p->fold(seq, secStructure, true);
     delete p;
+
+    EXPECT_DOUBLE_EQ(result, -18.70);
+    EXPECT_TRUE(secStructure.is_circular());
 
 	EXPECT_FALSE(HelperTest::checkDirTmp());
 }

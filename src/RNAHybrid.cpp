@@ -28,6 +28,7 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -43,7 +44,11 @@ class RNAHybrid : public IHybridize
     public:
         Fe dG;
         static const unsigned int OBSOLETE_dG = 1000;
+<<<<<<< local
         static const unsigned int SIZE_LINE = 6;
+=======
+        static const unsigned int SIZE_LINE = 3;
+>>>>>>> other
         static const unsigned int DELTA_G = 1;
 
         void parse(std::ifstream& file)
@@ -58,18 +63,19 @@ class RNAHybrid : public IHybridize
                 dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
+<<<<<<< local
                 string deltaG = result[DELTA_G];
                 bool convertion = from_string(deltaG, dG);
                 if (!convertion)
+=======
+                const string deltaG = result[DELTA_G];
+                if (!from_string(deltaG, dG))
+>>>>>>> other
                     throw RNABackendException("Failed to convert the string to value type.");
             }
         }
     };
 };
-
-static const string FILE_TARGET = "targetSequence.fasta";
-static const string FILE_QUERY = "querySequence.fasta";
-static const string FILE_NAME_OUTPUT = "outputRNAHybrid.out";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
@@ -81,25 +87,35 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
+<<<<<<< local
     write(FILE_TARGET, targetSequence);
     write(FILE_QUERY, querySequence);
+=======
+    TmpFile temporalTargetFile;
+    TmpFile temporalQueryFile;
+    TmpFile temporalOutputFile;
+
+    const string fileTmpTarget = temporalTargetFile.getTmpName();
+    const string fileTmpQuery = temporalQueryFile.getTmpName();
+    const string fileTmpOutput = temporalOutputFile.getTmpName();
+
+    write(fileTmpTarget, targetSequence);
+    write(fileTmpQuery, querySequence);
+>>>>>>> other
 
     stringstream cmd;
     cmd << "RNAhybrid -s 3utr_human ";
-    cmd << "-t " << FILE_TARGET;
-    cmd << " -q " << FILE_QUERY;
-    cmd << " > " << FILE_NAME_OUTPUT;
+    cmd << "-t " << fileTmpTarget;
+    cmd << " -q " << fileTmpQuery;
+    cmd << " > " << fileTmpOutput;
 
-    const Command CMD = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
-    runCommand(CMD);
+    const Command command = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
+    runCommand(command);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(FILE_NAME_OUTPUT.c_str());
-    remove_file(FILE_TARGET.c_str());
-    remove_file(FILE_QUERY.c_str());
     return body.dG;
 }

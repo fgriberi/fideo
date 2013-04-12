@@ -28,6 +28,7 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -65,7 +66,8 @@ class RNAup : public IHybridize
                 if (aux.size() != NumberOfColumns)
                     throw RNABackendException("Invalid output RNAup.");
                 const string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-                from_string(deltaG, dG);
+                if (!from_string(deltaG, dG))
+                    throw RNABackendException("Failed to convert the string to value type.");
             }
             else
                 throw RNABackendException("Failured operation >>.");
@@ -74,10 +76,8 @@ class RNAup : public IHybridize
 
 };
 
-static const string FILE_NAME_OUTPUT = "outputHybridize.out";
-static const string FILE_AUX = "toHybridizeUp";
-
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
+static const string OUT_FILE = "RNA_w25_u3_4_up.out"; //file generated to RNAup
 
 Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq, bool longerCirc) const
 {
@@ -86,24 +86,28 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    ofstream toHybridize(FILE_AUX.c_str());
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+    const string inputTmpFile = temporalInputFile.getTmpName();
+    const string outputTmpFile = temporalOutputFile.getTmpName();
+
+    ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
     stringstream cmd2;
-    cmd2 << "RNAup ";
-    cmd2 << "< " << FILE_AUX;
-    cmd2 << " > " << FILE_NAME_OUTPUT;
+    cmd2 << "RNAup -u 3,4 -c SH ";
+    cmd2 << "< " << inputTmpFile;
+    cmd2 << " > " << outputTmpFile;
 
-    const Command CMD2 = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
-    runCommand(CMD2);
+    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
+    runCommand(command);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    remove_file(FILE_NAME_OUTPUT.c_str());
-    remove_file(FILE_AUX);
+    remove_file(OUT_FILE.c_str());
     return body.dG;
 }

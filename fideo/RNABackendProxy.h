@@ -41,6 +41,23 @@ using std::string;
 int runCommand(const Command& cmd);
 
 /**
+ * Return temp file name
+ * @param
+*/
+inline FilePath get_temp_file()
+{
+    char nameBuff[32] = "/tmp/myTmpFile-XXXXXX";     // buffer to hold the temporary file name
+    int fileDescriptor = -1;
+    fileDescriptor = mkstemp(nameBuff);              // Create the temporary file, this function will replace the 'X's
+    //unlink(nameBuff);                              //Call unlink so that whenever the file is closed or the program exits
+    // the temporary file is deleted
+    if (fileDescriptor < 1)
+        throw RNABackendException("Creation of temp file failed with error.");
+    else
+        return nameBuff;
+}
+
+/**
  * Return input file name
  * @param
 */

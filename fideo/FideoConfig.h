@@ -2,7 +2,7 @@
  * File:   FideoConfig.h
  * Author: Franco Riberi <fgriberi at gmail.com>
  *
- * Created on Dicember 13, 2012, 9:50 PM
+ * Created on March 13, 2012, 9:50 PM
  *
  * Copyright (C) 2010  Franco Riberi, FuDePAN
  *
@@ -29,6 +29,8 @@
 #include <string>
 #include <map>
 
+typedef std::map<std::string, std::string> configuration;
+
 class FideoConfig
 {
     /*
@@ -36,7 +38,14 @@ class FideoConfig
      */
     static const std::string FILE_NAME;
 
+<<<<<<< local
     std::map<std::string, std::string> config;
+=======
+	/*
+     * Map between execute file and path file.
+     */
+	configuration config;
+>>>>>>> other
 
     /*
      * Read diferent paths
@@ -59,13 +68,33 @@ class FideoConfig
     /*
      * Concrete instance of class
      */
-    static FideoConfig *instance;
+    static FideoConfig* instance;
 
 public:
     /*
-     * Get specific path
+<<<<<<< local
+=======
+     * Get concrete instance
      */
+    static FideoConfig* getInstance();
+
+    /*
+>>>>>>> other
+     * Get specific path
+<<<<<<< local
+=======
+     */
+    std::string getPath(const std::string& exec);
+
+    /*
+     * Destructor of class
+>>>>>>> other
+     */
+<<<<<<< local
     static std::string getPath(const std::string& exec);
+=======
+    ~FideoConfig() {};
+>>>>>>> other
 };
 
 #endif  /* _FIDEO_CONFIG_H */

@@ -44,9 +44,24 @@ public:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;
 
     /**
-     * Destroyer
+     * Class destructor
      */
     virtual ~IHybridize() {}
+
+	/**
+	 * Method that provide the available backends for hybridize service.
+	 * @param List to fill with different backends
+     * @return 
+	 */
+	void getAvailableBackends(StringList& slist) const
+	{
+		mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+		while(!it.end())
+	    {
+    	    slist.push_back(*it);
+    	    it++;
+    	}
+	}
 };
 
 #endif  /* _IHYBRIDIZE_H */

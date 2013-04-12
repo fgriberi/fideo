@@ -32,11 +32,10 @@
 #include "fideo/RNABackendProxy.h"
 #include "fideo/RNABackendsConfig.h"
 #include "fideo/rna_backends_types.h"
+#include "fideo/TmpFile.h"
 
 using std::stack;
 using std::stringstream;
-
-static const FilePath OUT;
 
 //Vienna package
 class RNAFold : public IFold
@@ -51,7 +50,6 @@ class RNAFold : public IFold
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
-
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
@@ -59,21 +57,28 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
-    write(get_input_file_name(), sseq);
+
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+    const string fileInput = temporalInputFile.getTmpName();
+    const string fileOutput = temporalOutputFile.getTmpName();
+
+    write(fileInput, sseq);
     stringstream ss;
-    ss << "RNAfold" << " --noPS ";
+    ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
         ss << "-circ ";
-    ss << "< " << get_input_file_name() << " > " << get_output_file_name();
-    const Command CMD = ss.str();
-    runCommand(CMD);
+    ss << "< " << fileInput << " > " << fileOutput;
+
+    const Command cmd = ss.str();
+    runCommand(cmd);
 
     /* fold.out look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
     FileLine aux;
-    read_line(OUT, LINE_NO, aux);
+    read_line(fileOutput, LINE_NO, aux);
 
     string str;
     read_value(aux, 0, seqRNAm.length(), str);

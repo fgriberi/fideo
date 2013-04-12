@@ -70,6 +70,11 @@ typedef unsigned int FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
 
+/**
+ * string list
+ */
+typedef std::list<std::string> StringList;
+
 #define SUCCESS_EXEC 0
 #define MATRIX_SIZE 4
 

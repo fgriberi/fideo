@@ -28,6 +28,7 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -59,15 +60,13 @@ class RNAduplex : public IHybridize
             vector<string> result;
             ss >> result;
             if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAup.");
+                throw RNABackendException("Invalid output RNAduplex.");
             const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-            from_string(deltaG, dG);
+            if (!from_string(deltaG, dG))
+                throw RNABackendException("Failed to convert the string to value type.");
         }
     };
 };
-
-static const string FILE_NAME_OUTPUT = "outputRNAduplex.out";
-static const string FILE_AUX = "toHybridizeDuplex";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
@@ -78,7 +77,12 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    ofstream toHybridize(FILE_AUX.c_str());
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+    const string inputTmpFile = temporalInputFile.getTmpName();
+    const string outpTmpFile = temporalOutputFile.getTmpName();
+
+    ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
     toHybridize << "\n";
     toHybridize << seq2;
@@ -86,20 +90,18 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
 
     stringstream cmd2;
     cmd2 << "RNAduplex ";
-    cmd2 << "< " << FILE_AUX;
-    cmd2 << " > " << FILE_NAME_OUTPUT;
+    cmd2 << "< " << inputTmpFile;
+    cmd2 << " > " << outpTmpFile;
 
-    const Command CMD2 = cmd2.str();
-    runCommand(CMD2);
+    const Command cmd = cmd2.str();
+    runCommand(cmd);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     string line;
     getline(fileOutput, line);
     body.parse(line);
-    remove_file(FILE_NAME_OUTPUT.c_str());
-    remove_file(FILE_AUX);
     return body.dG;
 }

@@ -25,6 +25,10 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+<<<<<<< local
+=======
+#include "HelperTest.h"
+>>>>>>> other
 
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
@@ -40,13 +44,5 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-    EXPECT_FALSE(std::ifstream("fold.in.ct"));
-    EXPECT_FALSE(std::ifstream("fold.in.dG"));
-    EXPECT_FALSE(std::ifstream("fold.in.h-num"));
-    EXPECT_FALSE(std::ifstream("fold.in.log"));
-    EXPECT_FALSE(std::ifstream("fold.in.plot"));
-    EXPECT_FALSE(std::ifstream("fold.in.run"));
-    EXPECT_FALSE(std::ifstream("fold.in.ss-count"));
-    EXPECT_FALSE(std::ifstream("fold.in.ann"));
-    EXPECT_FALSE(std::ifstream("fold.in.det"));
+	EXPECT_FALSE(HelperTest::checkDirTmp());
 }

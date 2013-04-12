@@ -28,6 +28,7 @@
 #include <mili/mili.h>
 #include "fideo/IHybridize.h"
 #include "fideo/RNABackendProxy.h"
+#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -43,6 +44,7 @@ class RNAcofold : public IHybridize
         enum Columns
         {
             ColRNAcofoldResult,
+            ColOpenParenthesis,
             ColdG,
             NumberOfColumns
         };
@@ -56,15 +58,13 @@ class RNAcofold : public IHybridize
             vector<string> result;
             ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAup.");
-            const string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
-            from_string(deltaG, dG);
+                throw RNABackendException("Invalid output RNAcofold.");
+            const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
+            if (!from_string(deltaG, dG))
+                throw RNABackendException("Failed to convert the string to value type.");
         }
     };
 };
-
-static const string FILE_NAME_OUTPUT = "outputRNAcofold.out";
-static const string FILE_AUX = "toHybridizeCofold";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
@@ -75,19 +75,25 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    ofstream toHybridize(FILE_AUX.c_str());
+    TmpFile temporalInputFile;
+    TmpFile temporalOutputFile;
+
+    const string inputTmpFile = temporalInputFile.getTmpName();
+    const string outputTmpFile = temporalOutputFile.getTmpName();
+
+    ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
-    stringstream cmd2;
-    cmd2 << "RNAcofold ";
-    cmd2 << "< " << FILE_AUX;
-    cmd2 << " > " << FILE_NAME_OUTPUT;
+    stringstream command;
+    command << "RNAcofold ";
+    command << "< " << inputTmpFile;
+    command << " > " << outputTmpFile;
 
-    const Command CMD2 = cmd2.str();
-    runCommand(CMD2);
+    const Command cmd = command.str();
+    runCommand(cmd);
 
-    ifstream fileOutput(FILE_NAME_OUTPUT.c_str());
+    ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
 
@@ -97,7 +103,5 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     ParseBody body;
     body.parse(temp);
-    remove_file(FILE_NAME_OUTPUT.c_str());
-    remove_file(FILE_AUX);
     return body.dG;
 }

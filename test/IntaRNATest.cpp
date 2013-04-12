@@ -40,12 +40,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
-<<<<<<< local
-    EXPECT_FALSE(std::ifstream("outputIntaRNA.out"));
-
-=======
-	EXPECT_FALSE(HelperTest::checkDirTmp());
->>>>>>> other
+        EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(IntaRNABackendTestSuite, BasicTest2)
@@ -69,5 +64,5 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 
-	EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

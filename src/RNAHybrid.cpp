@@ -44,11 +44,7 @@ class RNAHybrid : public IHybridize
     public:
         Fe dG;
         static const unsigned int OBSOLETE_dG = 1000;
-<<<<<<< local
-        static const unsigned int SIZE_LINE = 6;
-=======
         static const unsigned int SIZE_LINE = 3;
->>>>>>> other
         static const unsigned int DELTA_G = 1;
 
         void parse(std::ifstream& file)
@@ -63,14 +59,8 @@ class RNAHybrid : public IHybridize
                 dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-<<<<<<< local
-                string deltaG = result[DELTA_G];
-                bool convertion = from_string(deltaG, dG);
-                if (!convertion)
-=======
                 const string deltaG = result[DELTA_G];
                 if (!from_string(deltaG, dG))
->>>>>>> other
                     throw RNABackendException("Failed to convert the string to value type.");
             }
         }
@@ -87,10 +77,6 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
-<<<<<<< local
-    write(FILE_TARGET, targetSequence);
-    write(FILE_QUERY, querySequence);
-=======
     TmpFile temporalTargetFile;
     TmpFile temporalQueryFile;
     TmpFile temporalOutputFile;
@@ -101,7 +87,6 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     write(fileTmpTarget, targetSequence);
     write(fileTmpQuery, querySequence);
->>>>>>> other
 
     stringstream cmd;
     cmd << "RNAhybrid -s 3utr_human ";

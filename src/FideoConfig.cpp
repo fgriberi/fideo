@@ -35,8 +35,6 @@ using namespace mili;
 const string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
 FideoConfig* FideoConfig::instance = NULL;
 
-<<<<<<< local
-=======
 FideoConfig* FideoConfig::getInstance()
 {
     if (instance == NULL)
@@ -47,7 +45,6 @@ FideoConfig* FideoConfig::getInstance()
 }
 
 
->>>>>>> other
 void FideoConfig::readPathsFile()
 {
     ifstream pathsFile;
@@ -57,19 +54,11 @@ void FideoConfig::readPathsFile()
     else
     {
         string temp;
-<<<<<<< local
-        while (getline(pathsFile,temp))
-=======
         while (getline(pathsFile, temp))
->>>>>>> other
         {
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
-<<<<<<< local
-            //config.insert(pair<string,string>(result[0],result[1])); //<executable,path>
-=======
->>>>>>> other
             config[result[0]] = result[1]; //<executable,path>
         }
     }
@@ -77,13 +66,8 @@ void FideoConfig::readPathsFile()
 
 string FideoConfig::getPath(const string& exec)
 {
-<<<<<<< local
-    const map<string, string>::const_iterator it = instance->config.find(exec);
-    if ( it == instance->config.end())
-=======
     const configuration::const_iterator it = getInstance()->config.find(exec);
     if (it == getInstance()->config.end())
->>>>>>> other
         return string();
     else
         return it->second;

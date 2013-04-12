@@ -43,10 +43,6 @@ class IntaRNA : public IHybridize
 
     class ParseBody
     {
-<<<<<<< local
-
-=======
->>>>>>> other
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
         static const unsigned int OBSOLETE_dG = 1000;
@@ -75,14 +71,9 @@ class IntaRNA : public IHybridize
                 dG = OBSOLETE_dG; //no significant hybridization found
             else
             {
-<<<<<<< local
-                string deltaG = result[DELTA_G];
-                from_string(deltaG, dG);
-=======
                 const string deltaG = result[DELTA_G];
                 if (!from_string(deltaG, dG))
                     throw RNABackendException("Failed to convert the string to value type.");
->>>>>>> other
             }
         }
     };
@@ -110,11 +101,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
-<<<<<<< local
-    if (chdir(FideoConfig::getPath(INTA_RNA).c_str()) != 0)
-=======
     if (chdir(FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
->>>>>>> other
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
@@ -127,3 +114,4 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     body.parse(fileOutput);
     return body.dG;
 }
+

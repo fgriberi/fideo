@@ -1,3 +1,4 @@
+
 /*
     Copyright (C) 2012 Franco Riberi, FuDePAN
 
@@ -25,10 +26,7 @@
 #include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-<<<<<<< local
-=======
 #include "HelperTest.h"
->>>>>>> other
 
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
@@ -44,5 +42,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-	EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
+
+

@@ -38,14 +38,10 @@ class FideoConfig
      */
     static const std::string FILE_NAME;
 
-<<<<<<< local
-    std::map<std::string, std::string> config;
-=======
 	/*
      * Map between execute file and path file.
      */
 	configuration config;
->>>>>>> other
 
     /*
      * Read diferent paths
@@ -61,40 +57,26 @@ class FideoConfig
     }
 
     /*
-     * Destructor of class
-     */
-    ~FideoConfig() {};
-
-    /*
      * Concrete instance of class
      */
     static FideoConfig* instance;
 
 public:
     /*
-<<<<<<< local
-=======
      * Get concrete instance
      */
     static FideoConfig* getInstance();
 
     /*
->>>>>>> other
      * Get specific path
-<<<<<<< local
-=======
      */
     std::string getPath(const std::string& exec);
 
     /*
      * Destructor of class
->>>>>>> other
      */
-<<<<<<< local
-    static std::string getPath(const std::string& exec);
-=======
     ~FideoConfig() {};
->>>>>>> other
+
 };
 
 #endif  /* _FIDEO_CONFIG_H */

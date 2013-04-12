@@ -149,19 +149,15 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
-<<<<<<< local
-    write(get_input_file_name(), sseq);
-=======
     TmpFile temporalFile;
     write(temporalFile.getTmpName(), sseq);
->>>>>>> other
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
         ss << "--circular ";
     ss << temporalFile.getTmpName();
 
-	if (chdir(PATH_TMP.c_str()) != 0)
+        if (chdir(PATH_TMP.c_str()) != 0)
         throw RNABackendException("Invalid path of temp files.");
     const Command cmd = ss.str();
     runCommand(cmd);

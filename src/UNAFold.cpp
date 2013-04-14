@@ -23,16 +23,7 @@
  *
  */
 
-#include <string>
-#include <sstream>
-#include <vector>
-#include <unistd.h>
-#include <mili/mili.h>
-#include "errno.h"
 #include "fideo/IFold.h"
-#include "fideo/RNABackendProxy.h"
-#include "fideo/RNABackendsConfig.h"
-#include "fideo/rna_backends_types.h"
 #include "fideo/TmpFile.h"
 
 using std::stringstream;

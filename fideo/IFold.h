@@ -29,7 +29,7 @@
 
 #include <biopp/biopp.h>
 #include "rna_backends_types.h"
-#include "rna_backends_exceptions.h"
+#include "RNABackendProxy.h"
 
 /**
  * Interface for sequence's folding services.

@@ -25,8 +25,6 @@
  */
 
 #include <errno.h>
-#include <string.h>
-#include <unistd.h>
 #include "fideo/RNABackendProxy.h"
 
 static const int SYSTEM_ERROR = -1;

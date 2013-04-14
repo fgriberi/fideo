@@ -27,6 +27,7 @@
 #define _IHYBRIDIZE_H
 
 #include <biopp/biopp.h>
+ #include "fideo/RNABackendProxy.h"
 #include "rna_backends_types.h"
 
 /**

@@ -23,11 +23,7 @@
  *
  */
 
-#include <sstream>
-#include <string>
-#include <mili/mili.h>
 #include "fideo/IHybridize.h"
-#include "fideo/RNABackendProxy.h"
 #include "fideo/TmpFile.h"
 
 using namespace biopp;

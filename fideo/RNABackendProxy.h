@@ -39,40 +39,9 @@ using std::string;
 int runCommand(const Command& cmd);
 
 /**
- * Return temp file name
- * @param
-*/
-inline FilePath get_temp_file()
-{
-    char nameBuff[32] = "/tmp/myTmpFile-XXXXXX";     // buffer to hold the temporary file name
-    int fileDescriptor = -1;
-    fileDescriptor = mkstemp(nameBuff);              // Create the temporary file, this function will replace the 'X's
-    //unlink(nameBuff);                              //Call unlink so that whenever the file is closed or the program exits
-    // the temporary file is deleted
-    if (fileDescriptor < 1)
-        throw RNABackendException("Creation of temp file failed with error.");
-    else
-        return nameBuff;
-}
-
-/**
- * Return input file name
- * @param
-*/
-inline const FilePath get_input_file_name()
-{
-    return "fold.in";
-}
-
-/**
- * Return output file name
- * @param
-*/
-inline const FilePath get_output_file_name()
-{
-    return "fold.out";
-}
-
+ * Remove a file 
+ * @param file_name name of file
+ */
 void remove_file(const std::string& file_name);
 
 /**
@@ -133,4 +102,3 @@ void convert_from_string(const std::string& from, T& to)
 }
 
 #endif  /* _RNABACKENDPROXY_H */
-

@@ -44,4 +44,3 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Ou
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
 
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
-

@@ -29,7 +29,6 @@
 
 #include <set>
 #include <vector>
-
 #include "rna_backends_exceptions.h"
 
 /**

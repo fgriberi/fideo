@@ -133,3 +133,4 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
     if (!s.empty())
         throw(InvalidStructureException(" Pairs pending to close"));
 }
+}

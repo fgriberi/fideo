@@ -114,3 +114,4 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
         throw RNABackendException("An error ocurred trying to read " + file);
     }
 }
+}

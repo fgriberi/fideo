@@ -29,7 +29,7 @@ TEST(FideoConfigTestSuite, Test1)
     const std::string INTA_RNA = "runIntaRNA";
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/IntaRNA/intarna-1.2.5/src";
 
-    const std::string executablePath =  FideoConfig::getInstance()->getPath(INTA_RNA);
+    const std::string executablePath =  fideo::FideoConfig::getInstance()->getPath(INTA_RNA);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }
@@ -39,7 +39,7 @@ TEST(FideoConfigTestSuite, Test2)
     const std::string RUN_GENE_DESIGN = "runGD";
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/geneDesign/GeneDesign/bin";
 
-    const std::string executablePath =  FideoConfig::getInstance()->getPath(RUN_GENE_DESIGN);
+    const std::string executablePath =  fideo::FideoConfig::getInstance()->getPath(RUN_GENE_DESIGN);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }
@@ -49,7 +49,7 @@ TEST(FideoConfigTestSuite, Test3)
     const std::string RESULT_GENE_DESIGN = "resultGD";
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/geneDesign/GeneDesign/bin/sequence_gdRT";
 
-    const std::string executablePath =  FideoConfig::getInstance()->getPath(RESULT_GENE_DESIGN);
+    const std::string executablePath =  fideo::FideoConfig::getInstance()->getPath(RESULT_GENE_DESIGN);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }

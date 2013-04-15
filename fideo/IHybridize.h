@@ -30,6 +30,8 @@
  #include "fideo/RNABackendProxy.h"
 #include "rna_backends_types.h"
 
+namespace fideo
+{
 /**
  * Interface for sequence's hybridize services.
  */
@@ -64,5 +66,6 @@ public:
     	}
 	}
 };
-
+}
+		
 #endif  /* _IHYBRIDIZE_H */

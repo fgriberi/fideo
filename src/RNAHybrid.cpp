@@ -30,6 +30,8 @@ using namespace biopp;
 using namespace mili;
 using namespace std;
 
+namespace fideo
+{
 class RNAHybrid : public IHybridize
 {
     static const unsigned int OBSOLETE_LINES = 6;
@@ -99,4 +101,5 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     ParseBody body;
     body.parse(fileOutput);
     return body.dG;
+}
 }

@@ -29,6 +29,9 @@
 #include <string>
 #include <map>
 
+namespace fideo
+{
+
 typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
@@ -78,5 +81,6 @@ public:
     ~FideoConfig() {};
 
 };
-
+}
 #endif  /* _FIDEO_CONFIG_H */
+

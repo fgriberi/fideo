@@ -31,6 +31,8 @@
 #include "rna_backends_types.h"
 #include "RNABackendProxy.h"
 
+namespace fideo
+{
 /**
  * Interface for sequence's folding services.
  */
@@ -66,5 +68,5 @@ public:
     	}
 	}
 };
-
+}
 #endif  /* _IFOLD_H */

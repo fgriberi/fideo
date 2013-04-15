@@ -29,6 +29,8 @@
 using std::stringstream;
 using namespace mili;
 
+namespace fideo
+{
 //UNAFold package
 class UNAFold : public IFold
 {
@@ -176,4 +178,5 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     file_in.close();
     delete_all_files(temporalFile.getTmpName());
     return 0;
+}
 }

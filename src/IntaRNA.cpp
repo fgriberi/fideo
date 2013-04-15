@@ -31,6 +31,8 @@ using namespace biopp;
 using namespace mili;
 using namespace std;
 
+namespace fideo
+{
 class IntaRNA : public IHybridize
 {
     static const unsigned int OBSOLETE_LINES = 9;
@@ -96,7 +98,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
-    if (chdir(FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
+    if (chdir(fideo::FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
@@ -109,4 +111,4 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     body.parse(fileOutput);
     return body.dG;
 }
-
+}

@@ -32,6 +32,8 @@
 
 using std::string;
 
+namespace fideo
+{
 /**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
@@ -131,6 +133,6 @@ void convert_from_string(const std::string& from, T& to)
     if (!mili::from_string(from, to))
         throw RNABackendException("Wrong column type.");
 }
+}
 
 #endif  /* _RNABACKENDPROXY_H */
-

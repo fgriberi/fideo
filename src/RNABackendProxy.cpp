@@ -27,6 +27,8 @@
 #include <errno.h>
 #include "fideo/RNABackendProxy.h"
 
+namespace fideo
+{
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 
@@ -111,4 +113,5 @@ void remove_file(const std::string& file_name)
 {
     if (unlink(file_name.c_str()) == FILE_ERROR)
         throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
+}
 }

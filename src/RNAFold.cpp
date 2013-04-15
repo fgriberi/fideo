@@ -31,6 +31,8 @@
 using std::stack;
 using std::stringstream;
 
+namespace fideo
+{
 //Vienna package
 class RNAFold : public IFold
 {
@@ -130,4 +132,5 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
     }
     if (!s.empty())
         throw(InvalidStructureException(" Pairs pending to close"));
+}
 }

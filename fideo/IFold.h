@@ -28,8 +28,8 @@
 #define _IFOLD_H
 
 #include <biopp/biopp.h>
-#include "rna_backends_types.h"
-#include "RNABackendProxy.h"
+#include "fideo/rna_backends_types.h"
+#include "fideo/FideoHelper.h"
 
 namespace fideo
 {

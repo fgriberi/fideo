@@ -24,7 +24,6 @@
  */
 
 #include "fideo/IFold.h"
-#include "fideo/TmpFile.h"
 
 using std::stringstream;
 using namespace mili;
@@ -118,16 +117,17 @@ static const string PATH_TMP = "/tmp/";
 
 void UNAFold::delete_all_files(const string& nameFile)
 {
-    remove_file(nameFile + ".ct");
-    remove_file(nameFile + "_1.ct");
-    remove_file(nameFile + ".dG");
-    remove_file(nameFile + ".h-num");
-    remove_file(nameFile + ".rnaml");
-    remove_file(nameFile + ".plot");
-    remove_file(nameFile + ".run");
-    remove_file(nameFile + ".ss-count");
-    remove_file(nameFile + ".ann");
-    remove_file(nameFile + ".det");
+    removeFile(nameFile);
+    removeFile(nameFile + ".ct");
+    removeFile(nameFile + "_1.ct");
+    removeFile(nameFile + ".dG");
+    removeFile(nameFile + ".h-num");
+    removeFile(nameFile + ".rnaml");
+    removeFile(nameFile + ".plot");
+    removeFile(nameFile + ".run");
+    removeFile(nameFile + ".ss-count");
+    removeFile(nameFile + ".ann");
+    removeFile(nameFile + ".det");
 }
 
 void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure)
@@ -142,15 +142,18 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
-    TmpFile temporalFile;
-    write(temporalFile.getTmpName(), sseq);
+
+    string temporalFile;
+    createTmpFile(temporalFile);
+
+    write(temporalFile, sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
         ss << "--circular ";
-    ss << temporalFile.getTmpName();
+    ss << temporalFile;
 
-        if (chdir(PATH_TMP.c_str()) != 0)
+    if (chdir(PATH_TMP.c_str()) != 0)
         throw RNABackendException("Invalid path of temp files.");
     const Command cmd = ss.str();
     runCommand(cmd);
@@ -162,7 +165,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
      *       .                .        .     .       .             .           .    .
     */
 
-    std::ifstream file_in((temporalFile.getTmpName() + ".ct").c_str());
+    std::ifstream file_in((temporalFile + ".ct").c_str());
     if (!file_in)
         throw RNABackendException("output file not found.");
     HeaderLine headerLine;
@@ -176,7 +179,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     }
     structureRNAm.set_circular(isCircRNAm);
     file_in.close();
-    delete_all_files(temporalFile.getTmpName());
+    delete_all_files(temporalFile);
     return 0;
 }
 }

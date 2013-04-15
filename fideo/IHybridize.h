@@ -27,8 +27,8 @@
 #define _IHYBRIDIZE_H
 
 #include <biopp/biopp.h>
- #include "fideo/RNABackendProxy.h"
-#include "rna_backends_types.h"
+ #include "fideo/FideoHelper.h"
+#include "fideo/rna_backends_types.h"
 
 namespace fideo
 {

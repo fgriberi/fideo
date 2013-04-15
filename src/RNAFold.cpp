@@ -26,7 +26,6 @@
 
 #include <stack>
 #include "fideo/IFold.h"
-#include "fideo/TmpFile.h"
 
 using std::stack;
 using std::stringstream;
@@ -54,10 +53,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
 
-    TmpFile temporalInputFile;
-    TmpFile temporalOutputFile;
-    const string fileInput = temporalInputFile.getTmpName();
-    const string fileOutput = temporalOutputFile.getTmpName();
+    string fileInput; 
+    createTmpFile(fileInput);
+    string fileOutput;
+    createTmpFile(fileOutput);
 
     write(fileInput, sseq);
     stringstream ss;
@@ -82,6 +81,8 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
 
     Fe energy;
     read_free_energy(aux, seqRNAm.length(), energy);
+    removeFile(fileInput); 
+    removeFile(fileOutput);
     return energy;
 }
 

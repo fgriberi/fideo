@@ -24,7 +24,6 @@
  */
 
 #include "fideo/IHybridize.h"
-#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -71,13 +70,12 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
     const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();
+    const string seq2 = shorterSeq.getString();    
 
-    TmpFile temporalInputFile;
-    TmpFile temporalOutputFile;
-
-    const string inputTmpFile = temporalInputFile.getTmpName();
-    const string outputTmpFile = temporalOutputFile.getTmpName();
+    string inputTmpFile;
+    createTmpFile(inputTmpFile);
+    string outputTmpFile;
+    createTmpFile(outputTmpFile);
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -101,6 +99,8 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     ParseBody body;
     body.parse(temp);
+    removeFile(inputTmpFile);
+    removeFile(outputTmpFile);
     return body.dG;
 }
 }

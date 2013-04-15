@@ -25,7 +25,6 @@
 
 #include "fideo/IHybridize.h"
 #include "fideo/FideoConfig.h"
-#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -88,8 +87,8 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    TmpFile temporalFile;
-    const string tmpFileOutput = temporalFile.getTmpName();
+    string tmpFileOutput;
+    createTmpFile(tmpFileOutput);
 
     stringstream cmd;
     cmd << "./IntaRNA ";
@@ -109,6 +108,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
+    removeFile(tmpFileOutput);
     return body.dG;
 }
 }

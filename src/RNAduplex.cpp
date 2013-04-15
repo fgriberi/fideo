@@ -24,7 +24,6 @@
  */
 
 #include "fideo/IHybridize.h"
-#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -75,10 +74,10 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
-    TmpFile temporalInputFile;
-    TmpFile temporalOutputFile;
-    const string inputTmpFile = temporalInputFile.getTmpName();
-    const string outpTmpFile = temporalOutputFile.getTmpName();
+    string inputTmpFile;
+    createTmpFile(inputTmpFile);
+    string outpTmpFile;
+    createTmpFile(outpTmpFile);
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
@@ -101,6 +100,8 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     string line;
     getline(fileOutput, line);
     body.parse(line);
+    removeFile(inputTmpFile);
+    removeFile(outpTmpFile);
     return body.dG;
 }
 }

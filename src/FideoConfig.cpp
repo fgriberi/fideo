@@ -24,7 +24,7 @@
  */
 
 #include "fideo/FideoConfig.h"
-#include "fideo/RNABackendProxy.h"
+#include "fideo/FideoHelper.h"
 
 using namespace std;
 using namespace mili;

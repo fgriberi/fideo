@@ -1,13 +1,12 @@
 /*
- * File:   RNABackendProxy.cpp
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * File:   FideoHelper.cpp
+ * Author: Franco Riberi <fgriberi at gmail.com>
  *
- * Created on November 10, 2010, 2012 4:26 PM
+ * Created on April 2013
  *
- * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
+ * Copyright (C) 2013 Franco Riberi, FuDePAN
  *
- * This file is part of fideo
+ * This file is part of fideo.
  *
  * fideo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +23,11 @@
  *
  */
 
-#include <errno.h>
-#include "fideo/RNABackendProxy.h"
+#include "fideo/FideoHelper.h"
 
 namespace fideo
 {
+
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 
@@ -51,7 +50,18 @@ int runCommand(const Command& cmd)
     }
 }
 
-void remove_file(const std::string& file_name)
+void createTmpFile(std::string &nameTmpFile)
+{
+	char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
+    const int fileDescriptor = mkstemp(nameFileAux);
+    if (fileDescriptor < 1)
+    {
+        throw RNABackendException("Creation of temp file failed with error.");
+    }
+    nameTmpFile = nameFileAux;
+}
+
+void removeFile(const std::string& file_name)
 {
     if (unlink(file_name.c_str()) == FILE_ERROR)
         throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));

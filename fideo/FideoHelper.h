@@ -1,11 +1,11 @@
 /*
- * File:   RNABackendProxy.h
+ * File:   IFold.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi   <fgriberi at gmail.com>
+ *		   Franco Riberi <fgriberi at gmail.com>
  *
- * Created on October 26, 2010, 2012, 4:31 PM
+ * Created on September 26, 2010, 5:25 PM
  *
- * Copyright (C) 2010  Santiago Videla, Franco Riberi FuDePAN
+ * Copyright (C) 2010  Santiago Videla, FuDePAN
  *
  * This file is part of fideo
  *
@@ -16,18 +16,19 @@
  *
  * fideo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef _RNABACKENDPROXY_H
-#define _RNABACKENDPROXY_H
+#ifndef _FIDEO_HELPER_H
+#define _FIDEO_HELPER_H
 
 #include <fstream>
+#include <errno.h>
 #include "rna_backends_types.h"
 
 using std::string;
@@ -35,38 +36,58 @@ using std::string;
 namespace fideo
 {
 /**
+ * Set of methods necessary
+ */
+
+///System methods
+
+/**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-int runCommand(const Command& cmd);
+static int runCommand(const Command& cmd);
+
+template<class T>
+void convert_from_string(const std::string& from, T& to)
+{
+    if (!mili::from_string(from, to))
+        throw RNABackendException("Wrong column type.");
+}
+
+///File Methods
+
+/**
+ * Create a temporal file
+ */
+static void createTmpFile(std::string &nameTmpFile);
 
 /**
  * Remove a file 
  * @param file_name name of file
  */
-void remove_file(const std::string& file_name);
+static void removeFile(const std::string& file_name);
 
 /**
  * Write a file with multiple lines.
  * @param file the file path
  * @param lines the lines to write
- */
-void write(const FilePath& file, FileLinesCt& lines);
+*/
+static void write(const FilePath& file, FileLinesCt& lines);
 
 /**
  * Write a file with a single line.
  * @param file the file path
  * @param line the line to write
  */
-void write(const FilePath& file, FileLine& line);
+static void write(const FilePath& file, FileLine& line);
 
 /**
  * Read a line from a file
  * @param file the file path
  * @param lineno the line number to read
  * @param line where to write the read line
- */
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
+*/
+static void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
 
 /**
  * Read a value from a file line using offset and length
@@ -95,13 +116,6 @@ inline void read_value(const FileLine& line, T& t)
     if (!success)
         throw RNABackendException("Could not read the value from given line");
 }
-
-template<class T>
-void convert_from_string(const std::string& from, T& to)
-{
-    if (!mili::from_string(from, to))
-        throw RNABackendException("Wrong column type.");
-}
 }
 
-#endif  /* _RNABACKENDPROXY_H */
+#endif  /* _FIDEO_HELPER_H */

@@ -24,7 +24,6 @@
  */
 
 #include "fideo/IHybridize.h"
-#include "fideo/TmpFile.h"
 
 using namespace biopp;
 using namespace mili;
@@ -75,13 +74,12 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
-    TmpFile temporalTargetFile;
-    TmpFile temporalQueryFile;
-    TmpFile temporalOutputFile;
-
-    const string fileTmpTarget = temporalTargetFile.getTmpName();
-    const string fileTmpQuery = temporalQueryFile.getTmpName();
-    const string fileTmpOutput = temporalOutputFile.getTmpName();
+    string fileTmpTarget;
+    createTmpFile(fileTmpTarget);    
+    string fileTmpQuery; 
+    createTmpFile(fileTmpQuery);
+    string fileTmpOutput;
+    createTmpFile(fileTmpOutput);
 
     write(fileTmpTarget, targetSequence);
     write(fileTmpQuery, querySequence);
@@ -100,6 +98,10 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
+
+    removeFile(fileTmpTarget);
+    removeFile(fileTmpQuery); 
+    removeFile(fileTmpOutput);
     return body.dG;
 }
 }

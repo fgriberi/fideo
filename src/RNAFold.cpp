@@ -31,6 +31,8 @@
 using std::stack;
 using std::stringstream;
 
+namespace fideo
+{
 //Vienna package
 class RNAFold : public IFold
 {

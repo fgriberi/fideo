@@ -25,6 +25,8 @@
 
 #include <fideo/TmpFile.h>
 
+namespace fideo
+{
 TmpFile::TmpFile()
 {
     getTmpFile();
@@ -48,4 +50,4 @@ FilePath TmpFile::getTmpName()
 {
     return tmpFileName;
 }
-
+}

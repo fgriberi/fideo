@@ -33,6 +33,8 @@
 #       define THROW(x)
 #endif
 
+namespace fideo
+{
 class RNABackendExceptionRoot {};
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(RNABackendException, RNABackendExceptionRoot, "RNABackend");
@@ -43,5 +45,6 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Ou
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
 
+}
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
 

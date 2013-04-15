@@ -27,6 +27,8 @@
 #include <errno.h>
 #include "fideo/RNABackendProxy.h"
 
+namespace fideo
+{
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 

@@ -32,10 +32,10 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("RNAFold");
+    fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    Fe result = p->fold(seq, secStructure, true);
+    fideo::Fe result = p->fold(seq, secStructure, true);
     delete p;
 
     EXPECT_DOUBLE_EQ(result, -18.70);

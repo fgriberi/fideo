@@ -29,6 +29,8 @@
 using namespace std;
 using namespace mili;
 
+namespace fideo
+{
 const string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
 FideoConfig* FideoConfig::instance = NULL;
 
@@ -68,4 +70,5 @@ string FideoConfig::getPath(const string& exec)
         return string();
     else
         return it->second;
+}
 }

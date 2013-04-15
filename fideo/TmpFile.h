@@ -29,6 +29,8 @@
 
 using namespace std;
 
+namespace fideo
+{
 class TmpFile
 {
     string tmpFileName; // buffer to hold the temporary file name
@@ -55,3 +57,4 @@ public:
     FilePath getTmpName();
 
 };
+}

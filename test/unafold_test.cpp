@@ -33,7 +33,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
+    fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
     EXPECT_NO_THROW(p->fold(seq, secStructure, true));

@@ -34,6 +34,8 @@ using namespace biopp;
 using namespace mili;
 using namespace std;
 
+namespace fideo
+{
 //Vienna package
 class RNAduplex : public IHybridize
 {
@@ -104,4 +106,5 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     getline(fileOutput, line);
     body.parse(line);
     return body.dG;
+}
 }

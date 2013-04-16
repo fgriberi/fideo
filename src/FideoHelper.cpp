@@ -24,6 +24,8 @@
  */
 
 #include "fideo/FideoHelper.h"
+#include "fideo/IFold.h"
+#include "fideo/IHybridize.h"
 
 namespace fideo
 {
@@ -50,25 +52,25 @@ int runCommand(const Command& cmd)
     }
 }
 
-// void getAvailableBackendsToFolding(StringList& slist) const
-// {
-//     mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
-//     while(!it.end())
-//     {
-//         slist.push_back(*it);
-//         it++;
-//     }
-// }
+void getAvailableBackendsToFolding(StringList& slist) 
+{
+    mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+    while(!it.end())
+    {
+        slist.push_back(*it);
+        it++;
+    }
+}
 
-// void getAvailableBackendsHybridize(StringList& slist) const
-// {
-//     mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
-//     while(!it.end())
-//     {
-//         slist.push_back(*it);
-//         it++;
-//     }
-// }
+void getAvailableBackendsHybridize(StringList& slist) 
+{
+    mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+    while(!it.end())
+    {
+        slist.push_back(*it);
+        it++;
+    }
+}
 
 
 void createTmpFile(std::string &nameTmpFile)

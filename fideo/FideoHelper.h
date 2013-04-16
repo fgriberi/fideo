@@ -59,30 +59,14 @@ void convert_from_string(const std::string& from, T& to)
  * @param List to fill with different backends
  * @return 
  */	
-//void getAvailableBackendsToFolding(StringList& slist) const;
-//	{
-//		mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
-//		while(!it.end())
-//	    {
-   //  	    slist.push_back(*it);
-    //	    it++;
-   // 	}
-//	}
+extern void getAvailableBackendsToFolding(StringList& slist);
 
 /**
  * Method that provide the available backends for hybridize service.
  * @param List to fill with different backends
  * @return 
  */
-//void getAvailableBackendsHybridize(StringList& slist) const;
-	// {
-	// 	mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
-	// 	while(!it.end())
-	//     {
- //    	    slist.push_back(*it);
- //    	    it++;
- //    	}
-	// }
+extern void getAvailableBackendsHybridize(StringList& slist);
 
 ///File Methods
 

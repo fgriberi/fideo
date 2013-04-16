@@ -45,7 +45,7 @@ namespace fideo
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-static int runCommand(const Command& cmd);
+extern int runCommand(const Command& cmd);
 
 template<class T>
 void convert_from_string(const std::string& from, T& to)
@@ -54,32 +54,62 @@ void convert_from_string(const std::string& from, T& to)
         throw RNABackendException("Wrong column type.");
 }
 
+/**
+ * Method that provide the available backends for folding service.
+ * @param List to fill with different backends
+ * @return 
+ */	
+//void getAvailableBackendsToFolding(StringList& slist) const;
+//	{
+//		mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+//		while(!it.end())
+//	    {
+   //  	    slist.push_back(*it);
+    //	    it++;
+   // 	}
+//	}
+
+/**
+ * Method that provide the available backends for hybridize service.
+ * @param List to fill with different backends
+ * @return 
+ */
+//void getAvailableBackendsHybridize(StringList& slist) const;
+	// {
+	// 	mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+	// 	while(!it.end())
+	//     {
+ //    	    slist.push_back(*it);
+ //    	    it++;
+ //    	}
+	// }
+
 ///File Methods
 
 /**
  * Create a temporal file
  */
-static void createTmpFile(std::string &nameTmpFile);
+extern void createTmpFile(std::string &nameTmpFile);
 
 /**
  * Remove a file 
  * @param file_name name of file
  */
-static void removeFile(const std::string& file_name);
+extern void removeFile(const std::string& file_name);
 
 /**
  * Write a file with multiple lines.
  * @param file the file path
  * @param lines the lines to write
 */
-static void write(const FilePath& file, FileLinesCt& lines);
+extern void write(const FilePath& file, FileLinesCt& lines);
 
 /**
  * Write a file with a single line.
  * @param file the file path
  * @param line the line to write
  */
-static void write(const FilePath& file, FileLine& line);
+extern void write(const FilePath& file, FileLine& line);
 
 /**
  * Read a line from a file
@@ -87,7 +117,7 @@ static void write(const FilePath& file, FileLine& line);
  * @param lineno the line number to read
  * @param line where to write the read line
 */
-static void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
+extern void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
 
 /**
  * Read a value from a file line using offset and length

@@ -52,21 +52,6 @@ public:
 	 * Class destructor
 	 */
     virtual ~IFold() {}
-
-	/**
-	 * Method that provide the available backends for hybridize service.
-	 * @param List to fill with different backends
-     * @return 
-	 */	
-	void getAvailableBackends(StringList& slist) const
-	{
-		mili::Factory<std::string,IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
-		while(!it.end())
-	    {
-    	    slist.push_back(*it);
-    	    it++;
-    	}
-	}
 };
 }
 #endif  /* _IFOLD_H */

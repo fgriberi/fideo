@@ -49,22 +49,7 @@ public:
     /**
      * Class destructor
      */
-    virtual ~IHybridize() {}
-
-	/**
-	 * Method that provide the available backends for hybridize service.
-	 * @param List to fill with different backends
-     * @return 
-	 */
-	void getAvailableBackends(StringList& slist) const
-	{
-		mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
-		while(!it.end())
-	    {
-    	    slist.push_back(*it);
-    	    it++;
-    	}
-	}
+    virtual ~IHybridize() {}	
 };
 }
 		

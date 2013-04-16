@@ -88,7 +88,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     const string seq2 = shorterSeq.getString();
 
     string tmpFileOutput;
-    createTmpFile(tmpFileOutput);
+    helper::createTmpFile(tmpFileOutput);
 
     stringstream cmd;
     cmd << "./IntaRNA ";
@@ -101,14 +101,14 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
         throw RNABackendException("Invalid path of IntaRNA executable.");
 
     const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
-    runCommand(command);
+    helper::runCommand(command);
 
     ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    removeFile(tmpFileOutput);
+    helper::removeFile(tmpFileOutput);
     return body.dG;
 }
 }

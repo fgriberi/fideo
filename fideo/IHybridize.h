@@ -27,7 +27,7 @@
 #define _IHYBRIDIZE_H
 
 #include <biopp/biopp.h>
- #include "fideo/FideoHelper.h"
+#include "fideo/FideoHelper.h"
 #include "fideo/rna_backends_types.h"
 
 namespace fideo
@@ -49,8 +49,23 @@ public:
     /**
      * Class destructor
      */
-    virtual ~IHybridize() {}	
+    virtual ~IHybridize() {}
+
+    /**
+     * Method that provide the available backends for hybridize service.
+     * @param List to fill with different backends
+     * @return
+    */
+    static void getAvailableBackends(StringList& slist)
+    {
+        mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+        while (!it.end())
+        {
+            slist.push_back(*it);
+            it++;
+        }
+    }
 };
 }
-		
+
 #endif  /* _IHYBRIDIZE_H */

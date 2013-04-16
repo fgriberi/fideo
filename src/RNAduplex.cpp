@@ -75,9 +75,9 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     const string seq2 = shorterSeq.getString();
 
     string inputTmpFile;
-    createTmpFile(inputTmpFile);
+    helper::createTmpFile(inputTmpFile);
     string outpTmpFile;
-    createTmpFile(outpTmpFile);
+    helper::createTmpFile(outpTmpFile);
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
@@ -91,7 +91,7 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     cmd2 << " > " << outpTmpFile;
 
     const Command cmd = cmd2.str();
-    runCommand(cmd);
+    helper::runCommand(cmd);
 
     ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
@@ -100,8 +100,8 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     string line;
     getline(fileOutput, line);
     body.parse(line);
-    removeFile(inputTmpFile);
-    removeFile(outpTmpFile);
+    helper::removeFile(inputTmpFile);
+    helper::removeFile(outpTmpFile);
     return body.dG;
 }
 }

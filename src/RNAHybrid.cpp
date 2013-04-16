@@ -75,14 +75,14 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
     string fileTmpTarget;
-    createTmpFile(fileTmpTarget);    
-    string fileTmpQuery; 
-    createTmpFile(fileTmpQuery);
+    helper::createTmpFile(fileTmpTarget);
+    string fileTmpQuery;
+    helper::createTmpFile(fileTmpQuery);
     string fileTmpOutput;
-    createTmpFile(fileTmpOutput);
+    helper::createTmpFile(fileTmpOutput);
 
-    write(fileTmpTarget, targetSequence);
-    write(fileTmpQuery, querySequence);
+    helper::write(fileTmpTarget, targetSequence);
+    helper::write(fileTmpQuery, querySequence);
 
     stringstream cmd;
     cmd << "RNAhybrid -s 3utr_human ";
@@ -91,7 +91,7 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     cmd << " > " << fileTmpOutput;
 
     const Command command = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
-    runCommand(command);
+    helper::runCommand(command);
 
     ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
@@ -99,9 +99,9 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     ParseBody body;
     body.parse(fileOutput);
 
-    removeFile(fileTmpTarget);
-    removeFile(fileTmpQuery); 
-    removeFile(fileTmpOutput);
+    helper::removeFile(fileTmpTarget);
+    helper::removeFile(fileTmpQuery);
+    helper::removeFile(fileTmpOutput);
     return body.dG;
 }
 }

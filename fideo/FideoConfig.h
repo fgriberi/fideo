@@ -41,10 +41,10 @@ class FideoConfig
      */
     static const std::string FILE_NAME;
 
-	/*
+    /*
      * Map between execute file and path file.
      */
-	configuration config;
+    configuration config;
 
     /*
      * Read diferent paths

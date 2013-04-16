@@ -28,7 +28,7 @@
 using namespace biopp;
 using namespace mili;
 using namespace std;
-	
+
 namespace fideo
 {
 //Vienna package
@@ -70,12 +70,12 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");
     const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();    
+    const string seq2 = shorterSeq.getString();
 
     string inputTmpFile;
-    createTmpFile(inputTmpFile);
+    helper::createTmpFile(inputTmpFile);
     string outputTmpFile;
-    createTmpFile(outputTmpFile);
+    helper::createTmpFile(outputTmpFile);
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -87,7 +87,7 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     command << " > " << outputTmpFile;
 
     const Command cmd = command.str();
-    runCommand(cmd);
+    helper::runCommand(cmd);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
@@ -99,8 +99,8 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
 
     ParseBody body;
     body.parse(temp);
-    removeFile(inputTmpFile);
-    removeFile(outputTmpFile);
+    helper::removeFile(inputTmpFile);
+    helper::removeFile(outputTmpFile);
     return body.dG;
 }
 }

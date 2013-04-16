@@ -41,5 +41,5 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
 
-	EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

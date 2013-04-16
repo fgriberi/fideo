@@ -27,30 +27,30 @@
 
 static const std::string DIRECTORY_PATH = "/tmp";
 
-bool HelperTest::isMyTmpFile (const std::string& fileTmpName)  
+bool HelperTest::isMyTmpFile(const std::string& fileTmpName)
 {
-	bool ret = false;
-	stringstream ss(fileTmpName);
-    ParserResult result;  
+    bool ret = false;
+    stringstream ss(fileTmpName);
+    ParserResult result;
     ss >> mili::Separator(result, '-');
     if (result.size() == 2 && result[0] == "myTmpFile")
-		ret = true;
-    return ret; 
+        ret = true;
+    return ret;
 }
 
 bool HelperTest::checkDirTmp()
 {
-	bool ret = false;
-	DIR *dir;
-	struct dirent *ent;
-	dir = opendir(DIRECTORY_PATH.c_str());
-	if (dir == NULL) 
-  		throw fideo::SeparatorException();
-	while ((ent = readdir (dir)) != NULL && !ret) 
-	{
-		ret = isMyTmpFile(ent->d_name);
-	}
-	closedir (dir);
-	return ret;
+    bool ret = false;
+    DIR* dir;
+    struct dirent* ent;
+    dir = opendir(DIRECTORY_PATH.c_str());
+    if (dir == NULL)
+        throw fideo::SeparatorException();
+    while ((ent = readdir(dir)) != NULL && !ret)
+    {
+        ret = isMyTmpFile(ent->d_name);
+    }
+    closedir(dir);
+    return ret;
 }
 

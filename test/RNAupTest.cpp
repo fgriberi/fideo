@@ -41,4 +41,4 @@ TEST(RNAupBackendTestSuite, BasicTest)
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
     EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
-}	
+}

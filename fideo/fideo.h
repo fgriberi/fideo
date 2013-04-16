@@ -44,7 +44,7 @@
 #define FIDEO_H
 
 #include "fideo/IFold.h"
-#include "fideo/IHybridize.h" 
-#include "fideo/FideoConfig.h" 
+#include "fideo/IHybridize.h"
+#include "fideo/FideoConfig.h"
 
 #endif

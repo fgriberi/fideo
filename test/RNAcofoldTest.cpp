@@ -39,5 +39,5 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -9.80);
     delete p;
 
-	EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

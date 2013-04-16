@@ -24,12 +24,11 @@
  */
 
 #include "fideo/FideoHelper.h"
-#include "fideo/IFold.h"
-#include "fideo/IHybridize.h"
 
 namespace fideo
 {
-
+namespace helper
+{
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 
@@ -52,30 +51,9 @@ int runCommand(const Command& cmd)
     }
 }
 
-void getAvailableBackendsToFolding(StringList& slist) 
+void createTmpFile(std::string& nameTmpFile)
 {
-    mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
-    while(!it.end())
-    {
-        slist.push_back(*it);
-        it++;
-    }
-}
-
-void getAvailableBackendsHybridize(StringList& slist) 
-{
-    mili::Factory<std::string,IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
-    while(!it.end())
-    {
-        slist.push_back(*it);
-        it++;
-    }
-}
-
-
-void createTmpFile(std::string &nameTmpFile)
-{
-	char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
+    char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
     const int fileDescriptor = mkstemp(nameFileAux);
     if (fileDescriptor < 1)
     {
@@ -146,5 +124,6 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
     {
         throw RNABackendException("An error ocurred trying to read " + file);
     }
+}
 }
 }

@@ -1,7 +1,7 @@
 /*
  * File:   IFold.h
  * Author: Santiago Videla <santiago.videla at gmail.com>
- *		   Franco Riberi <fgriberi at gmail.com>
+ *         Franco Riberi <fgriberi at gmail.com>
  *
  * Created on September 26, 2010, 5:25 PM
  *
@@ -39,13 +39,15 @@ namespace fideo
  * Set of methods necessary
  */
 
+namespace helper
+{
 ///System methods
 
 /**
  * Execute a give command using a system call
  * @param cmd the RNA backend command
  */
-extern int runCommand(const Command& cmd);
+int runCommand(const Command& cmd);
 
 template<class T>
 void convert_from_string(const std::string& from, T& to)
@@ -54,46 +56,32 @@ void convert_from_string(const std::string& from, T& to)
         throw RNABackendException("Wrong column type.");
 }
 
-/**
- * Method that provide the available backends for folding service.
- * @param List to fill with different backends
- * @return 
- */	
-extern void getAvailableBackendsToFolding(StringList& slist);
-
-/**
- * Method that provide the available backends for hybridize service.
- * @param List to fill with different backends
- * @return 
- */
-extern void getAvailableBackendsHybridize(StringList& slist);
-
 ///File Methods
 
 /**
  * Create a temporal file
  */
-extern void createTmpFile(std::string &nameTmpFile);
+void createTmpFile(std::string& nameTmpFile);
 
 /**
- * Remove a file 
+ * Remove a file
  * @param file_name name of file
  */
-extern void removeFile(const std::string& file_name);
+void removeFile(const std::string& file_name);
 
 /**
  * Write a file with multiple lines.
  * @param file the file path
  * @param lines the lines to write
 */
-extern void write(const FilePath& file, FileLinesCt& lines);
+void write(const FilePath& file, FileLinesCt& lines);
 
 /**
  * Write a file with a single line.
  * @param file the file path
  * @param line the line to write
  */
-extern void write(const FilePath& file, FileLine& line);
+void write(const FilePath& file, FileLine& line);
 
 /**
  * Read a line from a file
@@ -101,7 +89,7 @@ extern void write(const FilePath& file, FileLine& line);
  * @param lineno the line number to read
  * @param line where to write the read line
 */
-extern void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
+void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
 
 /**
  * Read a value from a file line using offset and length
@@ -129,6 +117,7 @@ inline void read_value(const FileLine& line, T& t)
     const bool success = from_string(line, t);
     if (!success)
         throw RNABackendException("Could not read the value from given line");
+}
 }
 }
 

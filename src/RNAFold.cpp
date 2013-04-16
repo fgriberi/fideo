@@ -53,12 +53,12 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
 
-    string fileInput; 
-    createTmpFile(fileInput);
+    string fileInput;
+    helper::createTmpFile(fileInput);
     string fileOutput;
-    createTmpFile(fileOutput);
+    helper::createTmpFile(fileOutput);
 
-    write(fileInput, sseq);
+    helper::write(fileInput, sseq);
     stringstream ss;
     ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
@@ -66,23 +66,23 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     ss << "< " << fileInput << " > " << fileOutput;
 
     const Command cmd = ss.str();
-    runCommand(cmd);
+    helper::runCommand(cmd);
 
     /* fold.out look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
     FileLine aux;
-    read_line(fileOutput, LINE_NO, aux);
+    helper::read_line(fileOutput, LINE_NO, aux);
 
     string str;
-    read_value(aux, 0, seqRNAm.length(), str);
+    helper::read_value(aux, 0, seqRNAm.length(), str);
     parse_structure(str, structureRNAm);
 
     Fe energy;
     read_free_energy(aux, seqRNAm.length(), energy);
-    removeFile(fileInput); 
-    removeFile(fileOutput);
+    helper::removeFile(fileInput);
+    helper::removeFile(fileOutput);
     return energy;
 }
 
@@ -92,7 +92,7 @@ size_t RNAFold::read_free_energy(FileLine& line, size_t offset, Fe& energy) cons
     {
         const size_t from = mili::ensure_found(line.find_first_of("(", offset)) + 1;
         const size_t to = mili::ensure_found(line.find_first_of(")", from)) - 1;
-        read_value(line, from, to - from, energy);
+        helper::read_value(line, from, to - from, energy);
         return to;
     }
     catch (const mili::StringNotFound& e)
@@ -110,25 +110,25 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
         biopp::SeqIndex open;
         switch (str[i])
         {
-        case UNPAIR:
-            secStructure.unpair(i);
-            break;
-        case OPEN_PAIR:
-            s.push(i);
-            break;
-        case CLOSE_PAIR:
-            if (!s.empty())
-            {
-                open = s.top();
-                secStructure.pair(open, i);
-                s.pop();
-            }
-            else
-                throw(InvalidStructureException(" Unexpected closing pair"));
-            break;
-        default:
-            throw(InvalidStructureException(" Unexpected symbol: " + secStructure.paired_with(i)));
-            break;
+            case UNPAIR:
+                secStructure.unpair(i);
+                break;
+            case OPEN_PAIR:
+                s.push(i);
+                break;
+            case CLOSE_PAIR:
+                if (!s.empty())
+                {
+                    open = s.top();
+                    secStructure.pair(open, i);
+                    s.pop();
+                }
+                else
+                    throw(InvalidStructureException(" Unexpected closing pair"));
+                break;
+            default:
+                throw(InvalidStructureException(" Unexpected symbol: " + secStructure.paired_with(i)));
+                break;
         }
     }
     if (!s.empty())

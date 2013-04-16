@@ -61,8 +61,8 @@ class UNAFold : public IFold
             {
                 if (aux.size() != NumberOfColumns)
                     throw RNABackendException("Invalid Header.");
-                convert_from_string(aux[ColNumberOfBases], number_of_bases);
-                convert_from_string(aux[ColDeltaG], delta_G);
+                helper::convert_from_string(aux[ColNumberOfBases], number_of_bases);
+                helper::convert_from_string(aux[ColDeltaG], delta_G);
                 sequence_name = aux[ColSeqName];
             }
             else
@@ -99,9 +99,9 @@ class UNAFold : public IFold
             {
                 if (aux.size() != NumberOfColumns)
                     throw RNABackendException("Invalid BodyLine.");
-                convert_from_string(aux[ColNucl], nuc);
-                convert_from_string(aux[ColNucleotideNumber], nucNumber);
-                convert_from_string(aux[ColPairedWith], pairedNuc);
+                helper::convert_from_string(aux[ColNucl], nuc);
+                helper::convert_from_string(aux[ColNucleotideNumber], nucNumber);
+                helper::convert_from_string(aux[ColPairedWith], pairedNuc);
             }
             return ret;
         }
@@ -117,17 +117,17 @@ static const string PATH_TMP = "/tmp/";
 
 void UNAFold::delete_all_files(const string& nameFile)
 {
-    removeFile(nameFile);
-    removeFile(nameFile + ".ct");
-    removeFile(nameFile + "_1.ct");
-    removeFile(nameFile + ".dG");
-    removeFile(nameFile + ".h-num");
-    removeFile(nameFile + ".rnaml");
-    removeFile(nameFile + ".plot");
-    removeFile(nameFile + ".run");
-    removeFile(nameFile + ".ss-count");
-    removeFile(nameFile + ".ann");
-    removeFile(nameFile + ".det");
+    helper::removeFile(nameFile);
+    helper::removeFile(nameFile + ".ct");
+    helper::removeFile(nameFile + "_1.ct");
+    helper::removeFile(nameFile + ".dG");
+    helper::removeFile(nameFile + ".h-num");
+    helper::removeFile(nameFile + ".rnaml");
+    helper::removeFile(nameFile + ".plot");
+    helper::removeFile(nameFile + ".run");
+    helper::removeFile(nameFile + ".ss-count");
+    helper::removeFile(nameFile + ".ann");
+    helper::removeFile(nameFile + ".det");
 }
 
 void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure)
@@ -144,9 +144,9 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     FileLine sseq = seqRNAm.getString();
 
     string temporalFile;
-    createTmpFile(temporalFile);
+    helper::createTmpFile(temporalFile);
 
-    write(temporalFile, sseq);
+    helper::write(temporalFile, sseq);
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
@@ -156,7 +156,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
     if (chdir(PATH_TMP.c_str()) != 0)
         throw RNABackendException("Invalid path of temp files.");
     const Command cmd = ss.str();
-    runCommand(cmd);
+    helper::runCommand(cmd);
 
     /* fold.in.ct look like this:
      * amountOfNucleotids dG = 'value'  nameSequence

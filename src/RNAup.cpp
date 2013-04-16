@@ -82,11 +82,11 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
         throw RNABackendException("Unsupported Sequence.");
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
-    
+
     string inputTmpFile;
-    createTmpFile(inputTmpFile);
+    helper::createTmpFile(inputTmpFile);
     string outputTmpFile;
-    createTmpFile(outputTmpFile);
+    helper::createTmpFile(outputTmpFile);
 
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -98,16 +98,16 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     cmd2 << " > " << outputTmpFile;
 
     const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
-    runCommand(command);
+    helper::runCommand(command);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
         throw RNABackendException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
-    removeFile(OUT_FILE.c_str());
-    removeFile(inputTmpFile);
-    removeFile(outputTmpFile);
+    helper::removeFile(OUT_FILE.c_str());
+    helper::removeFile(inputTmpFile);
+    helper::removeFile(outputTmpFile);
     return body.dG;
 }
 }

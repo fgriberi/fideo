@@ -40,8 +40,8 @@ typedef vector<string> ParserResult;
 class HelperTest
 {
 public:
-	static bool isMyTmpFile (const std::string& fileTmpName);
-	static bool checkDirTmp(); 
+    static bool isMyTmpFile(const std::string& fileTmpName);
+    static bool checkDirTmp();
 };
 
 #endif  /* _HELPER_TEST_H */

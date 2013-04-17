@@ -43,6 +43,18 @@ FideoConfig* FideoConfig::getInstance()
     return instance;
 }
 
+string FideoConfig::getPath(const string& exec)
+{
+    const configuration::const_iterator it = getInstance()->config.find(exec);
+    if (it == getInstance()->config.end())
+    {
+        return string();
+    }
+    else
+    {
+        return it->second;
+    }
+}
 
 void FideoConfig::readPathsFile()
 {
@@ -62,19 +74,6 @@ void FideoConfig::readPathsFile()
             ss >> Separator(result, ' ');
             config[result[0]] = result[1]; //<executable,path>
         }
-    }
-}
-
-string FideoConfig::getPath(const string& exec)
-{
-    const configuration::const_iterator it = getInstance()->config.find(exec);
-    if (it == getInstance()->config.end())
-    {
-        return string();
-    }
-    else
-    {
-        return it->second;
     }
 }
 }

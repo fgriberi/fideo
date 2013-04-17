@@ -36,25 +36,10 @@ class RNAup : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-    class ParseBody
-    {
-        enum Columns
-        {
-            ColRNAduplexResults,
-            ColIndiceIJ,
-            ColTwoPoints,
-            ColIndiceKL,
-            ColdGTotal,
-            ColEqualSymbol,
-            ColdGInt,
-            ColPlusSymbol,
-            ColdGu_l,
-            NumberOfColumns
-        };
-
+    class BodyParser
+    {        
     public:
-        Fe dG;
-
+        
         void parse(std::ifstream& file)
         {
             vector<string> aux;
@@ -70,6 +55,22 @@ class RNAup : public IHybridize
             else
                 throw RNABackendException("Failured operation >>.");
         }
+
+        Fe dG;
+    private:
+        enum Columns
+        {
+            ColRNAduplexResults,
+            ColIndiceIJ,
+            ColTwoPoints,
+            ColIndiceKL,
+            ColdGTotal,
+            ColEqualSymbol,
+            ColdGInt,
+            ColPlusSymbol,
+            ColdGu_l,
+            NumberOfColumns
+        }; 
     };
 
 };
@@ -108,7 +109,7 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
     {
         throw RNABackendException("Output file not found.");
     }
-    ParseBody body;
+    BodyParser body;
     body.parse(fileOutput);
     helper::removeFile(OUT_FILE.c_str());
     helper::removeFile(inputTmpFile);

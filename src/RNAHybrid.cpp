@@ -33,17 +33,12 @@ namespace fideo
 {
 class RNAHybrid : public IHybridize
 {
-    static const unsigned int OBSOLETE_LINES = 6;
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    static const unsigned int OBSOLETE_LINES = 6;
 
-    class ParseBody
+    class BodyParser
     {
-    public:
-        Fe dG;
-        static const unsigned int OBSOLETE_dG = 1000;
-        static const unsigned int SIZE_LINE = 3;
-        static const unsigned int DELTA_G = 1;
-
+    public:       
         void parse(std::ifstream& file)
         {
             string temp;
@@ -64,6 +59,11 @@ class RNAHybrid : public IHybridize
                 helper::convert_from_string(deltaG, dG);                
             }
         }
+
+        Fe dG;
+        static const unsigned int OBSOLETE_dG = 1000;
+        static const unsigned int SIZE_LINE = 3;
+        static const unsigned int DELTA_G = 1;
     };
 };
 
@@ -103,7 +103,7 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     {
         throw RNABackendException("Output file not found.");
     }
-    ParseBody body;
+    BodyParser body;
     body.parse(fileOutput);
 
     helper::removeFile(fileTmpTarget);

@@ -36,20 +36,9 @@ class RNAduplex : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-    class ParseBody
-    {
-        enum Columns
-        {
-            ColRNAResults,
-            ColIndiceIJ,
-            ColTwoPoints,
-            ColIndiceKL,
-            ColdG,
-            NumberOfColumns
-        };
-
+    class BodyParser
+    {       
     public:
-        Fe dG;
 
         void parse(string& line)
         {
@@ -63,6 +52,18 @@ class RNAduplex : public IHybridize
             const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
             helper::convert_from_string(deltaG, dG);            
         }
+
+        Fe dG;
+    private:
+        enum Columns
+        {
+            ColRNAResults,
+            ColIndiceIJ,
+            ColTwoPoints,
+            ColIndiceKL,
+            ColdG,
+            NumberOfColumns
+        };
     };
 };
 
@@ -101,7 +102,7 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const Nuc
     {
         throw RNABackendException("Output file not found.");
     }
-    ParseBody body;
+    BodyParser body;
     string line;
     getline(fileOutput, line);
     body.parse(line);

@@ -52,17 +52,7 @@ public:
      */
     ~FideoConfig() {};
 
-private:
-    /*
-    * Path of configuration file
-    */
-    static const std::string FILE_NAME;
-
-    /*
-     * Map between execute file and path file.
-     */
-    configuration config;
-
+private:   
     /*
      * Read diferent paths
      */
@@ -75,6 +65,16 @@ private:
     {
         readPathsFile();
     }
+
+    /*
+    * Path of configuration file
+    */
+    static const std::string FILE_NAME;
+
+    /*
+     * Map between execute file and path file.
+     */
+    configuration config;
 
     /*
      * Concrete instance of class

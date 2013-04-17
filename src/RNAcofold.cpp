@@ -36,18 +36,9 @@ class RNAcofold : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-    class ParseBody
-    {
-        enum Columns
-        {
-            ColRNAcofoldResult,
-            ColOpenParenthesis,
-            ColdG,
-            NumberOfColumns
-        };
-
-    public:
-        Fe dG;
+    class BodyParser
+    {     
+    public:      
 
         void parse(string& line)
         {
@@ -61,6 +52,16 @@ class RNAcofold : public IHybridize
             const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
             helper::convert_from_string(deltaG, dG);    
         }
+
+        Fe dG;
+    private:
+        enum Columns
+        {
+            ColRNAcofoldResult,
+            ColOpenParenthesis,
+            ColdG,
+            NumberOfColumns
+        };
     };
 };
 
@@ -102,7 +103,7 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     getline(fileOutput, temp);
     getline(fileOutput, temp);
 
-    ParseBody body;
+    BodyParser body;
     body.parse(temp);
     helper::removeFile(inputTmpFile);
     helper::removeFile(outputTmpFile);

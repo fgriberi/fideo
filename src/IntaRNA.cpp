@@ -34,23 +34,11 @@ namespace fideo
 {
 class IntaRNA : public IHybridize
 {
-    static const unsigned int OBSOLETE_LINES = 9;
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    static const unsigned int OBSOLETE_LINES = 9;
 
-    class ParseBody
-    {
-        static const unsigned int DELTA_G = 1;
-        static const unsigned int SIZE_LINE = 3;
-        static const unsigned int OBSOLETE_dG = 1000;
-
-        enum Columns
-        {
-            ColEnergy,
-            ColdG,
-            ColUnit,
-            NumberOfColumns
-        };
-
+    class BodyParser
+    {    
     public:
         Fe dG;
 
@@ -75,10 +63,22 @@ class IntaRNA : public IHybridize
                 helper::convert_from_string(deltaG, dG);
             }
         }
+    private:
+        static const unsigned int DELTA_G = 1;
+        static const unsigned int SIZE_LINE = 3;
+        static const unsigned int OBSOLETE_dG = 1000;
+
+        enum Columns
+        {
+            ColEnergy,
+            ColdG,
+            ColUnit,
+            NumberOfColumns
+        };
     };
 };
 
-static const string INTA_RNA = "runIntaRNA";
+static const string EXECUTABLE_PATH = "runIntaRNA";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
@@ -102,7 +102,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     cmd << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
-    if (chdir(fideo::FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
+    if (chdir(fideo::FideoConfig::getInstance()->getPath(EXECUTABLE_PATH).c_str()) != 0)
     {
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
@@ -115,7 +115,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     {
         throw RNABackendException("Output file not found.");
     }
-    ParseBody body;
+    BodyParser body;
     body.parse(fileOutput);
     helper::removeFile(tmpFileOutput);
     return body.dG;

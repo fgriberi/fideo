@@ -37,22 +37,9 @@ class UNAFold : public IFold
     static void delete_all_files(const string& nameFile);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
 
-    class HeaderLine
-    {
-        enum Columns
-        {
-            ColNumberOfBases,
-            ColDeltaGStr,
-            ColEqualSymbol,
-            ColDeltaG,
-            ColSeqName,
-            NumberOfColumns
-        };
+    class HeaderParser
+    {       
     public:
-        biopp::SeqIndex number_of_bases;
-        Fe delta_G;
-        string sequence_name;
-
         //Archivo parado en la primera linea.
         void parse(std::ifstream& file)
         {
@@ -72,27 +59,26 @@ class UNAFold : public IFold
                 throw RNABackendException("Failured operation >>.");
             }
         }
-    };
 
-    class BodyLine
-    {
+        biopp::SeqIndex number_of_bases;
+        Fe delta_G;
+        string sequence_name;
+
+    private:
         enum Columns
         {
-            ColNucleotideNumber,
-            ColNucl,
-            ColPrevious,
-            ColNext,
-            ColPairedWith,
-            ColNumberOfBases2,
-            Col7,  // not used
-            Col8,  // not used
+            ColNumberOfBases,
+            ColDeltaGStr,
+            ColEqualSymbol,
+            ColDeltaG,
+            ColSeqName,
             NumberOfColumns
         };
+    };
 
-    public:
-        char nuc;
-        biopp::SeqIndex nucNumber;  // starts at 1!
-        biopp::SeqIndex pairedNuc; // starts at 1! 0 means unpaired.
+    class BodyLineParser
+    {       
+    public:      
 
         bool parse(std::ifstream& file)
         {
@@ -111,9 +97,27 @@ class UNAFold : public IFold
             }
             return ret;
         }
+
+        char nuc;
+        biopp::SeqIndex nucNumber;  // starts at 1!
+        biopp::SeqIndex pairedNuc; // starts at 1! 0 means unpaired.
+
+    private:
+        enum Columns
+        {
+            ColNucleotideNumber,
+            ColNucl,
+            ColPrevious,
+            ColNext,
+            ColPairedWith,
+            ColNumberOfBases2,
+            Col7,  // not used
+            Col8,  // not used
+            NumberOfColumns
+        };
     };
 
-    static void fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure);
+    static void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
 
 };
 
@@ -136,7 +140,7 @@ void UNAFold::delete_all_files(const string& nameFile)
     helper::removeFile(nameFile + ".det");
 }
 
-void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure)
+void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure)
 {
     if (bodyLine.pairedNuc == 0)
     {
@@ -184,11 +188,11 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     {
         throw RNABackendException("output file not found.");
     }
-    HeaderLine headerLine;
+    HeaderParser headerLine;
     headerLine.parse(file_in);
     structureRNAm.set_sequence_size(headerLine.number_of_bases);
 
-    BodyLine bodyLine;
+    BodyLineParser bodyLine;
     while (bodyLine.parse(file_in))
     {
         fillStructure(bodyLine, structureRNAm);

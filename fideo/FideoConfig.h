@@ -35,8 +35,25 @@ namespace fideo
 typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
-{
+{   
+public:
     /*
+     * Get concrete instance
+     */
+    static FideoConfig* getInstance();
+
+    /*
+     * Get specific path
+     */
+    std::string getPath(const std::string& exec);
+
+    /*
+     * Destructor of class
+     */
+    ~FideoConfig() {};
+
+private:
+     /*
      * Path of configuration file
      */
     static const std::string FILE_NAME;
@@ -63,23 +80,6 @@ class FideoConfig
      * Concrete instance of class
      */
     static FideoConfig* instance;
-
-public:
-    /*
-     * Get concrete instance
-     */
-    static FideoConfig* getInstance();
-
-    /*
-     * Get specific path
-     */
-    std::string getPath(const std::string& exec);
-
-    /*
-     * Destructor of class
-     */
-    ~FideoConfig() {};
-
 };
 }
 #endif  /* _FIDEO_CONFIG_H */

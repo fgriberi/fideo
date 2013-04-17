@@ -35,7 +35,7 @@ namespace fideo
 class IntaRNA : public IHybridize
 {
     static const unsigned int OBSOLETE_LINES = 9;
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class ParseBody
     {
@@ -79,7 +79,7 @@ static const string INTA_RNA = "runIntaRNA";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
-Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
+Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");

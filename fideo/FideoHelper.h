@@ -33,6 +33,21 @@
 
 using std::string;
 
+/**
+ * Filename path
+ */
+typedef std::string FilePath;
+
+typedef std::string FileLine;
+
+typedef std::string Command;
+
+typedef unsigned int FileLineNo;
+
+typedef std::list<std::string> FileLinesCt;
+
+typedef std::list<std::string> Backend;
+
 namespace fideo
 {
 /**

@@ -43,7 +43,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(targetSequence, querySequence, false);
+    double dG = p->hybridize(targetSequence, false, querySequence);
     EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
 
@@ -79,7 +79,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(targetSequence, querySequence, false);
+    double dG = p->hybridize(targetSequence, false, querySequence);
     EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
 

@@ -35,7 +35,7 @@ class UNAFold : public IFold
 {
     std::ifstream file_in;
     static void delete_all_files(const string& nameFile);
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
 
     class HeaderLine
     {
@@ -138,7 +138,7 @@ void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secSt
         secStructure.pair(bodyLine.nucNumber - 1, bodyLine.pairedNuc - 1);
 }
 
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();

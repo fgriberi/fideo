@@ -34,7 +34,7 @@ namespace fideo
 class RNAHybrid : public IHybridize
 {
     static const unsigned int OBSOLETE_LINES = 6;
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class ParseBody
     {
@@ -66,7 +66,7 @@ class RNAHybrid : public IHybridize
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
-Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
+Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");

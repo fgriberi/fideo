@@ -36,7 +36,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2, false);
+    double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
@@ -60,7 +60,7 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2, false);
+    double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 

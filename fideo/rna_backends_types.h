@@ -33,51 +33,11 @@
 
 namespace fideo
 {
-/**
- * Distance between sequences
- */
-typedef float Distance;
-
-/**
- * Similitude between sequences or structures
- */
-typedef float Similitude;
 
 /**
  * Free eneregy in secodary structure
  */
 typedef double Fe;
-
-/**
- * Container of raw (string) RNA sequences
- */
-typedef std::set<std::string> StringSequencesCt;
-
-/**
- * Number of combination attemps.
- */
-typedef unsigned int CombinationAttempts;
-
-/**
- * Filename path
- */
-typedef std::string FilePath;
-
-typedef std::string FileLine;
-
-typedef std::string Command;
-
-typedef unsigned int FileLineNo;
-
-typedef std::list<std::string> FileLinesCt;
-
-/**
- * string list
- */
-typedef std::list<std::string> StringList;
-
-#define SUCCESS_EXEC 0
-#define MATRIX_SIZE 4
 
 }
 #endif  /* _RNA_BACKENDS_TYPES_H */

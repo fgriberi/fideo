@@ -41,13 +41,13 @@ class RNAFold : public IFold
     static const char UNPAIR = '.';
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
 {
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);

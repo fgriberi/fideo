@@ -35,7 +35,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2, false);
+    double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -7.80);
     delete p;
 

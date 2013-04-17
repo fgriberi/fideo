@@ -31,6 +31,7 @@
 #include "fideo/rna_backends_types.h"
 #include "fideo/FideoHelper.h"
 
+
 namespace fideo
 {
 /**
@@ -38,7 +39,6 @@ namespace fideo
  */
 struct IFold
 {
-public:
     /**
      * Fold an ARN sequence
      * @param sequence the ARN sequence to fold.
@@ -46,7 +46,7 @@ public:
      * @param circ if the structure it's circular.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
 
     /**
      * Class destructor
@@ -58,7 +58,7 @@ public:
      * @param List to fill with different backends
      * @return
      */
-    static void getAvailableBackends(StringList& slist)
+    static void getAvailableBackends(Backend& slist)
     {
         mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
         while (!it.end())

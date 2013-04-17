@@ -35,7 +35,7 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, seq2, false);
+    double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -9.80);
     delete p;
 

@@ -37,14 +37,13 @@ namespace fideo
  */
 struct IHybridize
 {
-public:
     /**
      * Hybridize an RNA sequence
      * @param firt sequence the RNA sequence to Hybridize.
      * @param second sequence the RNA sequence to Hybridize
      * @return The free energy.
      */
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
 
     /**
      * Class destructor
@@ -56,7 +55,7 @@ public:
      * @param List to fill with different backends
      * @return
     */
-    static void getAvailableBackends(StringList& slist)
+    static void getAvailableBackends(Backend& slist)
     {
         mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
         while (!it.end())

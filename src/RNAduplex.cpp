@@ -34,7 +34,7 @@ namespace fideo
 //Vienna package
 class RNAduplex : public IHybridize
 {
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class ParseBody
     {
@@ -67,7 +67,7 @@ class RNAduplex : public IHybridize
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq, bool longerCirc) const
+Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
 {
     if (longerCirc)
         throw RNABackendException("Unsupported Sequence.");

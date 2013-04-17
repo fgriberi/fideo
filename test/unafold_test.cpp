@@ -36,7 +36,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
-    EXPECT_NO_THROW(p->fold(seq, secStructure, true));
+    EXPECT_NO_THROW(p->fold(seq, true, secStructure));
     delete p;
 
     EXPECT_EQ(32, secStructure.size());

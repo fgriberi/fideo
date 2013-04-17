@@ -35,7 +35,7 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    fideo::Fe result = p->fold(seq, secStructure, true);
+    fideo::Fe result = p->fold(seq, true, secStructure);
     delete p;
 
     EXPECT_DOUBLE_EQ(result, -18.70);

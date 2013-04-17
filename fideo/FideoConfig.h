@@ -35,7 +35,7 @@ namespace fideo
 typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
-{   
+{
 public:
     /*
      * Get concrete instance
@@ -53,9 +53,9 @@ public:
     ~FideoConfig() {};
 
 private:
-     /*
-     * Path of configuration file
-     */
+    /*
+    * Path of configuration file
+    */
     static const std::string FILE_NAME;
 
     /*

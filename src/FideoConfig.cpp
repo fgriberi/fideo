@@ -69,11 +69,11 @@ string FideoConfig::getPath(const string& exec)
 {
     const configuration::const_iterator it = getInstance()->config.find(exec);
     if (it == getInstance()->config.end())
-    {    
+    {
         return string();
-    }    
+    }
     else
-    {   
+    {
         return it->second;
     }
 }

@@ -60,13 +60,17 @@ class UNAFold : public IFold
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
+                {
                     throw RNABackendException("Invalid Header.");
+                }
                 helper::convert_from_string(aux[ColNumberOfBases], number_of_bases);
                 helper::convert_from_string(aux[ColDeltaG], delta_G);
                 sequence_name = aux[ColSeqName];
             }
             else
+            {
                 throw RNABackendException("Failured operation >>.");
+            }
         }
     };
 
@@ -98,7 +102,9 @@ class UNAFold : public IFold
             if (ret)
             {
                 if (aux.size() != NumberOfColumns)
+                {
                     throw RNABackendException("Invalid BodyLine.");
+                }
                 helper::convert_from_string(aux[ColNucl], nuc);
                 helper::convert_from_string(aux[ColNucleotideNumber], nucNumber);
                 helper::convert_from_string(aux[ColPairedWith], pairedNuc);
@@ -133,9 +139,13 @@ void UNAFold::delete_all_files(const string& nameFile)
 void UNAFold::fillStructure(const BodyLine& bodyLine, biopp::SecStructure& secStructure)
 {
     if (bodyLine.pairedNuc == 0)
+    {
         secStructure.unpair(bodyLine.nucNumber - 1);
+    }
     else
+    {
         secStructure.pair(bodyLine.nucNumber - 1, bodyLine.pairedNuc - 1);
+    }
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
@@ -150,11 +160,15 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
+    {
         ss << "--circular ";
+    }
     ss << temporalFile;
 
     if (chdir(PATH_TMP.c_str()) != 0)
+    {
         throw RNABackendException("Invalid path of temp files.");
+    }
     const Command cmd = ss.str();
     helper::runCommand(cmd);
 
@@ -167,7 +181,9 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
 
     std::ifstream file_in((temporalFile + ".ct").c_str());
     if (!file_in)
+    {
         throw RNABackendException("output file not found.");
+    }
     HeaderLine headerLine;
     headerLine.parse(file_in);
     structureRNAm.set_sequence_size(headerLine.number_of_bases);

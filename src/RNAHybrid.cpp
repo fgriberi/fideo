@@ -48,17 +48,23 @@ class RNAHybrid : public IHybridize
         {
             string temp;
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+            {
                 getline(file, temp);
+            }
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != SIZE_LINE)
+            {
                 dG = OBSOLETE_dG; //no significant hybridization found
+            }
             else
             {
                 const string deltaG = result[DELTA_G];
                 if (!from_string(deltaG, dG))
+                {
                     throw RNABackendException("Failed to convert the string to value type.");
+                }
             }
         }
     };
@@ -69,7 +75,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
+    {
         throw RNABackendException("Unsupported Sequence.");
+    }
 
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
@@ -95,7 +103,9 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
 
     ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
+    {
         throw RNABackendException("Output file not found.");
+    }
     ParseBody body;
     body.parse(fileOutput);
 

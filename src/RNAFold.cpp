@@ -62,7 +62,9 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     stringstream ss;
     ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
+    {
         ss << "-circ ";
+    }
     ss << "< " << fileInput << " > " << fileOutput;
 
     const Command cmd = ss.str();
@@ -124,7 +126,9 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
                     s.pop();
                 }
                 else
+                {
                     throw(InvalidStructureException(" Unexpected closing pair"));
+                }
                 break;
             default:
                 throw(InvalidStructureException(" Unexpected symbol: " + secStructure.paired_with(i)));
@@ -132,6 +136,8 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
         }
     }
     if (!s.empty())
+    {
         throw(InvalidStructureException(" Pairs pending to close"));
+    }
 }
 }

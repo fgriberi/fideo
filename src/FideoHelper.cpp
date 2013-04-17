@@ -36,17 +36,25 @@ int runCommand(const Command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
+    {
         throw RNABackendException("System call failed");
+    }
     else
     {
         if (WIFEXITED(status))
+        {
             return WEXITSTATUS(status);
+        }
         else
         {
             if (WIFSIGNALED(status))
+            {
                 throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
+            }
             else
+            {
                 throw RNABackendException("Non termination for some reason");
+            }
         }
     }
 }
@@ -65,7 +73,9 @@ void createTmpFile(std::string& nameTmpFile)
 void removeFile(const std::string& file_name)
 {
     if (unlink(file_name.c_str()) == FILE_ERROR)
+    {
         throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
+    }
 }
 
 void write(const FilePath& file, FileLinesCt& lines)

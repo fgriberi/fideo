@@ -55,10 +55,14 @@ class RNAcofold : public IHybridize
             vector<string> result;
             ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
+            {
                 throw RNABackendException("Invalid output RNAcofold.");
+            }
             const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
             if (!from_string(deltaG, dG))
+            {
                 throw RNABackendException("Failed to convert the string to value type.");
+            }
         }
     };
 };
@@ -68,7 +72,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
+    {
         throw RNABackendException("Unsupported Sequence.");
+    }
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
@@ -91,7 +97,9 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
+    {
         throw RNABackendException("Output file not found.");
+    }
 
     string temp;
     getline(fileOutput, temp);

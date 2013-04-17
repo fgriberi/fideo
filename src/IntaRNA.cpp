@@ -58,18 +58,24 @@ class IntaRNA : public IHybridize
         {
             string temp;
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+            {
                 getline(file, temp);
+            }
 
             stringstream ss(temp);
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != SIZE_LINE)
+            {
                 dG = OBSOLETE_dG; //no significant hybridization found
+            }
             else
             {
                 const string deltaG = result[DELTA_G];
                 if (!from_string(deltaG, dG))
+                {
                     throw RNABackendException("Failed to convert the string to value type.");
+                }
             }
         }
     };
@@ -82,7 +88,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
+    {
         throw RNABackendException("Unsupported Sequence.");
+    }
 
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
@@ -98,14 +106,18 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
 
     //move to the directory where is the folding
     if (chdir(fideo::FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
+    {
         throw RNABackendException("Invalid path of IntaRNA executable.");
+    }
 
     const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
     helper::runCommand(command);
 
     ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
+    {
         throw RNABackendException("Output file not found.");
+    }
     ParseBody body;
     body.parse(fileOutput);
     helper::removeFile(tmpFileOutput);

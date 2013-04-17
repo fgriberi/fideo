@@ -61,10 +61,14 @@ class RNAup : public IHybridize
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
+                {
                     throw RNABackendException("Invalid output RNAup.");
+                }
                 const string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
                 if (!from_string(deltaG, dG))
+                {
                     throw RNABackendException("Failed to convert the string to value type.");
+                }
             }
             else
                 throw RNABackendException("Failured operation >>.");
@@ -79,7 +83,9 @@ static const string OUT_FILE = "RNA_w25_u3_4_up.out"; //file generated to RNAup
 Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
 {
     if (longerCirc)
+    {
         throw RNABackendException("Unsupported Sequence.");
+    }
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
@@ -102,7 +108,9 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
+    {
         throw RNABackendException("Output file not found.");
+    }
     ParseBody body;
     body.parse(fileOutput);
     helper::removeFile(OUT_FILE.c_str());

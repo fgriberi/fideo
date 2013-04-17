@@ -57,10 +57,14 @@ class RNAduplex : public IHybridize
             vector<string> result;
             ss >> result;
             if (result.size() != NumberOfColumns)
+            {
                 throw RNABackendException("Invalid output RNAduplex.");
+            }
             const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
             if (!from_string(deltaG, dG))
+            {
                 throw RNABackendException("Failed to convert the string to value type.");
+            }
         }
     };
 };
@@ -70,7 +74,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
 {
     if (longerCirc)
+    {
         throw RNABackendException("Unsupported Sequence.");
+    }
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
@@ -95,7 +101,9 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const Nuc
 
     ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
+    {
         throw RNABackendException("Output file not found.");
+    }
     ParseBody body;
     string line;
     getline(fileOutput, line);

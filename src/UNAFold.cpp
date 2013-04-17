@@ -34,8 +34,7 @@ namespace fideo
 class UNAFold : public IFold
 {
     std::ifstream file_in;
-    static void delete_all_files(const string& nameFile);
-    static void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
+    static void delete_all_files(const string& nameFile);    
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
 
     class HeaderParser
@@ -117,6 +116,8 @@ class UNAFold : public IFold
             NumberOfColumns
         };
     };   
+
+    static void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
 };
 
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");

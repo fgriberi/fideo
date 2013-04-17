@@ -59,10 +59,7 @@ class RNAcofold : public IHybridize
                 throw RNABackendException("Invalid output RNAcofold.");
             }
             const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
-            if (!from_string(deltaG, dG))
-            {
-                throw RNABackendException("Failed to convert the string to value type.");
-            }
+            helper::convert_from_string(deltaG, dG);    
         }
     };
 };

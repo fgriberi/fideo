@@ -61,14 +61,11 @@ class RNAup : public IHybridize
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
-                {
+                {   
                     throw RNABackendException("Invalid output RNAup.");
                 }
                 const string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-                if (!from_string(deltaG, dG))
-                {
-                    throw RNABackendException("Failed to convert the string to value type.");
-                }
+                helper::convert_from_string(deltaG, dG);              
             }
             else
                 throw RNABackendException("Failured operation >>.");

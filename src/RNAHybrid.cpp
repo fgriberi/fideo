@@ -61,10 +61,7 @@ class RNAHybrid : public IHybridize
             else
             {
                 const string deltaG = result[DELTA_G];
-                if (!from_string(deltaG, dG))
-                {
-                    throw RNABackendException("Failed to convert the string to value type.");
-                }
+                helper::convert_from_string(deltaG, dG);                
             }
         }
     };

@@ -1,12 +1,12 @@
 /*
  * @file   RNAcofold.cpp
- * @brief  RNAcofold is the implementation of IHybridize interface. It's a specific backend to hybridize. 
+ * @brief  RNAcofold is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend RNAcofold implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -39,11 +39,12 @@ using namespace std;
 
 namespace fideo
 {
-//Vienna package
+///Vienna package
 class RNAcofold : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
+    ///Class that allows parsing the body of a file
     class ParseBody
     {
         enum Columns
@@ -55,8 +56,13 @@ class RNAcofold : public IHybridize
         };
 
     public:
-        Fe dG;
+        Fe dG; ///free energy
 
+        /** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
         void parse(string& line)
         {
             stringstream ss(line);
@@ -76,7 +82,7 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
 {
     if (longerCirc)
-        throw RNABackendException("Unsupported Sequence.");
+        throw UnsupportedException();
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
@@ -85,6 +91,7 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
+    ///Constructed as required by RNAcofold
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
@@ -94,12 +101,12 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     command << "< " << inputTmpFile;
     command << " > " << outputTmpFile;
 
-    const Command cmd = command.str();
+    const Command cmd = command.str(); /// RNAcofold < inputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
 
     string temp;
     getline(fileOutput, temp);
@@ -111,4 +118,4 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     helper::removeFile(outputTmpFile);
     return body.dG;
 }
-}
+} // namespace fideo

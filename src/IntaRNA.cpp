@@ -1,12 +1,12 @@
 /*
  * @file   IntaRNA.cpp
- * @brief  IntaRNA is the implementation of IHybridize interface. It's a specific backend to hybridize. 
+ * @brief  IntaRNA is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend IntaRNA implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -42,14 +42,15 @@ namespace fideo
 {
 class IntaRNA : public IHybridize
 {
-    static const unsigned int OBSOLETE_LINES = 9;
+    static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
+    ///Class that allows parsing the body of a file
     class ParseBody
     {
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
-        static const unsigned int OBSOLETE_dG = 1000;
+        static const unsigned int OBSOLETE_dG = 1000; ///no significant hybridization found
 
         enum Columns
         {
@@ -60,11 +61,17 @@ class IntaRNA : public IHybridize
         };
 
     public:
-        Fe dG;
+        Fe dG; ///free energy to read the file
 
+        /** @brief Parse the file and get the value dG
+         *
+         * @param file: file to parser
+         * @return void
+         */
         void parse(std::ifstream& file)
         {
             string temp;
+            ///advance to the required line
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
                 getline(file, temp);
 
@@ -72,7 +79,7 @@ class IntaRNA : public IHybridize
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != SIZE_LINE)
-                dG = OBSOLETE_dG; //no significant hybridization found
+                dG = OBSOLETE_dG; 
             else
             {
                 const string deltaG = result[DELTA_G];
@@ -83,6 +90,7 @@ class IntaRNA : public IHybridize
     };
 };
 
+///name executable to find
 static const string INTA_RNA = "runIntaRNA";
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
@@ -90,7 +98,7 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
 {
     if (longerCirc)
-        throw RNABackendException("Unsupported Sequence.");
+        throw UnsupportedException();
 
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
@@ -104,16 +112,16 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeque
     cmd << " " << seq2;
     cmd << " > " << tmpFileOutput;
 
-    //move to the directory where is the folding
+    //move to the directory where is IntaRNA
     if (chdir(fideo::FideoConfig::getInstance()->getPath(INTA_RNA).c_str()) != 0)
-        throw RNABackendException("Invalid path of IntaRNA executable.");
+        throw InvalidPathException();
 
-    const Command command = cmd.str();  //./IntaRNA seq1 seq2 > outputIntaRNA.out
+    const Command command = cmd.str();  ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
     helper::runCommand(command);
 
     ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     ParseBody body;
     body.parse(fileOutput);
     helper::removeFile(tmpFileOutput);

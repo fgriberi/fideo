@@ -1,10 +1,10 @@
 /*
  * @file   rna_backends_exceptions.h
- * @brief  This header defines all fideo exceptions 
+ * @brief  This header defines all fideo exceptions
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
- * 
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
@@ -58,7 +58,29 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Err
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(FileReadException, RNABackendExceptionRoot, "The config file couldn't be read");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FromStringException, RNABackendExceptionRoot, "Wrong column type");
+
+///FideoHelper exceptions
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueUsingOffsetException, RNABackendExceptionRoot, "Could not read the value from given line, offset and length");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueException, RNABackendExceptionRoot, "Could not read the value from given line");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(SystemCallException, RNABackendExceptionRoot, "System call failed");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NonTerminationException, RNABackendExceptionRoot, "Non termination for some reason");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(TmpFileCreateException, RNABackendExceptionRoot, "Creation of temp file failed with error");
+
+//IntaRNA
+DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, RNABackendExceptionRoot, "Unsupported Sequence");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidPathException, RNABackendExceptionRoot, "Invalid path of IntaRNA executable");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, RNABackendExceptionRoot, "Output file not found");
+
+
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
+
 
 

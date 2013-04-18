@@ -1,13 +1,13 @@
 /*
  * @file   FideoConfig.cpp
- * @brief  This is the implementation of FideoConf interface and is responsible for 
+ * @brief  This is the implementation of FideoConf interface and is responsible for
  *         setting the path to the executable
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing class FideoConfig implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

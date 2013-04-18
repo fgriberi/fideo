@@ -2,9 +2,9 @@
  * @file   IHybridize.h
  * @brief  IHybridize provides the interface to hybridize service.
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
- * 
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
@@ -43,30 +43,32 @@
 
 namespace fideo
 {
-/**
- * Interface for sequence's hybridize services.
- */
+
+///Interface for sequence's hybridize services.
 struct IHybridize
 {
 public:
-    /**
-     * Hybridize an RNA sequence
-     * @param firt sequence the RNA sequence to Hybridize.
-     * @param second sequence the RNA sequence to Hybridize
+
+    /** @brief Hybridize an RNA sequence
+     * 
+     * @param longerSeq: longer sequence the RNA sequence to Hybridize.
+     * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
+     * @param longerCirc: if the longerSeq it's circular.
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const = 0;
 
-    /**
-     * Class destructor
+    /** @brief Class destructor
+     *
      */
     virtual ~IHybridize() {}
 
-    /**
+    /** @brief Get availables backend
+     *
      * Method that provide the available backends for hybridize service.
-     * @param List to fill with different backends
-     * @return
-    */
+     * @param slist: to fill with different backends
+     * @return void
+     */
     static void getAvailableBackends(StringList& slist)
     {
         mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
@@ -77,6 +79,6 @@ public:
         }
     }
 };
-}
+} //namespace fideo
 
 #endif  /* _IHYBRIDIZE_H */

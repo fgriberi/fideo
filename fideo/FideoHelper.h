@@ -1,10 +1,10 @@
 /*
  * @file   FideoHelper.h
- * @brief  This header defines necessary methods in fideo 
+ * @brief  This header defines necessary methods in fideo
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
- * 
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
@@ -45,17 +45,16 @@ using std::string;
 
 namespace fideo
 {
-/**
- * Set of methods necessary
- */
 
 namespace helper
 {
-///System methods
+//-----------------------------------System methods----------------------------------- 
 
-/**
+/** @brief exeute a command
+ *
  * Execute a give command using a system call
- * @param cmd the RNA backend command
+ * @param cmd: the RNA backend command
+ * @return int: status 
  */
 int runCommand(const Command& cmd);
 
@@ -63,72 +62,82 @@ template<class T>
 void convert_from_string(const std::string& from, T& to)
 {
     if (!mili::from_string(from, to))
-        throw RNABackendException("Wrong column type.");
+        throw FromStringException();
 }
 
-///File Methods
+//-----------------------------------File Methods----------------------------------- 
 
-/**
- * Create a temporal file
+/** @brief Create a temporal file
+ * 
+ * @param nameTmpFile: name file created
+ * @return void
  */
 void createTmpFile(std::string& nameTmpFile);
 
-/**
- * Remove a file
- * @param file_name name of file
+/** @brief Remove a file
+ * 
+ * @param file_name: name file to remove
+ * @return void
  */
 void removeFile(const std::string& file_name);
 
-/**
- * Write a file with multiple lines.
- * @param file the file path
- * @param lines the lines to write
+/** @brief Write a file with multiple lines.
+ *
+ * @param file: file path
+ * @param lines: lines to write
+ * @return void
 */
 void write(const FilePath& file, FileLinesCt& lines);
 
-/**
- * Write a file with a single line.
- * @param file the file path
- * @param line the line to write
+/** @brief Write a file with a single line.
+ * 
+ * @param file: file path
+ * @param line: line to write
+ * @return void
  */
 void write(const FilePath& file, FileLine& line);
 
-/**
- * Read a line from a file
- * @param file the file path
- * @param lineno the line number to read
- * @param line where to write the read line
+/** @brief Read a line from a file
+ * 
+ * @param file: file path
+ * @param lineno: line number to read
+ * @param line: where to write the read line
+ * @return void
 */
 void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
 
-/**
+/** @brief Read a value
+ *
  * Read a value from a file line using offset and length
- * @param line the file line
- * @param offset the offset in the line
- * @param n the length to read
- * @param t where to write the value.
+ * @param line: file line
+ * @param offset: offset in the line
+ * @param n: length to read
+ * @param t: where to write the value.
+ * @return void
  */
 template<class T>
 inline void read_value(const FileLine& line, FileLine::size_type offset, size_t n, T& t)
 {
     const bool success = mili::from_string(line.substr(offset, n), t);
     if (!success)
-        throw RNABackendException("Could not read the value from given line, offset and length");
+        throw NotReadValueUsingOffsetException();
 }
 
-/**
- * Read a value from a line file.
- * @param line the file line
- * @param t where to write the value
+/** @brief Read a value from a line file.
+ * 
+ * @param line: file line
+ * @param t: where to write the value
+ * @return void
  */
 template<class T>
 inline void read_value(const FileLine& line, T& t)
 {
     const bool success = from_string(line, t);
     if (!success)
-        throw RNABackendException("Could not read the value from given line");
+        throw NotReadValueException();
 }
-}
-}
+
+} //namespace helper
+} //namespace fideo
 
 #endif  /* _FIDEO_HELPER_H */

@@ -1,7 +1,7 @@
 /*
  * @file   HelperTest.h
- * @brief  This is the implementation of HelperTest interface. 
- * 
+ * @brief  This is the implementation of HelperTest interface.
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *

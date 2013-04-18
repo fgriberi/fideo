@@ -2,11 +2,11 @@
  * @file   unafold_test.cpp
  * @brief  unafold_test is a test file to UNAFold backend.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

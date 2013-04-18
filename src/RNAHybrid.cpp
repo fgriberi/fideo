@@ -1,12 +1,12 @@
 /*
  * @file   RANHybrid.cpp
- * @brief  RANHybrid is the implementation of IHybridize interface. It's a specific backend to hybridize. 
+ * @brief  RANHybrid is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend RANHybrid implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -44,14 +44,20 @@ class RNAHybrid : public IHybridize
     static const unsigned int OBSOLETE_LINES = 6;
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
+    ///Class that allows parsing the body of a file
     class ParseBody
     {
     public:
-        Fe dG;
-        static const unsigned int OBSOLETE_dG = 1000;
+        Fe dG; ///free energy
+        static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
         static const unsigned int SIZE_LINE = 3;
         static const unsigned int DELTA_G = 1;
 
+        /** @brief Parse the file and get the value dG
+         *
+         * @param file: file to parser
+         * @return void
+         */
         void parse(std::ifstream& file)
         {
             string temp;
@@ -61,7 +67,7 @@ class RNAHybrid : public IHybridize
             vector<string> result;
             ss >> Separator(result, ' ');
             if (result.size() != SIZE_LINE)
-                dG = OBSOLETE_dG; //no significant hybridization found
+                dG = OBSOLETE_dG; 
             else
             {
                 const string deltaG = result[DELTA_G];
@@ -77,8 +83,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const
 {
     if (longerCirc)
-        throw RNABackendException("Unsupported Sequence.");
+        throw UnsupportedException();
 
+    ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
@@ -98,12 +105,12 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     cmd << " -q " << fileTmpQuery;
     cmd << " > " << fileTmpOutput;
 
-    const Command command = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
+    const Command command = cmd.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput      
     helper::runCommand(command);
 
     ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException("Output file not found.");
     ParseBody body;
     body.parse(fileOutput);
 
@@ -112,4 +119,4 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     helper::removeFile(fileTmpOutput);
     return body.dG;
 }
-}
+} // namespace fideo

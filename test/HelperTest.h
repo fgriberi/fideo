@@ -1,7 +1,7 @@
 /*
  * @file   HelperTest.cpp
- * @brief  
- * 
+ * @brief
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *

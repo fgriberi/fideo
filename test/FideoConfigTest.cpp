@@ -2,11 +2,11 @@
  * @file   FideoConfigTest.cpp
  * @brief  FideoConfigTest is a test file to FideoConfig class.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

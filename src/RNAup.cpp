@@ -1,12 +1,12 @@
 /*
  * @file   RNAup.cpp
- * @brief  RNAup is the implementation of IHybridize interface. It's a specific backend to hybridize. 
+ * @brief  RNAup is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend RNAup implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -82,7 +82,7 @@ class RNAup : public IHybridize
 };
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
-static const string OUT_FILE = "RNA_w25_u3_4_up.out"; //file generated to RNAup
+static const string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
 
 Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq, bool longerCirc) const
 {
@@ -96,6 +96,7 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
+    ///Constructed as required by RNAup
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
@@ -105,12 +106,12 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, const NucSequence& shorterSeq,
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
+    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
     helper::runCommand(command);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     ParseBody body;
     body.parse(fileOutput);
     helper::removeFile(OUT_FILE.c_str());

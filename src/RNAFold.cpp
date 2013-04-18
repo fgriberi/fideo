@@ -1,15 +1,15 @@
 /*
  * @file   RNAFold.cpp
- * @brief  RNAFold is the implementation of IFold interface. It's a specific backend to folding. 
+ * @brief  RNAFold is the implementation of IFold interface. It's a specific backend to folding.
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend RNAFold implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -49,16 +49,32 @@ class RNAFold : public IFold
     static const char OPEN_PAIR = '(';
     static const char CLOSE_PAIR = ')';
     static const char UNPAIR = '.';
+
+    /** @brief Read free energy of line
+    *
+    * @param file: to read
+    * @param energy: to fill with free energy
+    * @return index of first ")" in file
+    */
     size_t read_free_energy(FileLine& file, size_t offset, Fe& energy) const;
+
+    /** @brief obtain structure
+    *
+    * @param str: to parse
+    * @param secStrucute: to fill with structure
+    * @return void
+    */
     static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
+
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const;
 };
 
 const FileLineNo RNAFold::LINE_NO = 1;
+
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const
-{
+{    
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
@@ -75,10 +91,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structu
         ss << "-circ ";
     ss << "< " << fileInput << " > " << fileOutput;
 
-    const Command cmd = ss.str();
+    const Command cmd = ss.str();  /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
     helper::runCommand(cmd);
 
-    /* fold.out look like this:
+    /* output file look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
     */
@@ -134,7 +150,7 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
                     s.pop();
                 }
                 else
-                    throw(InvalidStructureException(" Unexpected closing pair"));
+                    throw(InvalidStructureException("Unexpected closing pair"));
                 break;
             default:
                 throw(InvalidStructureException(" Unexpected symbol: " + secStructure.paired_with(i)));
@@ -144,4 +160,4 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
     if (!s.empty())
         throw(InvalidStructureException(" Pairs pending to close"));
 }
-}
+} //namespace fideo

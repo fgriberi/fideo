@@ -2,11 +2,11 @@
  * @file   RNAFoldTest.cpp
  * @brief  RNAFoldTest is a test file to RNAFold backend.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

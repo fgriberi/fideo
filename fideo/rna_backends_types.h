@@ -2,9 +2,9 @@
  * @file   rna_backends_types.h
  * @brief  This file contains all the definitions needed in fideo
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
- * 
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *

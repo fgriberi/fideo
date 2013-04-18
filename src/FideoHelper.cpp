@@ -2,11 +2,11 @@
  * @file   FideoHelper.cpp
  * @brief  This is the implementation of FideoHelper interface.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing class FideoHelper implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -44,7 +44,7 @@ int runCommand(const Command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
-        throw RNABackendException("System call failed");
+        throw SystemCallException();
     else
     {
         if (WIFEXITED(status))
@@ -52,9 +52,9 @@ int runCommand(const Command& cmd)
         else
         {
             if (WIFSIGNALED(status))
-                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
+                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);            
             else
-                throw RNABackendException("Non termination for some reason");
+                throw NonTerminationException();
         }
     }
 }
@@ -65,7 +65,7 @@ void createTmpFile(std::string& nameTmpFile)
     const int fileDescriptor = mkstemp(nameFileAux);
     if (fileDescriptor < 1)
     {
-        throw RNABackendException("Creation of temp file failed with error.");
+        throw TmpFileCreateException();
     }
     nameTmpFile = nameFileAux;
 }
@@ -133,5 +133,6 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
         throw RNABackendException("An error ocurred trying to read " + file);
     }
 }
-}
-}
+
+} //namespace helper
+} //namespace fideo

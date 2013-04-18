@@ -1,12 +1,12 @@
 /*
  * @file   RNAduplex.cpp
- * @brief  RNAduplex is the implementation of IHybridize interface. It's a specific backend to hybridize. 
+ * @brief  RNAduplex is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing backend RNAduplex implementation.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -44,6 +44,7 @@ class RNAduplex : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, bool longerCirc) const;
 
+    ///Class that allows parsing the body of a file
     class ParseBody
     {
         enum Columns
@@ -59,6 +60,11 @@ class RNAduplex : public IHybridize
     public:
         Fe dG;
 
+        /** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
         void parse(string& line)
         {
             stringstream ss(line);
@@ -84,9 +90,10 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
 
     string inputTmpFile;
     helper::createTmpFile(inputTmpFile);
-    string outpTmpFile;
-    helper::createTmpFile(outpTmpFile);
+    string outputTmpFile;
+    helper::createTmpFile(outputTmpFile);
 
+    ///Constructed as required by RNAduplex
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
     toHybridize << "\n";
@@ -96,20 +103,20 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, const NucSequence& shorter
     stringstream cmd2;
     cmd2 << "RNAduplex ";
     cmd2 << "< " << inputTmpFile;
-    cmd2 << " > " << outpTmpFile;
+    cmd2 << " > " << outputTmpFile;
 
-    const Command cmd = cmd2.str();
+    const Command cmd = cmd2.str();  ///RNAduplex < outputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
-    ifstream fileOutput(outpTmpFile.c_str());
+    ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     ParseBody body;
     string line;
     getline(fileOutput, line);
     body.parse(line);
     helper::removeFile(inputTmpFile);
-    helper::removeFile(outpTmpFile);
+    helper::removeFile(outputTmpFile);
     return body.dG;
 }
 }

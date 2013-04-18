@@ -2,9 +2,9 @@
  * @file   IFold.h
  * @brief  IFold provides the interface to folding service.
  *
- * @author Santiago Videla 
+ * @author Santiago Videla
  * @email  santiago.videla AT gmail.com
- * 
+ *
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
@@ -43,30 +43,31 @@
 
 namespace fideo
 {
-/**
- * Interface for sequence's folding services.
- */
+
+///Interface for sequence's folding services.
 struct IFold
 {
 public:
-    /**
-     * Fold an ARN sequence
-     * @param sequence the ARN sequence to fold.
-     * @param structure the structure where to write the folding.
-     * @param circ if the structure it's circular.
+    
+    /** @brief Fold an RNA sequence
+     * 
+     * @param seqRNAm: the RNA sequence to fold.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.     
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, biopp::SecStructure& structureRNAm, bool isCircRNAm) const = 0;
 
-    /**
-     * Class destructor
+    /** @brief Class destructor
+     *
      */
     virtual ~IFold() {}
 
-    /**
+    /** @brief Get availables backend
+     *
      * Method that provide the available backends for folding service.
-     * @param List to fill with different backends
-     * @return
+     * @param slist: to fill with different backends
+     * @return void
      */
     static void getAvailableBackends(StringList& slist)
     {
@@ -78,6 +79,6 @@ public:
         }
     }
 };
-}
+} //namespace fideo
 
 #endif  /* _IFOLD_H */

@@ -2,11 +2,11 @@
  * @file   FideoConfig.h
  * @brief  FideoConf provides the interface that allows setting the path to the executable.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Header file for fideo providing class FideoConfig.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
@@ -45,48 +45,48 @@ typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
 {
-     
+
     ///Path of configuration file
     static const std::string FILE_NAME;
 
     configuration config;
 
-    /** @brief Read diferent paths 
-     * 
+    /** @brief Read diferent paths
+     *
      * @return void
      */
     void readPathsFile();
 
     /** @brief Constructor of class
-     * 
-     * Method responsible for building the class. Read the configuration file 
+     *
+     * Method responsible for building the class. Read the configuration file
      * and complete the configuration map
      */
     FideoConfig()
     {
         readPathsFile();
     }
-    
+
     /// Concrete instance of FideoConfig class
     static FideoConfig* instance;
 
 public:
     /** @brief Get concrete instance
-     * 
+     *
      * @return a concrete instance of this.
      */
     static FideoConfig* getInstance();
 
     /** @brief Get specific path
-     * 
-     * Method responsible for searching the executabe path corresponding to  a given executable name 
+     *
+     * Method responsible for searching the executabe path corresponding to  a given executable name
      * @param  exec: executable name
      * @return executable path
      */
     std::string getPath(const std::string& exec);
 
     /** @brief Destructor of class
-     * 
+     *
      */
     ~FideoConfig() {};
 

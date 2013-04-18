@@ -2,11 +2,11 @@
  * @file   RNAHybridTest.cpp
  * @brief  RNAHybridTest is a test file to RNAHybrid backend.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

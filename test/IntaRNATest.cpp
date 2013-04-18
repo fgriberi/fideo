@@ -2,11 +2,11 @@
  * @file   IntaRNATest.cpp
  * @brief  IntaRNATest is a test file to IntaRNA backend.
  *
- * @author Franco Riberi 
+ * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
  * Contents:  Source file.
- * 
+ *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *

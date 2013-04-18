@@ -1,9 +1,19 @@
 /*
- * File:   rna_backends_types.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * @file   rna_backends_types.h
+ * @brief  This file contains all the definitions needed in fideo
  *
- * Created on October 27, 2010, 2012 6:42 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Header file for VISI providing fideo definitions.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 27, 2010, 2012 6:42 PM
  *
  * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
  *

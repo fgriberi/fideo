@@ -1,8 +1,16 @@
 /*
- * File:   UNAFold.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   UNAFold.cpp
+ * @brief  UNAFold is the implementation of IFold interface. It's a specific backend to folding. 
  *
- * Created on November 10, 2010, 4:26 PM
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend UNAFold implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date November 10, 2010, 4:26 PM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *

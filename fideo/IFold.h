@@ -1,11 +1,21 @@
 /*
- * File:   IFold.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * @file   IFold.h
+ * @brief  IFold provides the interface to folding service.
  *
- * Created on September 26, 2010, 5:25 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Contents:  Header file for fideo providing struct IFold.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date September 26, 2010, 5:25 PM
+ *
+ * Copyright (C) 2010  Santiago Videla and Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *

@@ -1,11 +1,21 @@
 /*
- * File:   RNAFold.cpp
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * @file   RNAFold.cpp
+ * @brief  RNAFold is the implementation of IFold interface. It's a specific backend to folding. 
  *
- * Created on November 10, 2010, 2012 4:26 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
  *
- * Copyright (C) 2010  Santiago Videla, Franco Riberi, FuDePAN
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend RNAFold implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date November 10, 2010, 2012 4:26 PM
+ *
+ * Copyright (C) 2010  Santiago Videla and Franco Riberi, Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *

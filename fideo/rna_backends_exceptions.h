@@ -1,10 +1,21 @@
 /*
- * File:   rna_backends_exceptions.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
+ * @file   rna_backends_exceptions.h
+ * @brief  This header defines all fideo exceptions 
  *
- * Created on October 27, 2010, 6:42 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Contents:  Header file for fideo providing system exceptions definitions.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 27, 2010, 6:42 PM
+ *
+ * Copyright (C) 2010  Santiago Videla and Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -46,7 +57,8 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Ou
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(FileReadException, RNABackendExceptionRoot, "The config file couldn't be read");
-}
+
+}// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
 
 

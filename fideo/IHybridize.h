@@ -1,8 +1,19 @@
 /*
- * File:   IHybridize.h
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   IHybridize.h
+ * @brief  IHybridize provides the interface to hybridize service.
  *
- * Created on October 26, 2012, 7:37 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Header file for fideo providing struct IHybridize.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 26, 2012, 7:37 PM
  *
  * Copyright (C) 2012  Franco Riberi, FuDePAN
  *

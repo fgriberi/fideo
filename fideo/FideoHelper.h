@@ -1,11 +1,21 @@
 /*
- * File:   IFold.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * @file   FideoHelper.h
+ * @brief  This header defines necessary methods in fideo 
  *
- * Created on September 26, 2010, 5:25 PM
+ * @author Santiago Videla 
+ * @email  santiago.videla AT gmail.com
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * Contents:  Header file for fideo providing necessary methods
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date September 26, 2010, 5:25 PM
+ *
+ * Copyright (C) 2010  Santiago Videla and Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -16,11 +26,11 @@
  *
  * fideo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with fideo. If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 

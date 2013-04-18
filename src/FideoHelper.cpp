@@ -1,8 +1,16 @@
 /*
- * File:   FideoHelper.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   FideoHelper.cpp
+ * @brief  This is the implementation of FideoHelper interface.
  *
- * Created on April 2013
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing class FideoHelper implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date April 2013
  *
  * Copyright (C) 2013 Franco Riberi, FuDePAN
  *

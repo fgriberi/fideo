@@ -1,8 +1,16 @@
 /*
- * File:   IntaRNA.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   IntaRNA.cpp
+ * @brief  IntaRNA is the implementation of IHybridize interface. It's a specific backend to hybridize. 
  *
- * Created on November 02, 2012, 19:35 PM
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend IntaRNA implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date November 02, 2012, 19:35 PM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *

@@ -1,8 +1,16 @@
 /*
- * File:   RNAcofold.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   RNAcofold.cpp
+ * @brief  RNAcofold is the implementation of IHybridize interface. It's a specific backend to hybridize. 
  *
- * Created on October 28, 2012, 10:32 AM
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend RNAcofold implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 28, 2012, 10:32 AM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *

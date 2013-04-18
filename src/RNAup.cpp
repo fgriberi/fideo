@@ -1,8 +1,16 @@
 /*
- * File:   RNAup.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   RNAup.cpp
+ * @brief  RNAup is the implementation of IHybridize interface. It's a specific backend to hybridize. 
  *
- * Created on October 26, 2012, 7:48 PM
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend RNAup implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 26, 2012, 7:48 PM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *

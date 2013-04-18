@@ -1,12 +1,21 @@
 /*
- * File:   FideoConfig.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   FideoConfig.cpp
+ * @brief  MOP is the implementation of FideoConf interface and is responsible for 
+ *         setting the path to the executable
  *
- * Created on November 02, 2012, 19:35 PM
+ * @author Franco Riberi 
+ * @email  fgriberi AT gmail.com
  *
- * Copyright (C) 2012 Franco Riberi, FuDePAN
+ * Contents:  Source file for fideo providing class FideoClass implementation.
+ * 
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
  *
- * This file is part of fideo.
+ * @date March 13, 2012, 9:50 PM
+ *
+ * Copyright (C) 2010  Franco Riberi, FuDePAN
+ *
+ * This file is part of fideo
  *
  * fideo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +40,11 @@ using namespace mili;
 
 namespace fideo
 {
+
+/// Path of configuration file
 const string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
+
+///Initial concrete instance
 FideoConfig* FideoConfig::instance = NULL;
 
 FideoConfig* FideoConfig::getInstance()
@@ -49,7 +62,7 @@ void FideoConfig::readPathsFile()
     ifstream pathsFile;
     pathsFile.open(FILE_NAME.c_str());
     if (!pathsFile)
-        throw RNABackendException("The config file couldn't be read.");
+        throw FileReadException();
     else
     {
         string temp;
@@ -71,4 +84,4 @@ string FideoConfig::getPath(const string& exec)
     else
         return it->second;
 }
-}
+} // namespace fideo

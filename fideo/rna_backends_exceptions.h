@@ -45,6 +45,8 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Ou
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FileReadException, RNABackendExceptionRoot, "The config file couldn't be read");
 }
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
+
 

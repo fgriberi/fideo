@@ -1,12 +1,20 @@
 /*
- * File:   HelperTest.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   HelperTest.h
+ * @brief  This is the implementation of HelperTest interface. 
+ * 
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
  *
- * Created on April 2013.
+ * Contents:  Source file for fideo providing class HelperTest implementation.
  *
- * Copyright (C) 2013 Franco Riberi, FuDePAN
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
  *
- * This file is part of fideo.
+ * @date April 2013
+ *
+ * Copyright (C) 2013  Franco Riberi, FuDePAN
+ *
+ * This file is part of fideo
  *
  * fideo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +27,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 

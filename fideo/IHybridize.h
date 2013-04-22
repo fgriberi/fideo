@@ -47,20 +47,11 @@ namespace fideo
 ///Interface for sequence's hybridize services.
 struct IHybridize
 {
-<<<<<<< local
-    /**
-     * Hybridize an RNA sequence
-     * @param firt sequence the RNA sequence to Hybridize.
-     * @param second sequence the RNA sequence to Hybridize
-=======
-public:
-
     /** @brief Hybridize an RNA sequence
      * 
      * @param longerSeq: longer sequence the RNA sequence to Hybridize.
      * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
      * @param longerCirc: if the longerSeq it's circular.
->>>>>>> other
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
@@ -70,20 +61,13 @@ public:
      */
     virtual ~IHybridize() {}
 
-    /** @brief Get availables backend
+	 /** @brief Get availables backend
      *
      * Method that provide the available backends for hybridize service.
-<<<<<<< local
-     * @param List to fill with different backends
-     * @return
-    */
-    static void getAvailableBackends(Backend& slist)
-=======
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(StringList& slist)
->>>>>>> other
+    static void getAvailableBackends(Backend& slist)
     {
         mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
         while (!it.end())

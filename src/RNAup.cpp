@@ -64,7 +64,7 @@ class RNAup : public IHybridize
                 throw RNABackendException("Failured operation >>.");
         }
 
-        Fe dG;
+        Fe dG; ///free energy
     private:
         enum Columns
         {
@@ -115,15 +115,10 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
-<<<<<<< local
     {
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     }
     BodyParser body;
-=======
-        throw NotFoundFileException();
-    ParseBody body;
->>>>>>> other
     body.parse(fileOutput);
     helper::removeFile(OUT_FILE.c_str());
     helper::removeFile(inputTmpFile);

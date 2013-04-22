@@ -47,22 +47,12 @@ namespace fideo
 
 ///Interface for sequence's folding services.
 struct IFold
-{
-<<<<<<< local
-    /**
-     * Fold an ARN sequence
-     * @param sequence the ARN sequence to fold.
-     * @param structure the structure where to write the folding.
-     * @param circ if the structure it's circular.
-=======
-public:
-    
+{    
     /** @brief Fold an RNA sequence
      * 
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
      * @param structureRNAm: the structure where to write the folding.     
->>>>>>> other
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;

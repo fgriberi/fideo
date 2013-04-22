@@ -39,16 +39,21 @@ using namespace std;
 
 namespace fideo
 {
-///Vienna package
+//Vienna package
 class RNAcofold : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-<<<<<<< local
+	///Class that allows parsing the body of a file
     class BodyParser
     {     
     public:      
 
+		/** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
         void parse(string& line)
         {
             stringstream ss(line);
@@ -62,13 +67,9 @@ class RNAcofold : public IHybridize
             helper::convert_from_string(deltaG, dG);    
         }
 
-        Fe dG;
+        Fe dG; ///free energy
+
     private:
-=======
-    ///Class that allows parsing the body of a file
-    class ParseBody
-    {
->>>>>>> other
         enum Columns
         {
             ColRNAcofoldResult,
@@ -76,29 +77,6 @@ class RNAcofold : public IHybridize
             ColdG,
             NumberOfColumns
         };
-<<<<<<< local
-=======
-
-    public:
-        Fe dG; ///free energy
-
-        /** @brief Parse the line and get the value dG
-         *
-         * @param line: line to parser
-         * @return void
-         */
-        void parse(string& line)
-        {
-            stringstream ss(line);
-            vector<string> result;
-            ss >> mili::Separator(result, ' ');
-            if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAcofold.");
-            const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
-            if (!from_string(deltaG, dG))
-                throw RNABackendException("Failed to convert the string to value type.");
-        }
->>>>>>> other
     };
 };
 
@@ -107,13 +85,9 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
-<<<<<<< local
     {
         throw RNABackendException("Unsupported Sequence.");
     }
-=======
-        throw UnsupportedException();
->>>>>>> other
     const string seq1 = longerSeq.getString();
     const string seq2 = shorterSeq.getString();
 
@@ -122,7 +96,6 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
-    ///Constructed as required by RNAcofold
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
@@ -137,13 +110,9 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
-<<<<<<< local
     {
-        throw RNABackendException("Output file not found.");
-    }
-=======
         throw NotFoundFileException();
->>>>>>> other
+    }
 
     string temp;
     getline(fileOutput, temp);

@@ -44,11 +44,16 @@ class RNAduplex : public IHybridize
 {
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-<<<<<<< local
+    ///Class that allows parsing the body of a file
     class BodyParser
     {       
     public:
 
+ 		/** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
         void parse(string& line)
         {
             stringstream ss(line);
@@ -62,13 +67,9 @@ class RNAduplex : public IHybridize
             helper::convert_from_string(deltaG, dG);            
         }
 
-        Fe dG;
+        Fe dG; /// free energy
+
     private:
-=======
-    ///Class that allows parsing the body of a file
-    class ParseBody
-    {
->>>>>>> other
         enum Columns
         {
             ColRNAResults,
@@ -78,29 +79,6 @@ class RNAduplex : public IHybridize
             ColdG,
             NumberOfColumns
         };
-<<<<<<< local
-=======
-
-    public:
-        Fe dG;
-
-        /** @brief Parse the line and get the value dG
-         *
-         * @param line: line to parser
-         * @return void
-         */
-        void parse(string& line)
-        {
-            stringstream ss(line);
-            vector<string> result;
-            ss >> result;
-            if (result.size() != NumberOfColumns)
-                throw RNABackendException("Invalid output RNAduplex.");
-            const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-            if (!from_string(deltaG, dG))
-                throw RNABackendException("Failed to convert the string to value type.");
-        }
->>>>>>> other
     };
 };
 
@@ -117,10 +95,10 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const Nuc
 
     string inputTmpFile;
     helper::createTmpFile(inputTmpFile);
-    string outputTmpFile;
-    helper::createTmpFile(outputTmpFile);
+    string outpTmpFile;
+    helper::createTmpFile(outpTmpFile);
 
-    ///Constructed as required by RNAduplex
+	///Constructed as required by RNAduplex
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
     toHybridize << "\n";
@@ -130,27 +108,22 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const Nuc
     stringstream cmd2;
     cmd2 << "RNAduplex ";
     cmd2 << "< " << inputTmpFile;
-    cmd2 << " > " << outputTmpFile;
+    cmd2 << " > " << outpTmpFile;
 
-    const Command cmd = cmd2.str();  ///RNAduplex < outputTmpFile > outputTmpFile
+    const Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
-    ifstream fileOutput(outputTmpFile.c_str());
+    ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
-<<<<<<< local
     {
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     }
     BodyParser body;
-=======
-        throw NotFoundFileException();
-    ParseBody body;
->>>>>>> other
     string line;
     getline(fileOutput, line);
     body.parse(line);
     helper::removeFile(inputTmpFile);
-    helper::removeFile(outputTmpFile);
+    helper::removeFile(outpTmpFile);
     return body.dG;
 }
-}
+} // namespace fideo

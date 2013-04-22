@@ -45,34 +45,6 @@ typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
 {
-<<<<<<< local
-=======
-
-    ///Path of configuration file
-    static const std::string FILE_NAME;
-
-    configuration config;
-
-    /** @brief Read diferent paths
-     *
-     * @return void
-     */
-    void readPathsFile();
-
-    /** @brief Constructor of class
-     *
-     * Method responsible for building the class. Read the configuration file
-     * and complete the configuration map
-     */
-    FideoConfig()
-    {
-        readPathsFile();
-    }
-
-    /// Concrete instance of FideoConfig class
-    static FideoConfig* instance;
-
->>>>>>> other
 public:
     /** @brief Get concrete instance
      *
@@ -93,40 +65,33 @@ public:
      */
     ~FideoConfig() {};
 
-<<<<<<< local
-private:   
-    /*
-     * Read diferent paths
+private:   	
+	/** @brief Read diferent paths
+     *
+     * @return void
      */
     void readPathsFile();
 
-    /*
-     * Constructor of class
+     /** @brief Constructor of class
+     *
+     * Method responsible for building the class. Read the configuration file
+     * and complete the configuration map
      */
     FideoConfig()
     {
         readPathsFile();
     }
 
-    /*
-    * Path of configuration file
-    */
+	/// Path of configuration file
     static const std::string FILE_NAME;
 
-    /*
-     * Map between execute file and path file.
-     */
     configuration config;
 
-    /*
-     * Concrete instance of class
-     */
+	/// Concrete instance of FideoConfig class
     static FideoConfig* instance;
-};
-}
-=======
-}; //FideoConfig
+
+}; // FideoConfig
 } // fideo
->>>>>>> other
+
 #endif  /* _FIDEO_CONFIG_H */
 

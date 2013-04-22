@@ -44,13 +44,9 @@ int runCommand(const Command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
-<<<<<<< local
     {
-        throw RNABackendException("System call failed");
+		throw SystemCallException();	        
     }
-=======
-        throw SystemCallException();
->>>>>>> other
     else
     {
         if (WIFEXITED(status))
@@ -60,21 +56,13 @@ int runCommand(const Command& cmd)
         else
         {
             if (WIFSIGNALED(status))
-<<<<<<< local
             {
                 throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
             }
-=======
-                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);            
->>>>>>> other
             else
-<<<<<<< local
             {
-                throw RNABackendException("Non termination for some reason");
+				throw NonTerminationException();                
             }
-=======
-                throw NonTerminationException();
->>>>>>> other
         }
     }
 }

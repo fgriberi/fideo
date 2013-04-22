@@ -74,13 +74,9 @@ void FideoConfig::readPathsFile()
     ifstream pathsFile;
     pathsFile.open(FILE_NAME.c_str());
     if (!pathsFile)
-<<<<<<< local
     {
-        throw RNABackendException("The configure file couldn't be read.");
+		throw FileReadException();        
     }
-=======
-        throw FileReadException();
->>>>>>> other
     else
     {
         string line;
@@ -93,8 +89,4 @@ void FideoConfig::readPathsFile()
         }
     }
 }
-}
-<<<<<<< local
-=======
 } // namespace fideo
->>>>>>> other

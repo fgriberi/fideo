@@ -1,8 +1,16 @@
 /*
- * File:   FideoConfig.h
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   FideoConfig.h
+ * @brief  FideoConf provides the interface that allows setting the path to the executable.
  *
- * Created on March 13, 2012, 9:50 PM
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Header file for fideo providing class FideoConfig.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date March 13, 2012, 9:50 PM
  *
  * Copyright (C) 2010  Franco Riberi, FuDePAN
  *
@@ -32,26 +40,60 @@
 namespace fideo
 {
 
+///Map between execute name and path file.<executable,path>
 typedef std::map<std::string, std::string> configuration;
 
 class FideoConfig
 {
+<<<<<<< local
+=======
+
+    ///Path of configuration file
+    static const std::string FILE_NAME;
+
+    configuration config;
+
+    /** @brief Read diferent paths
+     *
+     * @return void
+     */
+    void readPathsFile();
+
+    /** @brief Constructor of class
+     *
+     * Method responsible for building the class. Read the configuration file
+     * and complete the configuration map
+     */
+    FideoConfig()
+    {
+        readPathsFile();
+    }
+
+    /// Concrete instance of FideoConfig class
+    static FideoConfig* instance;
+
+>>>>>>> other
 public:
-    /*
-     * Get concrete instance
+    /** @brief Get concrete instance
+     *
+     * @return a concrete instance of this.
      */
     static FideoConfig* getInstance();
 
-    /*
-     * Get specific path
+    /** @brief Get specific path
+     *
+     * Method responsible for searching the executabe path corresponding to  a given executable name
+     * @param  exec: executable name
+     * @return executable path
      */
     std::string getPath(const std::string& exec);
 
-    /*
-     * Destructor of class
+    /** @brief Destructor of class
+     *
      */
     ~FideoConfig() {};
 
+<<<<<<< local
 private:   
     /*
      * Read diferent paths
@@ -82,5 +124,9 @@ private:
     static FideoConfig* instance;
 };
 }
+=======
+}; //FideoConfig
+} // fideo
+>>>>>>> other
 #endif  /* _FIDEO_CONFIG_H */
 

@@ -1,11 +1,21 @@
 /*
- * File:   IFold.h
- * Author: Santiago Videla <santiago.videla at gmail.com>
- *         Franco Riberi <fgriberi at gmail.com>
+ * @file   IFold.h
+ * @brief  IFold provides the interface to folding service.
  *
- * Created on September 26, 2010, 5:25 PM
+ * @author Santiago Videla
+ * @email  santiago.videla AT gmail.com
  *
- * Copyright (C) 2010  Santiago Videla, FuDePAN
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Header file for fideo providing struct IFold.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date September 26, 2010, 5:25 PM
+ *
+ * Copyright (C) 2010  Santiago Videla and Franco Riberi, FuDePAN
  *
  * This file is part of fideo
  *
@@ -34,29 +44,39 @@
 
 namespace fideo
 {
-/**
- * Interface for sequence's folding services.
- */
+
+///Interface for sequence's folding services.
 struct IFold
 {
+<<<<<<< local
     /**
      * Fold an ARN sequence
      * @param sequence the ARN sequence to fold.
      * @param structure the structure where to write the folding.
      * @param circ if the structure it's circular.
+=======
+public:
+    
+    /** @brief Fold an RNA sequence
+     * 
+     * @param seqRNAm: the RNA sequence to fold.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.     
+>>>>>>> other
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
 
-    /**
-     * Class destructor
+    /** @brief Class destructor
+     *
      */
     virtual ~IFold() {}
 
-    /**
+    /** @brief Get availables backend
+     *
      * Method that provide the available backends for folding service.
-     * @param List to fill with different backends
-     * @return
+     * @param slist: to fill with different backends
+     * @return void
      */
     static void getAvailableBackends(Backend& slist)
     {
@@ -68,6 +88,6 @@ struct IFold
         }
     }
 };
-}
+} //namespace fideo
 
 #endif  /* _IFOLD_H */

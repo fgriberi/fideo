@@ -1,8 +1,16 @@
 /*
- * File:   RNAup.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   RNAup.cpp
+ * @brief  RNAup is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * Created on October 26, 2012, 7:48 PM
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend RNAup implementation.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 26, 2012, 7:48 PM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *
@@ -76,7 +84,7 @@ class RNAup : public IHybridize
 };
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
-static const string OUT_FILE = "RNA_w25_u3_4_up.out"; //file generated to RNAup
+static const string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
 
 Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
 {
@@ -92,6 +100,7 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
     string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
+    ///Constructed as required by RNAup
     ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
@@ -101,15 +110,20 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < toHybridize > output.out
+    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
     helper::runCommand(command);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
+<<<<<<< local
     {
         throw RNABackendException("Output file not found.");
     }
     BodyParser body;
+=======
+        throw NotFoundFileException();
+    ParseBody body;
+>>>>>>> other
     body.parse(fileOutput);
     helper::removeFile(OUT_FILE.c_str());
     helper::removeFile(inputTmpFile);

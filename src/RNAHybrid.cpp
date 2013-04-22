@@ -1,8 +1,16 @@
 /*
- * File:   RNAHybrid.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   RANHybrid.cpp
+ * @brief  RANHybrid is the implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * Created on November 02, 2012, 19:35 PM
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing backend RANHybrid implementation.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date November 02, 2012, 19:35 PM
  *
  * Copyright (C) 2012 Franco Riberi, FuDePAN
  *
@@ -36,8 +44,14 @@ class RNAHybrid : public IHybridize
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 6;
 
+<<<<<<< local
     class BodyParser
+=======
+    ///Class that allows parsing the body of a file
+    class ParseBody
+>>>>>>> other
     {
+<<<<<<< local
     public:       
         void parse(std::ifstream& file)
         {
@@ -62,8 +76,39 @@ class RNAHybrid : public IHybridize
 
         Fe dG;
         static const unsigned int OBSOLETE_dG = 1000;
+=======
+    public:
+        Fe dG; ///free energy
+        static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
+>>>>>>> other
         static const unsigned int SIZE_LINE = 3;
         static const unsigned int DELTA_G = 1;
+<<<<<<< local
+=======
+
+        /** @brief Parse the file and get the value dG
+         *
+         * @param file: file to parser
+         * @return void
+         */
+        void parse(std::ifstream& file)
+        {
+            string temp;
+            for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+                getline(file, temp);
+            stringstream ss(temp);
+            vector<string> result;
+            ss >> Separator(result, ' ');
+            if (result.size() != SIZE_LINE)
+                dG = OBSOLETE_dG; 
+            else
+            {
+                const string deltaG = result[DELTA_G];
+                if (!from_string(deltaG, dG))
+                    throw RNABackendException("Failed to convert the string to value type.");
+            }
+        }
+>>>>>>> other
     };
 };
 
@@ -72,10 +117,15 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
+<<<<<<< local
     {
         throw RNABackendException("Unsupported Sequence.");
     }
+=======
+        throw UnsupportedException();
+>>>>>>> other
 
+    ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
@@ -95,15 +145,20 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     cmd << " -q " << fileTmpQuery;
     cmd << " > " << fileTmpOutput;
 
-    const Command command = cmd.str();  //RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > FILE_NAME_OUTPUT
+    const Command command = cmd.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput      
     helper::runCommand(command);
 
     ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
+<<<<<<< local
     {
         throw RNABackendException("Output file not found.");
     }
     BodyParser body;
+=======
+        throw NotFoundFileException("Output file not found.");
+    ParseBody body;
+>>>>>>> other
     body.parse(fileOutput);
 
     helper::removeFile(fileTmpTarget);
@@ -111,4 +166,4 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     helper::removeFile(fileTmpOutput);
     return body.dG;
 }
-}
+} // namespace fideo

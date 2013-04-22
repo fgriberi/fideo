@@ -1,8 +1,16 @@
 /*
- * File:   FideoHelper.cpp
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   FideoHelper.cpp
+ * @brief  This is the implementation of FideoHelper interface.
  *
- * Created on April 2013
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Source file for fideo providing class FideoHelper implementation.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date April 2013
  *
  * Copyright (C) 2013 Franco Riberi, FuDePAN
  *
@@ -36,9 +44,13 @@ int runCommand(const Command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
+<<<<<<< local
     {
         throw RNABackendException("System call failed");
     }
+=======
+        throw SystemCallException();
+>>>>>>> other
     else
     {
         if (WIFEXITED(status))
@@ -48,13 +60,21 @@ int runCommand(const Command& cmd)
         else
         {
             if (WIFSIGNALED(status))
+<<<<<<< local
             {
                 throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
             }
+=======
+                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);            
+>>>>>>> other
             else
+<<<<<<< local
             {
                 throw RNABackendException("Non termination for some reason");
             }
+=======
+                throw NonTerminationException();
+>>>>>>> other
         }
     }
 }
@@ -65,7 +85,7 @@ void createTmpFile(std::string& nameTmpFile)
     const int fileDescriptor = mkstemp(nameFileAux);
     if (fileDescriptor < 1)
     {
-        throw RNABackendException("Creation of temp file failed with error.");
+        throw TmpFileCreateException();
     }
     nameTmpFile = nameFileAux;
 }
@@ -135,5 +155,6 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
         throw RNABackendException("An error ocurred trying to read " + file);
     }
 }
-}
-}
+
+} //namespace helper
+} //namespace fideo

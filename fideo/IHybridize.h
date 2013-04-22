@@ -1,8 +1,19 @@
 /*
- * File:   IHybridize.h
- * Author: Franco Riberi <fgriberi at gmail.com>
+ * @file   IHybridize.h
+ * @brief  IHybridize provides the interface to hybridize service.
  *
- * Created on October 26, 2012, 7:37 PM
+ * @author Santiago Videla
+ * @email  santiago.videla AT gmail.com
+ *
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
+ *
+ * Contents:  Header file for fideo providing struct IHybridize.
+ *
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
+ *
+ * @date October 26, 2012, 7:37 PM
  *
  * Copyright (C) 2012  Franco Riberi, FuDePAN
  *
@@ -32,30 +43,47 @@
 
 namespace fideo
 {
-/**
- * Interface for sequence's hybridize services.
- */
+
+///Interface for sequence's hybridize services.
 struct IHybridize
 {
+<<<<<<< local
     /**
      * Hybridize an RNA sequence
      * @param firt sequence the RNA sequence to Hybridize.
      * @param second sequence the RNA sequence to Hybridize
+=======
+public:
+
+    /** @brief Hybridize an RNA sequence
+     * 
+     * @param longerSeq: longer sequence the RNA sequence to Hybridize.
+     * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
+     * @param longerCirc: if the longerSeq it's circular.
+>>>>>>> other
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
 
-    /**
-     * Class destructor
+    /** @brief Class destructor
+     *
      */
     virtual ~IHybridize() {}
 
-    /**
+    /** @brief Get availables backend
+     *
      * Method that provide the available backends for hybridize service.
+<<<<<<< local
      * @param List to fill with different backends
      * @return
     */
     static void getAvailableBackends(Backend& slist)
+=======
+     * @param slist: to fill with different backends
+     * @return void
+     */
+    static void getAvailableBackends(StringList& slist)
+>>>>>>> other
     {
         mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
         while (!it.end())
@@ -65,6 +93,6 @@ struct IHybridize
         }
     }
 };
-}
+} //namespace fideo
 
 #endif  /* _IHYBRIDIZE_H */

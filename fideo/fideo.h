@@ -1,42 +1,39 @@
 /**
- *  @file:      fideo.h
- *  @details    Main header file.\n
- *              System: CombEng \n
- *              Language: C++\n
+ * @file   fideo.h
+ * @brief  Defines the interface of the fideo
  *
- *  @author     Favio Bettiol
- *  @email      favio.bettiol AT gmail.com
+ * @author Favio Bettiol
+ * @email  favio.bettiol AT gmail.com
  *
- *  @author     Diego Diaz
- *  @email      diazdiego86 AT gmail.com
+ * @author Diego Diaz
+ * @email  diazdiego86 AT gmail.com
  *
- *  @author     Franco Riberi
- *  @email      fgriberi AT gmail.com
+ * @author Franco Riberi
+ * @email  fgriberi AT gmail.com
  *
- *  @date       August 2010
- *  @version    0.1
+ * Contents: Header file for fideo.
  *
- * This file is part of CombEng
+ * System:    fideo: Folding Interface Dynamic Exchange Operations
+ * Language:  C++
  *
- * CombEng : Combinatory Engine, an FuD's abstraction layer for problems that
- * require to combine elements. Also, this layer provides ranking and prune
- * features for these combinations.
- * <http://fud.googlecode.com/>
+ * @date August 2010
  *
- * Copyright (C) 2010 - Favio Bettiol and Diego Diaz
+ * Copyright (C) 2010  Favio Bettiol, Diego Diaz and Franco Riberi, FuDePAN
  *
- * CombEng is free software: you can redistribute it and/or modify
+ * This file is part of fideo
+ *
+ * fideo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CombEng is distributed in the hope that it will be useful,
+ * fideo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with CombEng .  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 

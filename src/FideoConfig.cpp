@@ -46,7 +46,7 @@ FideoConfig* FideoConfig::instance = NULL;
 
 FideoConfig::FideoConfig()
 {
-    readPathsFile();
+    fillConfigurationDataFromFile();
 }
 
 FideoConfig* FideoConfig::getInstance()
@@ -71,7 +71,7 @@ void FideoConfig::getPath(const std::string& exec, std::string& executablePath) 
     }
 }
 
-void FideoConfig::readPathsFile() 
+void FideoConfig::fillConfigurationDataFromFile() 
 {
     std::ifstream pathsFile;
     pathsFile.open(FILE_NAME.c_str());

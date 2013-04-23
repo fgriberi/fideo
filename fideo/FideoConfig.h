@@ -68,9 +68,10 @@ public:
 private:   	
 	/** @brief Read diferent paths
      *
+     * Read diferent paths and fill configuration map 
      * @return void
      */
-    void readPathsFile();
+    void fillConfigurationDataFromFile();
 
      /** @brief Constructor of class
      *

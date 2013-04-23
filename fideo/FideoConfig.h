@@ -56,9 +56,9 @@ public:
      *
      * Method responsible for searching the executabe path corresponding to  a given executable name
      * @param  exec: executable name
-     * @return executable path
+     * @return 
      */
-    std::string getPath(const std::string& exec) const;
+    void getPath(const std::string& exec, std::string& executablePath) const;
 
     /** @brief Destructor of class
      *
@@ -77,10 +77,7 @@ private:
      * Method responsible for building the class. Read the configuration file
      * and complete the configuration map
      */
-    FideoConfig()
-    {
-        readPathsFile();
-    }
+    FideoConfig();
 
 	/// Path of configuration file
     static const std::string FILE_NAME;

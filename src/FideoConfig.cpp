@@ -35,17 +35,19 @@
 #include "fideo/FideoConfig.h"
 #include "fideo/FideoHelper.h"
 
-using namespace std;
-using namespace mili;
-
 namespace fideo
 {
 
 /// Path of configuration file
-const string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
+const std::string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
 
 ///Initial concrete instance
 FideoConfig* FideoConfig::instance = NULL;
+
+FideoConfig::FideoConfig()
+{
+    readPathsFile();
+}
 
 FideoConfig* FideoConfig::getInstance()
 {
@@ -56,22 +58,22 @@ FideoConfig* FideoConfig::getInstance()
     return instance;
 }
 
-string FideoConfig::getPath(const string& exec) const
+void FideoConfig::getPath(const std::string& exec, std::string& executablePath) const
 {
     const configuration::const_iterator it = getInstance()->config.find(exec);
-    if (it == getInstance()->config.end())
+    if (it == instance->config.end())
     {
-        return string();
+        executablePath = string();        
     }
     else
     {
-        return it->second;
+        executablePath = it->second;
     }
 }
 
-void FideoConfig::readPathsFile()
+void FideoConfig::readPathsFile() 
 {
-    ifstream pathsFile;
+    std::ifstream pathsFile;
     pathsFile.open(FILE_NAME.c_str());
     if (!pathsFile)
     {
@@ -79,13 +81,13 @@ void FideoConfig::readPathsFile()
     }
     else
     {
-        string line;
+        std::string line;
         while (getline(pathsFile, line))
         {
-            stringstream ss(line);
-            vector<string> result;
-            ss >> Separator(result, ' ');
-            config[result[0]] = result[1]; //<executable,path>
+            std::stringstream ss(line);
+            std::vector<std::string> result;
+            ss >> mili::Separator(result, ' ');
+            config[result[0]] = result[1]; //<executable,path>            
         }
     }
 }

@@ -58,7 +58,7 @@ public:
      * @param  exec: executable name
      * @return executable path
      */
-    std::string getPath(const std::string& exec);
+    std::string getPath(const std::string& exec) const;
 
     /** @brief Destructor of class
      *

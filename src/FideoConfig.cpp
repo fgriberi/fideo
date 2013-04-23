@@ -56,7 +56,7 @@ FideoConfig* FideoConfig::getInstance()
     return instance;
 }
 
-string FideoConfig::getPath(const string& exec)
+string FideoConfig::getPath(const string& exec) const
 {
     const configuration::const_iterator it = getInstance()->config.find(exec);
     if (it == getInstance()->config.end())

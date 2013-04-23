@@ -110,7 +110,7 @@ Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const Nuc
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outpTmpFile;
 
-    const Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+    const command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
     ifstream fileOutput(outpTmpFile.c_str());

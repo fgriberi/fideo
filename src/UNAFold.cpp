@@ -172,7 +172,7 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
 {
     structureRNAm.clear();
-    FileLine sseq = seqRNAm.getString();
+    fileLine sseq = seqRNAm.getString();
 
     string temporalFile;
     helper::createTmpFile(temporalFile);
@@ -190,7 +190,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     {
         throw RNABackendException("Invalid path of temp files.");
     }
-    const Command cmd = ss.str();  /// UNAFold.pl --max=1 ("" | --circular) temporalFile
+    const command cmd = ss.str();  /// UNAFold.pl --max=1 ("" | --circular) temporalFile
     helper::runCommand(cmd);
 
 	/* file output look like this:

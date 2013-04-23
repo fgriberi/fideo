@@ -110,11 +110,11 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     string tmpFileOutput;
     helper::createTmpFile(tmpFileOutput);
 
-    stringstream cmd;
-    cmd << "./IntaRNA ";
-    cmd << seq1;
-    cmd << " " << seq2;
-    cmd << " > " << tmpFileOutput;
+    stringstream exec;
+    exec << "./IntaRNA ";
+    exec << seq1;
+    exec << " " << seq2;
+    exec << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
     std::string executablePath;
@@ -124,8 +124,8 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
 
-    const Command command = cmd.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
-    helper::runCommand(command);
+    const command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+    helper::runCommand(cmd);
 
     ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)

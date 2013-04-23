@@ -110,8 +110,8 @@ Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequ
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    const Command command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
-    helper::runCommand(command);
+    const command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
+    helper::runCommand(cmd);
 
     ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)

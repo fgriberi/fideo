@@ -39,7 +39,7 @@
 
 #include <fstream>
 #include <errno.h>
-#include "rna_backends_types.h"
+#include "rna_backends_exceptions.h"
 
 namespace fideo
 {

@@ -8,7 +8,7 @@
  * @author Franco Riberi
  * @email  fgriberi AT gmail.com
  *
- * Contents:  Header file for VISI providing fideo definitions.
+ * Contents:  Header file providing fideo definitions.
  *
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
@@ -36,10 +36,6 @@
 
 #ifndef _RNA_BACKENDS_TYPES_H
 #define _RNA_BACKENDS_TYPES_H
-
-#include <set>
-#include <vector>
-#include "rna_backends_exceptions.h"
 
 namespace fideo
 {

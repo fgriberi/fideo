@@ -59,7 +59,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
@@ -95,5 +95,5 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
 }

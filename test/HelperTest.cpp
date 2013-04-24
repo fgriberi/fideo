@@ -33,12 +33,14 @@
 
 #include <HelperTest.h>
 
+namespace fideo
+{
 static const std::string DIRECTORY_PATH = "/tmp";
 
 bool HelperTest::isMyTmpFile(const std::string& fileTmpName)
 {
     bool ret = false;
-    stringstream ss(fileTmpName);
+    std::stringstream ss(fileTmpName);
     ParserResult result;
     ss >> mili::Separator(result, '-');
     if (result.size() == 2 && result[0] == "myTmpFile")
@@ -61,4 +63,4 @@ bool HelperTest::checkDirTmp()
     closedir(dir);
     return ret;
 }
-
+} //namespace fideo

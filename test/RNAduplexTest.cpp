@@ -52,5 +52,5 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -7.80);
     delete p;
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
 }

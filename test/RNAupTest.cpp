@@ -52,6 +52,6 @@ TEST(RNAupBackendTestSuite, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
     EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
 }

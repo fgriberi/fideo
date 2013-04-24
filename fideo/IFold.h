@@ -41,7 +41,6 @@
 #include "fideo/rna_backends_types.h"
 #include "fideo/FideoHelper.h"
 
-
 namespace fideo
 {
 

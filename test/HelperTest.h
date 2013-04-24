@@ -41,9 +41,9 @@
 #include <mili/mili.h>
 #include <fideo/rna_backends_exceptions.h>
 
-using namespace std;
-
-typedef vector<string> ParserResult;
+namespace fideo
+{
+typedef std::vector<std::string> ParserResult;
 
 class HelperTest
 {
@@ -51,5 +51,6 @@ public:
     static bool isMyTmpFile(const std::string& fileTmpName);
     static bool checkDirTmp();
 };
+} //namespace fideo 
 
 #endif  /* _HELPER_TEST_H */

@@ -31,10 +31,8 @@
  *
  */
 
-#include <string>
 #include <fideo/fideo.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 TEST(FideoConfigTestSuite, Test1)
 {

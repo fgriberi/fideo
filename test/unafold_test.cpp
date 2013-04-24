@@ -54,7 +54,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
 }
 
 

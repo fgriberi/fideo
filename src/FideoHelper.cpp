@@ -18,7 +18,7 @@
  *
  * fideo is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation, either version 3 of tghe License, or
  * (at your option) any later version.
  *
  * fideo is distributed in the hope that it will be useful,
@@ -40,7 +40,7 @@ namespace helper
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 
-int runCommand(const Command& cmd)
+int runCommand(const command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
@@ -86,14 +86,14 @@ void removeFile(const std::string& file_name)
     }
 }
 
-void write(const FilePath& file, FileLinesCt& lines)
+void write(const filePath& file, fileLinesCt& lines)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try
     {
         out.open(file.c_str());
-        mili::CAutonomousIterator<FileLinesCt> it(lines);
+        mili::CAutonomousIterator<fileLinesCt> it(lines);
         while (!it.end())
         {
             out << *it << std::endl;
@@ -106,7 +106,7 @@ void write(const FilePath& file, FileLinesCt& lines)
     }
 }
 
-void write(const FilePath& file, FileLine& line)
+void write(const filePath& file, fileLine& line)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -121,7 +121,7 @@ void write(const FilePath& file, FileLine& line)
     }
 }
 
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
+void read_line(const filePath& file, fileLineNo lineno, fileLine& line)
 {
     std::ifstream in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -130,7 +130,7 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line)
         in.open(file.c_str());
         if (lineno > 0)
         {
-            string aux;
+            std::string aux;
             for (size_t i = 0; i < lineno; ++i)
             {
                 getline(in, aux);

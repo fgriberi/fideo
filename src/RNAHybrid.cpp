@@ -91,8 +91,8 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     }
 
 	///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
-    FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
-    FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
+    fileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
+    fileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
     string fileTmpTarget;
     helper::createTmpFile(fileTmpTarget);
@@ -104,14 +104,14 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     helper::write(fileTmpTarget, targetSequence);
     helper::write(fileTmpQuery, querySequence);
 
-    stringstream cmd;
-    cmd << "RNAhybrid -s 3utr_human ";
-    cmd << "-t " << fileTmpTarget;
-    cmd << " -q " << fileTmpQuery;
-    cmd << " > " << fileTmpOutput;
+    stringstream exec;
+    exec << "RNAhybrid -s 3utr_human ";
+    exec << "-t " << fileTmpTarget;
+    exec << " -q " << fileTmpQuery;
+    exec << " > " << fileTmpOutput;
 
-    const Command command = cmd.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
-    helper::runCommand(command);
+    const command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
+    helper::runCommand(cmd);
 
     ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)

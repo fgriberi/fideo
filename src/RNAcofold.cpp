@@ -100,12 +100,12 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
-    stringstream command;
-    command << "RNAcofold ";
-    command << "< " << inputTmpFile;
-    command << " > " << outputTmpFile;
+    stringstream exec;
+    exec << "RNAcofold ";
+    exec << "< " << inputTmpFile;
+    exec << " > " << outputTmpFile;
 
-    const Command cmd = command.str(); /// RNAcofold < inputTmpFile > outputTmpFile
+    const command cmd = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
     ifstream fileOutput(outputTmpFile.c_str());

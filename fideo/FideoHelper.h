@@ -39,52 +39,58 @@
 
 #include <fstream>
 #include <errno.h>
-#include "rna_backends_types.h"
+#include "rna_backends_exceptions.h"
 
-using std::string;
+namespace fideo
+{
 
 /**
  * Filename path
  */
-typedef std::string FilePath;
+typedef std::string filePath;
 
-typedef std::string FileLine;
+typedef std::string fileLine;
 
-typedef std::string Command;
+typedef std::string command;
 
-typedef unsigned int FileLineNo;
+typedef unsigned int fileLineNo;
 
-typedef std::list<std::string> FileLinesCt;
+typedef std::list<std::string> fileLinesCt;
 
-typedef std::list<std::string> Backend;
-
-namespace fideo
-{
+typedef std::list<std::string> backend;
 
 namespace helper
 {
 //-----------------------------------System methods----------------------------------- 
 
-/** @brief exeute a command
+/** @brief execute a command
  *
  * Execute a give command using a system call
  * @param cmd: the RNA backend command
  * @return int: status 
  */
-int runCommand(const Command& cmd);
+int runCommand(const command& cmd);
 
+/** @brief Convert from string to type T
+ *
+ * @param from: string to convert
+ * @param to: converted of 'from' parameter.
+ * @return void
+ */
 template<class T>
 void convert_from_string(const std::string& from, T& to)
 {
     if (!mili::from_string(from, to))
+    {
         throw FromStringException();
+    }
 }
 
 //-----------------------------------File Methods----------------------------------- 
 
 /** @brief Create a temporal file
  * 
- * @param nameTmpFile: name file created
+ * @param nameTmpFile: to fill with name file created
  * @return void
  */
 void createTmpFile(std::string& nameTmpFile);
@@ -102,7 +108,7 @@ void removeFile(const std::string& file_name);
  * @param lines: lines to write
  * @return void
 */
-void write(const FilePath& file, FileLinesCt& lines);
+void write(const filePath& file, fileLinesCt& lines);
 
 /** @brief Write a file with a single line.
  * 
@@ -110,7 +116,7 @@ void write(const FilePath& file, FileLinesCt& lines);
  * @param line: line to write
  * @return void
  */
-void write(const FilePath& file, FileLine& line);
+void write(const filePath& file, fileLine& line);
 
 /** @brief Read a line from a file
  * 
@@ -119,7 +125,7 @@ void write(const FilePath& file, FileLine& line);
  * @param line: where to write the read line
  * @return void
 */
-void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
+void read_line(const filePath& file, fileLineNo lineno, fileLine& line);
 
 /** @brief Read a value
  *
@@ -131,11 +137,13 @@ void read_line(const FilePath& file, FileLineNo lineno, FileLine& line);
  * @return void
  */
 template<class T>
-inline void read_value(const FileLine& line, FileLine::size_type offset, size_t n, T& t)
+inline void read_value(const fileLine& line, const fileLine::size_type offset, const size_t n, T& t)
 {
     const bool success = mili::from_string(line.substr(offset, n), t);
     if (!success)
+    {
         throw NotReadValueUsingOffsetException();
+    }
 }
 
 /** @brief Read a value from a line file.
@@ -145,11 +153,13 @@ inline void read_value(const FileLine& line, FileLine::size_type offset, size_t 
  * @return void
  */
 template<class T>
-inline void read_value(const FileLine& line, T& t)
+inline void read_value(const fileLine& line, T& t)
 {
     const bool success = from_string(line, t);
     if (!success)
+    {
         throw NotReadValueException();
+    }
 }
 
 } //namespace helper

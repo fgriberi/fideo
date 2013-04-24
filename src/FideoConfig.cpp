@@ -65,8 +65,8 @@ FideoConfig* FideoConfig::getInstance()
 
 void FideoConfig::getPath(const std::string& exec, std::string& executablePath) const
 {
-    const Configuration::const_iterator it = getInstance()->config.find(exec);
-    if (it == instance->config.end())
+    const Configuration::const_iterator it = config.find(exec);
+    if (it == config.end())
     {
         executablePath = std::string();        
     }

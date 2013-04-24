@@ -38,7 +38,7 @@
 #define _IFOLD_H
 
 #include <biopp/biopp.h>
-#include "fideo/rna_backends_types.h"
+#include "fideo/RnaBackendsTypes.h"
 #include "fideo/FideoHelper.h"
 
 namespace fideo

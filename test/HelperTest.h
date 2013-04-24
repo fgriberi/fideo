@@ -39,7 +39,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <mili/mili.h>
-#include <fideo/rna_backends_exceptions.h>
+#include <fideo/RnaBackendsException.h>
 
 namespace fideo
 {

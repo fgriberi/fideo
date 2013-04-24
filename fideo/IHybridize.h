@@ -39,7 +39,7 @@
 
 #include <biopp/biopp.h>
 #include "fideo/FideoHelper.h"
-#include "fideo/rna_backends_types.h"
+#include "fideo/RnaBackendsTypes.h"
 
 namespace fideo
 {

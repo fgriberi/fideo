@@ -49,6 +49,11 @@ FideoConfig::FideoConfig()
     fillConfigurationDataFromFile();
 }
 
+FideoConfig::~FideoConfig()
+{
+    delete instance;
+}
+
 FideoConfig* FideoConfig::getInstance()
 {
     if (instance == NULL)

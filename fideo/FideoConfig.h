@@ -63,7 +63,7 @@ public:
     /** @brief Destructor of class
      *
      */
-    ~FideoConfig() {};
+    ~FideoConfig();
 
 private:   	
 	/** @brief Read diferent paths

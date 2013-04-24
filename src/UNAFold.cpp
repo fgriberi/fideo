@@ -33,17 +33,17 @@
 
 #include "fideo/IFold.h"
 
-using std::stringstream;
-using namespace mili;
-
 namespace fideo
 {
+
+using namespace mili;
+
 //UNAFold package
 class UNAFold : public IFold
 {
-    static void delete_all_files(const string& nameFile);    
+    static void deleteAllFiles(const std::string& nameFile);    
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
-    std::ifstream file_in;
+    //std::ifstream fileIn;
 
 	///Class that allows parsing the header of a file
     class HeaderParser
@@ -52,16 +52,16 @@ class UNAFold : public IFold
     
         void parse(std::ifstream& file)
         {
-            std::vector<string> aux;
+            std::vector<std::string> aux;
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
                 {
                     throw RNABackendException("Invalid Header.");
                 }
-                helper::convert_from_string(aux[ColNumberOfBases], number_of_bases);
-                helper::convert_from_string(aux[ColDeltaG], delta_G);
-                sequence_name = aux[ColSeqName];
+                helper::convertFromString(aux[ColNumberOfBases], numberOfBases);
+                helper::convertFromString(aux[ColDeltaG], deltaG);
+                sequenceName = aux[ColSeqName];
             }
             else
             {
@@ -69,9 +69,9 @@ class UNAFold : public IFold
             }
         }
 
-        biopp::SeqIndex number_of_bases;
-        Fe delta_G;
-        string sequence_name;
+        biopp::SeqIndex numberOfBases;
+        Fe deltaG;
+        std::string sequenceName;
 
     private:
         enum Columns
@@ -92,7 +92,7 @@ class UNAFold : public IFold
 
         bool parse(std::ifstream& file)
         {
-            std::vector<string> aux;
+            std::vector<std::string> aux;
             const bool ret = (file >> aux);
 
             if (ret)
@@ -101,9 +101,9 @@ class UNAFold : public IFold
                 {
                     throw RNABackendException("Invalid BodyLine.");
                 }
-                helper::convert_from_string(aux[ColNucl], nuc);
-                helper::convert_from_string(aux[ColNucleotideNumber], nucNumber);
-                helper::convert_from_string(aux[ColPairedWith], pairedNuc);
+                helper::convertFromString(aux[ColNucl], nuc);
+                helper::convertFromString(aux[ColNucleotideNumber], nucNumber);
+                helper::convertFromString(aux[ColPairedWith], pairedNuc);
             }
             return ret;
         }
@@ -138,9 +138,9 @@ class UNAFold : public IFold
 
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 
-static const string PATH_TMP = "/tmp/";
+static const std::string PATH_TMP = "/tmp/";
 
-void UNAFold::delete_all_files(const string& nameFile)
+void UNAFold::deleteAllFiles(const std::string& nameFile)
 {
     helper::removeFile(nameFile);
 	
@@ -172,13 +172,13 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
 {
     structureRNAm.clear();
-    fileLine sseq = seqRNAm.getString();
+    FileLine sseq = seqRNAm.getString();
 
-    string temporalFile;
+    std::string temporalFile;
     helper::createTmpFile(temporalFile);
 
     helper::write(temporalFile, sseq);
-    stringstream ss;
+    std::stringstream ss;
     ss << "UNAFold.pl --max=1 ";
     if (isCircRNAm)
     {
@@ -190,7 +190,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     {
         throw RNABackendException("Invalid path of temp files.");
     }
-    const command cmd = ss.str();  /// UNAFold.pl --max=1 ("" | --circular) temporalFile
+    const Command cmd = ss.str();  /// UNAFold.pl --max=1 ("" | --circular) temporalFile
     helper::runCommand(cmd);
 
 	/* file output look like this:
@@ -201,23 +201,23 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     */
 
     /// temporalFile.ct is the file to parse
-    std::ifstream file_in((temporalFile + ".ct").c_str());
-    if (!file_in)
+    std::ifstream fileIn((temporalFile + ".ct").c_str());
+    if (!fileIn)
     {
         throw RNABackendException("output file not found.");
     }
     HeaderParser headerLine;
-    headerLine.parse(file_in);
-    structureRNAm.set_sequence_size(headerLine.number_of_bases);
+    headerLine.parse(fileIn);
+    structureRNAm.set_sequence_size(headerLine.numberOfBases);
 
     BodyLineParser bodyLine;
-    while (bodyLine.parse(file_in))
+    while (bodyLine.parse(fileIn))
     {
         fillStructure(bodyLine, structureRNAm);
     }
     structureRNAm.set_circular(isCircRNAm);
-    file_in.close();
-    delete_all_files(temporalFile);
+    fileIn.close();
+    deleteAllFiles(temporalFile);
     return 0;
 }
 } // namespace fideo

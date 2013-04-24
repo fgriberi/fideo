@@ -68,7 +68,7 @@ struct IFold
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(backend& slist)
+    static void getAvailableBackends(Backend& slist)
     {
         mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
         while (!it.end())

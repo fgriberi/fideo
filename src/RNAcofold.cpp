@@ -33,10 +33,6 @@
 
 #include "fideo/IHybridize.h"
 
-using namespace biopp;
-using namespace mili;
-using namespace std;
-
 namespace fideo
 {
 //Vienna package
@@ -54,17 +50,17 @@ class RNAcofold : public IHybridize
          * @param line: line to parser
          * @return void
          */
-        void parse(string& line)
+        void parse(std::string& line)
         {
-            stringstream ss(line);
-            vector<string> result;
+            std::stringstream ss(line);
+            std::vector<std::string> result;
             ss >> mili::Separator(result, ' ');
             if (result.size() != NumberOfColumns)
             {
                 throw RNABackendException("Invalid output RNAcofold.");
             }
-            const string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
-            helper::convert_from_string(deltaG, dG);    
+            const std::string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
+            helper::convertFromString(deltaG, dG);    
         }
 
         Fe dG; ///free energy
@@ -88,33 +84,33 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     {
         throw RNABackendException("Unsupported Sequence.");
     }
-    const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();
+    const std::string seq1 = longerSeq.getString();
+    const std::string seq2 = shorterSeq.getString();
 
-    string inputTmpFile;
+    std::string inputTmpFile;
     helper::createTmpFile(inputTmpFile);
-    string outputTmpFile;
+    std::string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
-    ofstream toHybridize(inputTmpFile.c_str());
+    std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
-    stringstream exec;
+    std::stringstream exec;
     exec << "RNAcofold ";
     exec << "< " << inputTmpFile;
     exec << " > " << outputTmpFile;
 
-    const command cmd = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
+    const Command cmd = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
-    ifstream fileOutput(outputTmpFile.c_str());
+    std::ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();
     }
 
-    string temp;
+    std::string temp;
     getline(fileOutput, temp);
     getline(fileOutput, temp);
 

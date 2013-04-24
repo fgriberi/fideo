@@ -37,9 +37,6 @@
 #include <stack>
 #include "fideo/IFold.h"
 
-using std::stack;
-using std::stringstream;
-
 namespace fideo
 {
 //Vienna package
@@ -51,7 +48,7 @@ class RNAFold : public IFold
     * @param energy: to fill with free energy
     * @return index of first ")" in file
     */
-    size_t read_free_energy(fileLine& file, size_t offset, Fe& energy) const;
+    size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
 
     /** @brief obtain structure
     *
@@ -59,27 +56,27 @@ class RNAFold : public IFold
     * @param secStrucute: to fill with structure
     * @return void
     */
-    static void parse_structure(std::string& str, biopp::SecStructure& secStructure);
+    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
 
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
 
-    static const fileLineNo LINE_NO;
+    static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';
     static const char CLOSE_PAIR = ')';
     static const char UNPAIR = '.';
 };
 
-const fileLineNo RNAFold::LINE_NO = 1;
+const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
-size_t RNAFold::read_free_energy(fileLine& line, size_t offset, Fe& energy) const
+size_t RNAFold::readFreeEnergy(FileLine& line, size_t offset, Fe& energy) const
 {
     try
     {
         const size_t from = mili::ensure_found(line.find_first_of("(", offset)) + 1;
         const size_t to = mili::ensure_found(line.find_first_of(")", from)) - 1;
-        helper::read_value(line, from, to - from, energy);
+        helper::readValue(line, from, to - from, energy);
         return to;
     }
     catch (const mili::StringNotFound& e)
@@ -88,10 +85,10 @@ size_t RNAFold::read_free_energy(fileLine& line, size_t offset, Fe& energy) cons
     }
 }
 
-void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructure)
+void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure)
 {
     secStructure.set_sequence_size(str.length());
-    stack<biopp::SeqIndex> s;
+    std::stack<biopp::SeqIndex> stackIndex;
     for (size_t i = 0; i < str.length(); ++i)
     {
         biopp::SeqIndex open;
@@ -101,14 +98,14 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
                 secStructure.unpair(i);
                 break;
             case OPEN_PAIR:
-                s.push(i);
+                stackIndex.push(i);
                 break;
             case CLOSE_PAIR:
-                if (!s.empty())
+                if (!stackIndex.empty())
                 {
-                    open = s.top();
+                    open = stackIndex.top();
                     secStructure.pair(open, i);
-                    s.pop();
+                    stackIndex.pop();
                 }
                 else
                 {
@@ -120,7 +117,7 @@ void RNAFold::parse_structure(std::string& str, biopp::SecStructure& secStructur
                 break;
         }
     }
-    if (!s.empty())
+    if (!stackIndex.empty())
     {
         throw(InvalidStructureException("Pairs pending to close"));
     }
@@ -130,15 +127,15 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
 {
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
-    fileLine sseq = seqRNAm.getString();
+    FileLine sseq = seqRNAm.getString();
 
-    string fileInput;
+    std::string fileInput;
     helper::createTmpFile(fileInput);
-    string fileOutput;
+    std::string fileOutput;
     helper::createTmpFile(fileOutput);
 
     helper::write(fileInput, sseq);
-    stringstream ss;
+    std::stringstream ss;
     ss << "RNAfold" << " -noPS ";
     if (isCircRNAm)
     {
@@ -146,22 +143,22 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     }
     ss << "< " << fileInput << " > " << fileOutput;
 
-    const command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
+    const Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
     helper::runCommand(cmd);
 
  	/* output file look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
      */    
-    fileLine aux;
-    helper::read_line(fileOutput, LINE_NO, aux);
+    FileLine aux;
+    helper::readLine(fileOutput, LINE_NO, aux);
 
-    string str;
-    helper::read_value(aux, 0, seqRNAm.length(), str);
-    parse_structure(str, structureRNAm);
+    std::string str;
+    helper::readValue(aux, 0, seqRNAm.length(), str);
+    parseStructure(str, structureRNAm);
 
     Fe energy;
-    read_free_energy(aux, seqRNAm.length(), energy);
+    readFreeEnergy(aux, seqRNAm.length(), energy);
     helper::removeFile(fileInput);
     helper::removeFile(fileOutput);
     return energy;

@@ -33,10 +33,6 @@
 
 #include "fideo/IHybridize.h"
 
-using namespace biopp;
-using namespace mili;
-using namespace std;
-
 namespace fideo
 {
 class RNAHybrid : public IHybridize
@@ -55,22 +51,22 @@ class RNAHybrid : public IHybridize
          */      
         void parse(std::ifstream& file)
         {
-            string temp;
+            std::string temp;
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
             {
                 getline(file, temp);
             }
-            stringstream ss(temp);
-            vector<string> result;
-            ss >> Separator(result, ' ');
+            std::stringstream ss(temp);
+            std::vector<std::string> result;
+            ss >> mili::Separator(result, ' ');
             if (result.size() != SIZE_LINE)
             {
                 dG = OBSOLETE_dG; //no significant hybridization found
             }
             else
             {
-                const string deltaG = result[DELTA_G];
-                helper::convert_from_string(deltaG, dG);                
+                const std::string deltaG = result[DELTA_G];
+                helper::convertFromString(deltaG, dG);                
             }
         }
 
@@ -91,29 +87,29 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     }
 
 	///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
-    fileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
-    fileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
+    FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
+    FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
-    string fileTmpTarget;
+    std::string fileTmpTarget;
     helper::createTmpFile(fileTmpTarget);
-    string fileTmpQuery;
+    std::string fileTmpQuery;
     helper::createTmpFile(fileTmpQuery);
-    string fileTmpOutput;
+    std::string fileTmpOutput;
     helper::createTmpFile(fileTmpOutput);
 
     helper::write(fileTmpTarget, targetSequence);
     helper::write(fileTmpQuery, querySequence);
 
-    stringstream exec;
+    std::stringstream exec;
     exec << "RNAhybrid -s 3utr_human ";
     exec << "-t " << fileTmpTarget;
     exec << " -q " << fileTmpQuery;
     exec << " > " << fileTmpOutput;
 
-    const command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
+    const Command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
     helper::runCommand(cmd);
 
-    ifstream fileOutput(fileTmpOutput.c_str());
+    std::ifstream fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
     {
 		throw NotFoundFileException();

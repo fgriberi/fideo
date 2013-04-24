@@ -47,29 +47,29 @@ namespace fideo
 /**
  * Filename path
  */
-typedef std::string filePath;
+typedef std::string FilePath;
 
-typedef std::string fileLine;
+typedef std::string FileLine;
 
-typedef std::string command;
+typedef std::string Command;
 
-typedef unsigned int fileLineNo;
+typedef unsigned int FileLineNo;
 
-typedef std::list<std::string> fileLinesCt;
+typedef std::list<std::string> FileLinesCt;
 
-typedef std::list<std::string> backend;
+typedef std::list<std::string> Backend;
 
 namespace helper
 {
 //-----------------------------------System methods----------------------------------- 
 
-/** @brief execute a command
+/** @brief execute a Command
  *
- * Execute a give command using a system call
- * @param cmd: the RNA backend command
+ * Execute a give Command using a system call
+ * @param cmd: the RNA Backend Command
  * @return int: status 
  */
-int runCommand(const command& cmd);
+int runCommand(const Command& cmd);
 
 /** @brief Convert from string to type T
  *
@@ -78,7 +78,7 @@ int runCommand(const command& cmd);
  * @return void
  */
 template<class T>
-void convert_from_string(const std::string& from, T& to)
+void convertFromString(const std::string& from, T& to)
 {
     if (!mili::from_string(from, to))
     {
@@ -97,10 +97,10 @@ void createTmpFile(std::string& nameTmpFile);
 
 /** @brief Remove a file
  * 
- * @param file_name: name file to remove
+ * @param fileName: name file to remove
  * @return void
  */
-void removeFile(const std::string& file_name);
+void removeFile(const std::string& fileName);
 
 /** @brief Write a file with multiple lines.
  *
@@ -108,7 +108,7 @@ void removeFile(const std::string& file_name);
  * @param lines: lines to write
  * @return void
 */
-void write(const filePath& file, fileLinesCt& lines);
+void write(const FilePath& file, FileLinesCt& lines);
 
 /** @brief Write a file with a single line.
  * 
@@ -116,7 +116,7 @@ void write(const filePath& file, fileLinesCt& lines);
  * @param line: line to write
  * @return void
  */
-void write(const filePath& file, fileLine& line);
+void write(const FilePath& file, FileLine& line);
 
 /** @brief Read a line from a file
  * 
@@ -125,7 +125,7 @@ void write(const filePath& file, fileLine& line);
  * @param line: where to write the read line
  * @return void
 */
-void read_line(const filePath& file, fileLineNo lineno, fileLine& line);
+void readLine(const FilePath& file, FileLineNo lineno, FileLine& line);
 
 /** @brief Read a value
  *
@@ -137,7 +137,7 @@ void read_line(const filePath& file, fileLineNo lineno, fileLine& line);
  * @return void
  */
 template<class T>
-inline void read_value(const fileLine& line, const fileLine::size_type offset, const size_t n, T& t)
+inline void readValue(const FileLine& line, const FileLine::size_type offset, const size_t n, T& t)
 {
     const bool success = mili::from_string(line.substr(offset, n), t);
     if (!success)
@@ -153,7 +153,7 @@ inline void read_value(const fileLine& line, const fileLine::size_type offset, c
  * @return void
  */
 template<class T>
-inline void read_value(const fileLine& line, T& t)
+inline void readValue(const FileLine& line, T& t)
 {
     const bool success = from_string(line, t);
     if (!success)

@@ -33,12 +33,11 @@
 
 #include "fideo/IHybridize.h"
 
-using namespace biopp;
-using namespace mili;
-using namespace std;
-
 namespace fideo
 {
+
+using namespace mili;
+
 //Vienna package
 class RNAduplex : public IHybridize
 {
@@ -54,17 +53,17 @@ class RNAduplex : public IHybridize
          * @param line: line to parser
          * @return void
          */
-        void parse(string& line)
+        void parse(std::string& line)
         {
-            stringstream ss(line);
-            vector<string> result;
+            std::stringstream ss(line);
+            std::vector<std::string> result;
             ss >> result;
             if (result.size() != NumberOfColumns)
             {
                 throw RNABackendException("Invalid output RNAduplex.");
             }
-            const string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-            helper::convert_from_string(deltaG, dG);            
+            const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
+            helper::convertFromString(deltaG, dG);            
         }
 
         Fe dG; /// free energy
@@ -84,42 +83,42 @@ class RNAduplex : public IHybridize
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-Fe RNAduplex::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
+Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {
         throw RNABackendException("Unsupported Sequence.");
     }
-    const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();
+    const std::string seq1 = longerSeq.getString();
+    const std::string seq2 = shorterSeq.getString();
 
-    string inputTmpFile;
+    std::string inputTmpFile;
     helper::createTmpFile(inputTmpFile);
-    string outpTmpFile;
+    std::string outpTmpFile;
     helper::createTmpFile(outpTmpFile);
 
 	///Constructed as required by RNAduplex
-    ofstream toHybridize(inputTmpFile.c_str());
+    std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
     toHybridize << "\n";
     toHybridize << seq2;
     toHybridize.close();
 
-    stringstream cmd2;
+    std::stringstream cmd2;
     cmd2 << "RNAduplex ";
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outpTmpFile;
 
-    const command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+    const Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
-    ifstream fileOutput(outpTmpFile.c_str());
+    std::ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();
     }
     BodyParser body;
-    string line;
+    std::string line;
     getline(fileOutput, line);
     body.parse(line);
     helper::removeFile(inputTmpFile);

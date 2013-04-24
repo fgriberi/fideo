@@ -40,7 +40,7 @@ namespace helper
 static const int SYSTEM_ERROR = -1;
 static const int FILE_ERROR = -1;
 
-int runCommand(const command& cmd)
+int runCommand(const Command& cmd)
 {
     const int status = system(cmd.c_str());
     if (status == SYSTEM_ERROR)
@@ -78,22 +78,22 @@ void createTmpFile(std::string& nameTmpFile)
     nameTmpFile = nameFileAux;
 }
 
-void removeFile(const std::string& file_name)
+void removeFile(const std::string& fileName)
 {
-    if (unlink(file_name.c_str()) == FILE_ERROR)
+    if (unlink(fileName.c_str()) == FILE_ERROR)
     {
-        throw RNABackendException("Error in unlink of '" + file_name + "': " + std::string(strerror(errno)));
+        throw RNABackendException("Error in unlink of '" + fileName + "': " + std::string(strerror(errno)));
     }
 }
 
-void write(const filePath& file, fileLinesCt& lines)
+void write(const FilePath& file, FileLinesCt& lines)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try
     {
         out.open(file.c_str());
-        mili::CAutonomousIterator<fileLinesCt> it(lines);
+        mili::CAutonomousIterator<FileLinesCt> it(lines);
         while (!it.end())
         {
             out << *it << std::endl;
@@ -106,7 +106,7 @@ void write(const filePath& file, fileLinesCt& lines)
     }
 }
 
-void write(const filePath& file, fileLine& line)
+void write(const FilePath& file, FileLine& line)
 {
     std::ofstream out;
     out.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
@@ -121,7 +121,7 @@ void write(const filePath& file, fileLine& line)
     }
 }
 
-void read_line(const filePath& file, fileLineNo lineno, fileLine& line)
+void readLine(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
     std::ifstream in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);

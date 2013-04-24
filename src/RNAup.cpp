@@ -33,12 +33,11 @@
 
 #include "fideo/IHybridize.h"
 
-using namespace biopp;
-using namespace mili;
-using namespace std;
-
 namespace fideo
 {
+
+using namespace mili;
+
 //Vienna package
 class RNAup : public IHybridize
 {
@@ -50,15 +49,15 @@ class RNAup : public IHybridize
         
         void parse(std::ifstream& file)
         {
-            vector<string> aux;
+            std::vector<std::string> aux;
             if (file >> aux)
             {
                 if (aux.size() != NumberOfColumns)
                 {   
                     throw RNABackendException("Invalid output RNAup.");
                 }
-                const string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-                helper::convert_from_string(deltaG, dG);              
+                const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
+                helper::convertFromString(deltaG, dG);              
             }
             else
                 throw RNABackendException("Failured operation >>.");
@@ -84,36 +83,36 @@ class RNAup : public IHybridize
 };
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
-static const string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
+static const std::string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
 
-Fe RNAup::hybridize(const NucSequence& longerSeq, bool longerCirc, const NucSequence& shorterSeq) const
+Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {
         throw RNABackendException("Unsupported Sequence.");
     }
-    const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();
+    const std::string seq1 = longerSeq.getString();
+    const std::string seq2 = shorterSeq.getString();
 
-    string inputTmpFile;
+    std::string inputTmpFile;
     helper::createTmpFile(inputTmpFile);
-    string outputTmpFile;
+    std::string outputTmpFile;
     helper::createTmpFile(outputTmpFile);
 
     ///Constructed as required by RNAup
-    ofstream toHybridize(inputTmpFile.c_str());
+    std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
     toHybridize.close();
 
-    stringstream cmd2;
+    std::stringstream cmd2;
     cmd2 << "RNAup -u 3,4 -c SH ";
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    const command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
+    const Command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
     helper::runCommand(cmd);
 
-    ifstream fileOutput(outputTmpFile.c_str());
+    std::ifstream fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();

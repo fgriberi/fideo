@@ -41,7 +41,7 @@ namespace fideo
 {
 
 ///Map between execute name and path file.<executable,path>
-typedef std::map<std::string, std::string> configuration;
+typedef std::map<std::string, std::string> Configuration;
 
 class FideoConfig
 {
@@ -83,7 +83,7 @@ private:
 	/// Path of configuration file
     static const std::string FILE_NAME;
 
-    configuration config;
+    Configuration config;
 
 	/// Concrete instance of FideoConfig class
     static FideoConfig* instance;

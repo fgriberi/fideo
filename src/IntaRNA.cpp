@@ -34,10 +34,6 @@
 #include "fideo/IHybridize.h"
 #include "fideo/FideoConfig.h"
 
-using namespace biopp;
-using namespace mili;
-using namespace std;
-
 namespace fideo
 {
 class IntaRNA : public IHybridize
@@ -58,23 +54,23 @@ class IntaRNA : public IHybridize
          */
         void parse(std::ifstream& file)
         {
-            string temp;
+            std::string temp;
 			///advance to the required line
             for (size_t i = 0; i < OBSOLETE_LINES; ++i)
             {
                 getline(file, temp);
             }
-            stringstream ss(temp);
-            vector<string> result;
-            ss >> Separator(result, ' ');
+            std::stringstream ss(temp);
+            std::vector<std::string> result;
+            ss >> mili::Separator(result, ' ');
             if (result.size() != SIZE_LINE)
             {
                 dG = OBSOLETE_dG;
             }
             else
             {
-                const string deltaG = result[DELTA_G];
-                helper::convert_from_string(deltaG, dG);
+                const std::string deltaG = result[DELTA_G];
+                helper::convertFromString(deltaG, dG);
             }
         }
 
@@ -93,7 +89,7 @@ class IntaRNA : public IHybridize
     };
 };
 
-static const string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to find
+static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to find
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
@@ -104,13 +100,13 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
         throw RNABackendException("Unsupported Sequence.");
     }
 
-    const string seq1 = longerSeq.getString();
-    const string seq2 = shorterSeq.getString();
+    const std::string seq1 = longerSeq.getString();
+    const std::string seq2 = shorterSeq.getString();
 
-    string tmpFileOutput;
+    std::string tmpFileOutput;
     helper::createTmpFile(tmpFileOutput);
 
-    stringstream exec;
+    std::stringstream exec;
     exec << "./IntaRNA ";
     exec << seq1;
     exec << " " << seq2;
@@ -124,10 +120,10 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
 
-    const command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+    const Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
     helper::runCommand(cmd);
 
-    ifstream fileOutput(tmpFileOutput.c_str());
+    std::ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
     {
         throw RNABackendException("Output file not found.");

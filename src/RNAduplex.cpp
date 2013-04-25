@@ -41,30 +41,19 @@ using namespace mili;
 //Vienna package
 class RNAduplex : public IHybridize
 {
+private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     ///Class that allows parsing the body of a file
     class BodyParser
     {       
     public:
-
  		/** @brief Parse the line and get the value dG
          *
          * @param line: line to parser
          * @return void
          */
-        void parse(std::string& line)
-        {
-            std::stringstream ss(line);
-            std::vector<std::string> result;
-            ss >> result;
-            if (result.size() != NumberOfColumns)
-            {
-                throw RNABackendException("Invalid output RNAduplex.");
-            }
-            const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-            helper::convertFromString(deltaG, dG);            
-        }
+        void parse(std::string& line);        
 
         Fe dG; /// free energy
 
@@ -80,6 +69,19 @@ class RNAduplex : public IHybridize
         };
     };
 };
+
+void RNAduplex::BodyParser::parse(std::string& line)
+{   
+    std::stringstream ss(line);
+    std::vector<std::string> result;
+    ss >> result;
+    if (result.size() != NumberOfColumns)
+    {
+        throw RNABackendException("Invalid output RNAduplex.");
+    }
+    const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
+    helper::convertFromString(deltaG, dG);            
+}
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 

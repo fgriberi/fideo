@@ -41,6 +41,7 @@ using namespace mili;
 //UNAFold package
 class UNAFold : public IFold
 {
+private:
     static void deleteAllFiles(const std::string& nameFile);    
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
     //std::ifstream fileIn;
@@ -49,25 +50,7 @@ class UNAFold : public IFold
     class HeaderParser
     {       
     public:
-    
-        void parse(std::ifstream& file)
-        {
-            std::vector<std::string> aux;
-            if (file >> aux)
-            {
-                if (aux.size() != NumberOfColumns)
-                {
-                    throw RNABackendException("Invalid Header.");
-                }
-                helper::convertFromString(aux[ColNumberOfBases], numberOfBases);
-                helper::convertFromString(aux[ColDeltaG], deltaG);
-                sequenceName = aux[ColSeqName];
-            }
-            else
-            {
-                throw RNABackendException("Failured operation >>.");
-            }
-        }
+        void parse(std::ifstream& file);        
 
         biopp::SeqIndex numberOfBases;
         Fe deltaG;
@@ -90,23 +73,7 @@ class UNAFold : public IFold
     {       
     public:      
 
-        bool parse(std::ifstream& file)
-        {
-            std::vector<std::string> aux;
-            const bool ret = (file >> aux);
-
-            if (ret)
-            {
-                if (aux.size() != NumberOfColumns)
-                {
-                    throw RNABackendException("Invalid BodyLine.");
-                }
-                helper::convertFromString(aux[ColNucl], nuc);
-                helper::convertFromString(aux[ColNucleotideNumber], nucNumber);
-                helper::convertFromString(aux[ColPairedWith], pairedNuc);
-            }
-            return ret;
-        }
+        bool parse(std::ifstream& file);        
 
         char nuc;				   /// a nucleotid
         biopp::SeqIndex nucNumber; /// starts at 1!. Number of nucleotid in sequence
@@ -135,6 +102,44 @@ class UNAFold : public IFold
      */
     static void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
 };
+
+
+void UNAFold::HeaderParser::parse(std::ifstream& file)
+{
+    std::vector<std::string> aux;
+    if (file >> aux)
+    {
+        if (aux.size() != NumberOfColumns)
+        {
+            throw RNABackendException("Invalid Header.");
+        }
+        helper::convertFromString(aux[ColNumberOfBases], numberOfBases);
+        helper::convertFromString(aux[ColDeltaG], deltaG);
+        sequenceName = aux[ColSeqName];
+    }
+    else
+    {
+        throw RNABackendException("Failured operation >>.");
+    }
+}
+
+bool UNAFold::BodyLineParser::parse(std::ifstream& file)
+{
+    std::vector<std::string> aux;
+    const bool ret = (file >> aux);
+
+    if (ret)
+    {
+        if (aux.size() != NumberOfColumns)
+        {
+            throw RNABackendException("Invalid BodyLine.");
+        }
+        helper::convertFromString(aux[ColNucl], nuc);
+        helper::convertFromString(aux[ColNucleotideNumber], nucNumber);
+        helper::convertFromString(aux[ColPairedWith], pairedNuc);
+    }
+    return ret;
+}
 
 REGISTER_FACTORIZABLE_CLASS(IFold, UNAFold, std::string, "UNAFold");
 

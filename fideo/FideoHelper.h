@@ -34,8 +34,8 @@
  *
  */
 
-#ifndef _FIDEO_HELPER_H
-#define _FIDEO_HELPER_H
+#ifndef FIDEO_HELPER_H
+#define FIDEO_HELPER_H
 
 #include <fstream>
 #include <errno.h>
@@ -70,21 +70,6 @@ namespace helper
  * @return int: status 
  */
 int runCommand(const Command& cmd);
-
-/** @brief Convert from string to type T
- *
- * @param from: string to convert
- * @param to: converted of 'from' parameter.
- * @return void
- */
-template<class T>
-void convertFromString(const std::string& from, T& to)
-{
-    if (!mili::from_string(from, to))
-    {
-        throw FromStringException();
-    }
-}
 
 //-----------------------------------File Methods----------------------------------- 
 
@@ -127,42 +112,11 @@ void write(const FilePath& file, FileLine& line);
 */
 void readLine(const FilePath& file, FileLineNo lineno, FileLine& line);
 
-/** @brief Read a value
- *
- * Read a value from a file line using offset and length
- * @param line: file line
- * @param offset: offset in the line
- * @param n: length to read
- * @param t: where to write the value.
- * @return void
- */
-template<class T>
-inline void readValue(const FileLine& line, const FileLine::size_type offset, const size_t n, T& t)
-{
-    const bool success = mili::from_string(line.substr(offset, n), t);
-    if (!success)
-    {
-        throw NotReadValueUsingOffsetException();
-    }
-}
-
-/** @brief Read a value from a line file.
- * 
- * @param line: file line
- * @param t: where to write the value
- * @return void
- */
-template<class T>
-inline void readValue(const FileLine& line, T& t)
-{
-    const bool success = from_string(line, t);
-    if (!success)
-    {
-        throw NotReadValueException();
-    }
-}
+#define FIDEO_HELPER_INLINE_H
+#include "FideoHelperInline.h"
+#undef FIDEO_HELPER_INLINE_H
 
 } //namespace helper
 } //namespace fideo
 
-#endif  /* _FIDEO_HELPER_H */
+#endif  /* FIDEO_HELPER_H */

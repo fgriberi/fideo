@@ -41,27 +41,13 @@ using namespace mili;
 //Vienna package
 class RNAup : public IHybridize
 {
+private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class BodyParser
     {        
     public:
-        
-        void parse(std::ifstream& file)
-        {
-            std::vector<std::string> aux;
-            if (file >> aux)
-            {
-                if (aux.size() != NumberOfColumns)
-                {   
-                    throw RNABackendException("Invalid output RNAup.");
-                }
-                const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-                helper::convertFromString(deltaG, dG);              
-            }
-            else
-                throw RNABackendException("Failured operation >>.");
-        }
+        void parse(std::ifstream& file);        
 
         Fe dG; ///free energy
     private:
@@ -81,6 +67,24 @@ class RNAup : public IHybridize
     };
 
 };
+
+void RNAup::BodyParser::parse(std::ifstream& file)
+{
+    std::vector<std::string> aux;
+    if (file >> aux)
+    {
+        if (aux.size() != NumberOfColumns)
+        {   
+            throw RNABackendException("Invalid output RNAup.");
+        }
+        const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
+        helper::convertFromString(deltaG, dG);              
+    }
+    else
+    {              
+        throw RNABackendException("Failured operation >>.");
+    }
+}
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 static const std::string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup

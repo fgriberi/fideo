@@ -38,6 +38,7 @@ namespace fideo
 {
 class IntaRNA : public IHybridize
 {
+private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
@@ -52,28 +53,8 @@ class IntaRNA : public IHybridize
          * @param file: file to parser
          * @return void
          */
-        void parse(std::ifstream& file)
-        {
-            std::string temp;
-			///advance to the required line
-            for (size_t i = 0; i < OBSOLETE_LINES; ++i)
-            {
-                getline(file, temp);
-            }
-            std::stringstream ss(temp);
-            std::vector<std::string> result;
-            ss >> mili::Separator(result, ' ');
-            if (result.size() != SIZE_LINE)
-            {
-                dG = OBSOLETE_dG;
-            }
-            else
-            {
-                const std::string deltaG = result[DELTA_G];
-                helper::convertFromString(deltaG, dG);
-            }
-        }
-
+        void parse(std::ifstream& file);
+ 
     private:
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
@@ -88,6 +69,28 @@ class IntaRNA : public IHybridize
         };
     };
 };
+
+void IntaRNA::BodyParser::parse(std::ifstream& file)
+{
+    std::string temp;
+    ///advance to the required line
+    for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+    {
+        getline(file, temp);
+    }
+    std::stringstream ss(temp);
+    std::vector<std::string> result;
+    ss >> mili::Separator(result, ' ');
+    if (result.size() != SIZE_LINE)
+    {
+        dG = OBSOLETE_dG;
+    }
+    else
+    {
+        const std::string deltaG = result[DELTA_G];
+        helper::convertFromString(deltaG, dG);
+    }
+}
 
 static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to find
 

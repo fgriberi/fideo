@@ -67,16 +67,23 @@ struct IFold
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(Backend& slist)
-    {
-        mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
-        while (!it.end())
-        {
-            slist.push_back(*it);
-            it++;
-        }
-    }
+    static void getAvailableBackends(Backend& slist);    
 };
+
+//void IFold::getAvailableBackends(Backend& slist)
+//{
+/*
+{
+    mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+    while (!it.end())
+    {
+        slist.push_back(*it);
+        it++;
+    }
+}
+*/
+//}
+
 } //namespace fideo
 
 #endif  /* _IFOLD_H */

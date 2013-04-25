@@ -42,6 +42,9 @@ namespace fideo
 //Vienna package
 class RNAFold : public IFold
 {
+private:
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
+
     /** @brief Read free energy of line
     *
     * @param file: to read
@@ -56,9 +59,7 @@ class RNAFold : public IFold
     * @param secStrucute: to fill with structure
     * @return void
     */
-    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
-
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
+    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);   
 
     static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';

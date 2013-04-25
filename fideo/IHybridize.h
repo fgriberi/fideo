@@ -67,16 +67,21 @@ struct IHybridize
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(Backend& slist)
-    {
-        mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
-        while (!it.end())
-        {
-            slist.push_back(*it);
-            it++;
-        }
-    }
+    static void getAvailableBackends(Backend& slist);    
 };
+
+//void Hybridize::getAvailableBackends(Backend& slist)
+/*
+{
+    mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+    while (!it.end())
+    {
+        slist.push_back(*it);
+        it++;
+    }
+}
+*/
+
 } //namespace fideo
 
 #endif  /* _IHYBRIDIZE_H */

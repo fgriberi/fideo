@@ -37,6 +37,7 @@ namespace fideo
 {
 class RNAHybrid : public IHybridize
 {
+private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 6;
 
@@ -49,33 +50,35 @@ class RNAHybrid : public IHybridize
          * @param file: file to parser
          * @return void
          */      
-        void parse(std::ifstream& file)
-        {
-            std::string temp;
-            for (size_t i = 0; i < OBSOLETE_LINES; ++i)
-            {
-                getline(file, temp);
-            }
-            std::stringstream ss(temp);
-            std::vector<std::string> result;
-            ss >> mili::Separator(result, ' ');
-            if (result.size() != SIZE_LINE)
-            {
-                dG = OBSOLETE_dG; //no significant hybridization found
-            }
-            else
-            {
-                const std::string deltaG = result[DELTA_G];
-                helper::convertFromString(deltaG, dG);                
-            }
-        }
-
+        void parse(std::ifstream& file);
+        
         Fe dG; ///free energy
         static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
         static const unsigned int SIZE_LINE = 3;
         static const unsigned int DELTA_G = 1;
     };
 };
+
+void RNAHybrid::BodyParser::parse(std::ifstream& file)
+{
+    std::string temp;
+    for (size_t i = 0; i < OBSOLETE_LINES; ++i)
+    {
+        getline(file, temp);
+    }
+    std::stringstream ss(temp);
+    std::vector<std::string> result;
+    ss >> mili::Separator(result, ' ');
+    if (result.size() != SIZE_LINE)
+    {
+        dG = OBSOLETE_dG; //no significant hybridization found
+    }
+    else
+    {
+        const std::string deltaG = result[DELTA_G];
+        helper::convertFromString(deltaG, dG);                
+    }
+}
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 

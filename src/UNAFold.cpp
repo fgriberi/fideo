@@ -31,6 +31,7 @@
  *
  */
 
+#include <unistd.h>
 #include "fideo/IFold.h"
 
 namespace fideo

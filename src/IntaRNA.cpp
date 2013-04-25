@@ -31,6 +31,7 @@
  *
  */
 
+#include <unistd.h>
 #include "fideo/IHybridize.h"
 #include "fideo/FideoConfig.h"
 

@@ -38,7 +38,8 @@
 #define FIDEO_HELPER_H
 
 #include <fstream>
-#include <errno.h>
+#include <cerrno>
+#include <unistd.h>
 #include "RnaBackendsException.h"
 
 namespace fideo

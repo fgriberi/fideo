@@ -41,26 +41,17 @@ namespace fideo
 /// Path of configuration file
 const std::string FideoConfig::FILE_NAME = "/home/gringusi/Escritorio/Tesis/fbuild/fudepan-build/install/.paths";
 
-///Initial concrete instance
-FideoConfig* FideoConfig::instance = NULL;
-
 FideoConfig::FideoConfig()
 {
     fillConfigurationDataFromFile();
 }
 
-FideoConfig::~FideoConfig()
-{
-    delete instance;
-}
+FideoConfig::~FideoConfig(){}
 
 FideoConfig* FideoConfig::getInstance()
 {
-    if (instance == NULL)
-    {
-        instance = new FideoConfig();
-    }
-    return instance;
+    static FideoConfig instance;
+    return &instance;
 }
 
 void FideoConfig::getPath(const std::string& exec, std::string& executablePath) const

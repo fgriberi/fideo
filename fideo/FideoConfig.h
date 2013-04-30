@@ -85,9 +85,6 @@ private:
 
     Configuration config;
 
-	/// Concrete instance of FideoConfig class
-    static FideoConfig* instance;
-
 }; // FideoConfig
 } // fideo
 

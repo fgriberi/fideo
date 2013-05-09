@@ -40,7 +40,7 @@
 #include <fstream>
 #include <cerrno>
 #include <unistd.h>
-#include "RnaBackendsException.h"
+#include "fideo/RnaBackendsException.h"
 
 namespace fideo
 {

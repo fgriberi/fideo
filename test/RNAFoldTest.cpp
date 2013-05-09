@@ -1,9 +1,9 @@
 /*
- * @file   RNAFoldTest.cpp
- * @brief  RNAFoldTest is a test file to RNAFold backend.
+ * @file      RNAFoldTest.cpp
+ * @brief     RNAFoldTest is a test file to RNAFold backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -39,19 +39,21 @@
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
+using namespace fideo;
+
 TEST(RNAFoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("RNAFold");
+    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    fideo::Fe result = p->fold(seq, true, secStructure);
+    Fe result = p->fold(seq, true, secStructure);
     delete p;
 
     EXPECT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

@@ -1,9 +1,9 @@
 /*
- * @file   HelperTest.h
- * @brief  This is the implementation of HelperTest interface.
+ * @file      HelperTest.h
+ * @brief     This is the implementation of HelperTest interface.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file for fideo providing class HelperTest implementation.
  *

@@ -1,9 +1,9 @@
 /*
- * @file   RNAcofoldTest.cpp
- * @brief  RNAcofoldTest is a test file to RNAcofold backend.
+ * @file      RNAcofoldTest.cpp
+ * @brief     RNAcofoldTest is a test file to RNAcofold backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -37,20 +37,21 @@
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "HelperTest.h"
+
+using namespace fideo;
 
 TEST(RNAcofoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAcofold");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -9.80);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

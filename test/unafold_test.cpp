@@ -1,9 +1,9 @@
 /*
- * @file   unafold_test.cpp
- * @brief  unafold_test is a test file to UNAFold backend.
+ * @file      unafold_test.cpp
+ * @brief     unafold_test is a test file to UNAFold backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -37,15 +37,16 @@
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "HelperTest.h"
+
+using namespace fideo;
 
 TEST(UnaFoldBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    fideo::IFold* p = mili::FactoryRegistry<fideo::IFold, std::string>::new_class("UNAFold");
+    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
     EXPECT_NO_THROW(p->fold(seq, true, secStructure));
@@ -54,7 +55,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 

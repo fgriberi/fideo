@@ -1,9 +1,9 @@
 /*
- * @file   RNAupTest.cpp
- * @brief  RNAupTest is a test file to RNAup backend.
+ * @file      RNAupTest.cpp
+ * @brief     RNAupTest is a test file to RNAup backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -37,21 +37,23 @@
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "HelperTest.h"
 
+using namespace fideo;
+
+static const std::string FILE_NAME = "RNA_w25_u3_4_up.out";
 TEST(RNAupBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAup");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAup");
     EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
-    EXPECT_FALSE(std::ifstream(("RNA_w25_u3_4_up.out")));
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(std::ifstream(FILE_NAME.c_str()));
 }

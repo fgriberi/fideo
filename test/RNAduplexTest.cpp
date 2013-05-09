@@ -1,9 +1,9 @@
 /*
- * @file   RNAduplexTest.cpp
- * @brief  RNARNAduplexTest is a test file to RNAduplex backend.
+ * @file      RNAduplexTest.cpp
+ * @brief     RNARNAduplexTest is a test file to RNAduplex backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -40,17 +40,19 @@
 #include <gmock/gmock.h>
 #include "HelperTest.h"
 
+using namespace fideo;
+
 TEST(RNAduplexBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAduplex");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -7.80);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

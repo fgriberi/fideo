@@ -1,9 +1,9 @@
 /*
- * @file   IntaRNATest.cpp
- * @brief  IntaRNATest is a test file to IntaRNA backend.
+ * @file      IntaRNATest.cpp
+ * @brief     IntaRNATest is a test file to IntaRNA backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -37,19 +37,21 @@
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
+using namespace fideo;
+
 TEST(IntaRNABackendTestSuite, BasicTest1)
 {
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("IntaRNA");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -5.23621);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(IntaRNABackendTestSuite, BasicTest2)
@@ -66,12 +68,12 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     const biopp::NucSequence seq1(sequence1);
     const biopp::NucSequence seq2(sequence2);
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("IntaRNA");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
     EXPECT_DOUBLE_EQ(dG, -7.34977);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

@@ -1,9 +1,9 @@
 /*
- * @file   RNAHybridTest.cpp
- * @brief  RNAHybridTest is a test file to RNAHybrid backend.
+ * @file      RNAHybridTest.cpp
+ * @brief     RNAHybridTest is a test file to RNAHybrid backend.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author    Franco Riberi
+ * @email     fgriberi AT gmail.com
  *
  * Contents:  Source file.
  *
@@ -37,8 +37,9 @@
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "HelperTest.h"
+
+using namespace fideo;
 
 TEST(RNAHybridBackendTestSuite, BasicTest1)
 {
@@ -47,19 +48,20 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
                              "TGCAGGGTATATGGACTTCTGTGTTAAAAATGCAGAATTACTCAACCTTGCTGCAGTTAGGATCTTCTTC"
                              "CTCAATGCCGCAAAGGCCAAGGCTGCTCTCTCGCGTAAGCCAGAGAGGAAGGCTAACCCTAAATTTGGAG"
                              "AGTGGCAGGTGGAGGTTATCAATAATCATT";
+
     const std::string seq2 = "AAGAUGUGGAAAAAUUGGAAUC";
 
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
     EXPECT_DOUBLE_EQ(dG, -16.4);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
@@ -83,17 +85,18 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
                              "CACCTCAAACTTCAGTGCGTTCTTCTGTCATCATGTACAATTTTCTTTCTTCGAATTTTGATTCGAATGTCAATTTATCA"
                              "ATTTATAAAAACTCCAATAAAAAAGCATCTTGAAGCATCTTGTTTTACCACATATATCAAAACTTCAAAGTACACAATTA"
                              "ATCGGATCATCAGAAAAA";
+
     const std::string seq2 = "UGAGGUAGUAGGUUGUAUAGUU";
 
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    fideo::IHybridize* p = mili::FactoryRegistry<fideo::IHybridize, std::string>::new_class("RNAHybrid");
+    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
     EXPECT_DOUBLE_EQ(dG, -28.2);
     delete p;
 
-    EXPECT_FALSE(fideo::HelperTest::checkDirTmp());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
 }

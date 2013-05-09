@@ -2,7 +2,7 @@ Import ('env')
 
 name = 'fideo'
 inc = env.Dir('.')
-ext_inc = env.Dir('fideo')
+ext_inc = []
 src = env.Glob('src/*.cpp') 
 deps = ['mili', 'biopp', 'stl-debug']
 

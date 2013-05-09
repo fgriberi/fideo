@@ -34,12 +34,14 @@
 #include <fideo/fideo.h>
 #include <gtest/gtest.h>
 
+using namespace fideo;
+
 TEST(FideoConfigTestSuite, Test1)
 {
     const std::string INTA_RNA = "runIntaRNA";
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/IntaRNA/intarna-1.2.5/src";
     std::string executablePath;
-    fideo::FideoConfig::getInstance()->getPath(INTA_RNA, executablePath);
+    FideoConfig::getInstance()->getPath(INTA_RNA, executablePath);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }
@@ -50,7 +52,7 @@ TEST(FideoConfigTestSuite, Test2)
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/geneDesign/GeneDesign/bin";
 
     std::string executablePath;
-    fideo::FideoConfig::getInstance()->getPath(RUN_GENE_DESIGN, executablePath);
+    FideoConfig::getInstance()->getPath(RUN_GENE_DESIGN, executablePath);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }
@@ -61,7 +63,7 @@ TEST(FideoConfigTestSuite, Test3)
     const std::string PATH_EXECUTABLE = "/home/gringusi/Escritorio/geneDesign/GeneDesign/bin/sequence_gdRT";
 
     std::string executablePath;
-    fideo::FideoConfig::getInstance()->getPath(RESULT_GENE_DESIGN, executablePath);
+    FideoConfig::getInstance()->getPath(RESULT_GENE_DESIGN, executablePath);
 
     ASSERT_EQ(executablePath, PATH_EXECUTABLE);
 }

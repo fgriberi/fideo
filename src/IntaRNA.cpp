@@ -32,8 +32,8 @@
  */
 
 #include <unistd.h>
+#include <etilico/etilico.h>
 #include "fideo/IHybridize.h"
-#include "fideo/FideoConfig.h"
 
 namespace fideo
 {
@@ -89,7 +89,7 @@ void IntaRNA::BodyParser::parse(std::ifstream& file)
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);
+        helper::convertFromString(deltaG, dG);        
     }
 }
 
@@ -118,14 +118,14 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
 
     //move to the directory where is the folding
     std::string executablePath;
-    fideo::FideoConfig::getInstance()->getPath(EXECUTABLE_PATH, executablePath);
+    etilico::Config::getInstance()->getPath(EXECUTABLE_PATH, executablePath);
     if (chdir(executablePath.c_str()) != 0)
     {
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
 
-    const Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
-    helper::runCommand(cmd);
+    const etilico::Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+    etilico::runCommand(cmd);
 
     std::ifstream fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
@@ -133,8 +133,11 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
         throw RNABackendException("Output file not found.");
     }
     BodyParser body;
-    body.parse(fileOutput);
-    helper::removeFile(tmpFileOutput);
+    body.parse(fileOutput);    
+    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()));
+
     return body.dG;
 }
 } // namespace fideo
+
+

@@ -35,6 +35,7 @@
  */
 
 #include <stack>
+#include <etilico/etilico.h> 
 #include "fideo/IFold.h"
 
 namespace fideo
@@ -144,8 +145,8 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     }
     ss << "< " << fileInput << " > " << fileOutput;
 
-    const Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
-    helper::runCommand(cmd);
+    const etilico::Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
+    etilico::runCommand(cmd);
 
  	/* output file look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
@@ -160,8 +161,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
 
     Fe energy;
     readFreeEnergy(aux, seqRNAm.length(), energy);
-    helper::removeFile(fileInput);
-    helper::removeFile(fileOutput);
+    
+    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()));
+
     return energy;
 }
 } //namespace fideo

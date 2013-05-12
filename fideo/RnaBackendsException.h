@@ -78,6 +78,7 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidPathException, RNABackendExceptionRoot, "I
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, RNABackendExceptionRoot, "Output file not found");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(ExceptionUnlink, RNABackendExceptionRoot, "Error unlink");
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */

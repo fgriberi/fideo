@@ -52,8 +52,6 @@ typedef std::string FilePath;
 
 typedef std::string FileLine;
 
-typedef std::string Command;
-
 typedef unsigned int FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
@@ -62,31 +60,12 @@ typedef std::list<std::string> Backend;
 
 namespace helper
 {
-//-----------------------------------System methods----------------------------------- 
-
-/** @brief execute a Command
- *
- * Execute a give Command using a system call
- * @param cmd: the RNA Backend Command
- * @return int: status 
- */
-int runCommand(const Command& cmd);
-
-//-----------------------------------File Methods----------------------------------- 
-
 /** @brief Create a temporal file
  * 
  * @param nameTmpFile: to fill with name file created
  * @return void
  */
 void createTmpFile(std::string& nameTmpFile);
-
-/** @brief Remove a file
- * 
- * @param fileName: name file to remove
- * @return void
- */
-void removeFile(const std::string& fileName);
 
 /** @brief Write a file with multiple lines.
  *

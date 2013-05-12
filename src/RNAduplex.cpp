@@ -31,6 +31,7 @@
  *
  */
 
+#include <etilico/etilico.h>
 #include "fideo/IHybridize.h"
 
 namespace fideo
@@ -111,8 +112,8 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outpTmpFile;
 
-    const Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
-    helper::runCommand(cmd);
+    const etilico::Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+    etilico::runCommand(cmd);
 
     std::ifstream fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
@@ -123,8 +124,10 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     std::string line;
     getline(fileOutput, line);
     body.parse(line);
-    helper::removeFile(inputTmpFile);
-    helper::removeFile(outpTmpFile);
+    
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()));
+    
     return body.dG;
 }
 } // namespace fideo

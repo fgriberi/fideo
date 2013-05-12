@@ -39,8 +39,12 @@
 
 using namespace fideo;
 
+//temporal
+int linkFictitious();
+
 TEST(IntaRNABackendTestSuite, BasicTest1)
 {
+    linkFictitious();
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 

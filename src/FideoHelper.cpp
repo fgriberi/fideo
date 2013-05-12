@@ -33,39 +33,16 @@
 
 #include "fideo/FideoHelper.h"
 
+/// Temporal functions
+int linkFictitious()
+{
+    return 1;
+}
+
 namespace fideo
 {
 namespace helper
 {
-static const int SYSTEM_ERROR = -1;
-static const int FILE_ERROR = -1;
-
-int runCommand(const Command& cmd)
-{
-    const int status = system(cmd.c_str());
-    if (status == SYSTEM_ERROR)
-    {
-		throw SystemCallException();	        
-    }
-    else
-    {
-        if (WIFEXITED(status))
-        {
-            return WEXITSTATUS(status);
-        }
-        else
-        {
-            if (WIFSIGNALED(status))
-            {
-                throw RNABackendException("Termination signal " + mili::to_string(WTERMSIG(status)) + " in " + cmd);
-            }
-            else
-            {
-				throw NonTerminationException();                
-            }
-        }
-    }
-}
 
 void createTmpFile(std::string& nameTmpFile)
 {
@@ -76,14 +53,6 @@ void createTmpFile(std::string& nameTmpFile)
         throw TmpFileCreateException();
     }
     nameTmpFile = nameFileAux;
-}
-
-void removeFile(const std::string& fileName)
-{
-    if (unlink(fileName.c_str()) == FILE_ERROR)
-    {
-        throw RNABackendException("Error in unlink of '" + fileName + "': " + std::string(strerror(errno)));
-    }
 }
 
 void write(const FilePath& file, FileLinesCt& lines)

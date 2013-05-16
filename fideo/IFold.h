@@ -40,21 +40,35 @@
 #include <biopp/biopp.h>
 #include "fideo/RnaBackendsTypes.h"
 #include "fideo/FideoHelper.h"
+#include "fideo/IMotifObserver.h"
+
 
 namespace fideo
 {
 
-///Interface for sequence's folding services.
+/** @brief Interface for sequence's folding services.
+*
+*/
 struct IFold
-{    
+{
     /** @brief Fold an RNA sequence
-     * 
+     *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
-     * @param structureRNAm: the structure where to write the folding.     
+     * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
+
+    /** @brief Fold an RNA sequence
+     *
+     * @param seqRNAm: the RNA sequence to fold.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param motif: specific implementation of IMotifObserfer
+     * @return The free energy in the structure.
+     */
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const = 0;
 
     /** @brief Class destructor
      *
@@ -67,7 +81,7 @@ struct IFold
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(Backend& slist)    
+    static void getAvailableBackends(Backend& slist)
     {
         mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
         while (!it.end())

@@ -44,9 +44,10 @@ using namespace mili;
 class UNAFold : public IFold
 {
 private:
+
     static void deleteAllFiles(const std::string& nameFile);    
     virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
-    //std::ifstream fileIn;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const;
 
 	///Class that allows parsing the header of a file
     class HeaderParser
@@ -174,6 +175,11 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     {
         secStructure.pair(bodyLine.nucNumber - 1, bodyLine.pairedNuc - 1);
     }
+}
+
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const
+{
+    return 0; //temporal
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const

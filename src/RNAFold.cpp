@@ -44,7 +44,9 @@ namespace fideo
 class RNAFold : public IFold
 {
 private:
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
+
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;  
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const;
 
     /** @brief Read free energy of line
     *
@@ -123,6 +125,11 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
     {
         throw(InvalidStructureException("Pairs pending to close"));
     }
+}
+
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const
+{
+    return 0; //temporal
 }
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const

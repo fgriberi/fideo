@@ -80,8 +80,14 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, RNABackendExceptionRoot, "
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(ExceptionUnlink, RNABackendExceptionRoot, "Error unlink");
 
+//UNAFold
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, RNABackendExceptionRoot, "Invalid motif");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, RNABackendExceptionRoot, "The .det file not exist");
+
+DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, RNABackendExceptionRoot, "Index out of range");
+
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
-
 
 

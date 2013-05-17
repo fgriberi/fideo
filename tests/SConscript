@@ -1,7 +1,7 @@
 Import ('env')
 
 name = 'fideo'
-inc = env.Dir('.')
+inc = env.Dir('.'), env.Dir('../../etilico')
 src = env.Glob('*.cpp')
 deps = ['fideo', 'etilico', 'biopp', 'gtest_main', 'gtest']
 

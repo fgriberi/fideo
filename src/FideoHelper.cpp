@@ -44,17 +44,6 @@ namespace fideo
 namespace helper
 {
 
-void createTmpFile(std::string& nameTmpFile)
-{
-    char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
-    const int fileDescriptor = mkstemp(nameFileAux);
-    if (fileDescriptor < 1)
-    {
-        throw TmpFileCreateException();
-    }
-    nameTmpFile = nameFileAux;
-}
-
 void write(const FilePath& file, FileLinesCt& lines)
 {
     std::ofstream out;

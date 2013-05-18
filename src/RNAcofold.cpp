@@ -91,9 +91,9 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const std::string seq2 = shorterSeq.getString();
 
     std::string inputTmpFile;
-    helper::createTmpFile(inputTmpFile);
+    etilico::createTemporaryFilename(inputTmpFile);
     std::string outputTmpFile;
-    helper::createTmpFile(outputTmpFile);
+    etilico::createTemporaryFilename(outputTmpFile);
 
     std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;

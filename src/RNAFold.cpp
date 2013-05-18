@@ -139,9 +139,9 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     FileLine sseq = seqRNAm.getString();
 
     std::string fileInput;
-    helper::createTmpFile(fileInput);
+    etilico::createTemporaryFilename(fileInput);
     std::string fileOutput;
-    helper::createTmpFile(fileOutput);
+    etilico::createTemporaryFilename(fileOutput);
 
     helper::write(fileInput, sseq);
     std::stringstream ss;

@@ -69,8 +69,6 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(SystemCallException, RNABackendExceptionRoot, "Sy
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NonTerminationException, RNABackendExceptionRoot, "Non termination for some reason");
 
-DEFINE_SPECIFIC_EXCEPTION_TEXT(TmpFileCreateException, RNABackendExceptionRoot, "Creation of temp file failed with error");
-
 //IntaRNA
 DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, RNABackendExceptionRoot, "Unsupported Sequence");
 

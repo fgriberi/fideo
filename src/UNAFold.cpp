@@ -193,7 +193,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     FileLine sseq = seqRNAm.getString();
 
     std::string temporalFile;
-    helper::createTmpFile(temporalFile);
+    etilico::createTemporaryFilename(temporalFile);
 
     helper::write(temporalFile, sseq);
     std::stringstream ss;

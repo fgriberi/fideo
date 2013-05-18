@@ -60,13 +60,7 @@ typedef std::list<std::string> Backend;
 
 namespace helper
 {
-/** @brief Create a temporal file
- * 
- * @param nameTmpFile: to fill with name file created
- * @return void
- */
-void createTmpFile(std::string& nameTmpFile);
-
+	
 /** @brief Write a file with multiple lines.
  *
  * @param file: file path

@@ -108,7 +108,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     const std::string seq2 = shorterSeq.getString();
 
     std::string tmpFileOutput;
-    helper::createTmpFile(tmpFileOutput);
+    etilico::createTemporaryFilename(tmpFileOutput);
 
     std::stringstream exec;
     exec << "./IntaRNA ";

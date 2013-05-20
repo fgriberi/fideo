@@ -120,8 +120,8 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     BodyParser body;
     body.parse(temp);
 
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()) == 0);
 
     return body.dG;
 }

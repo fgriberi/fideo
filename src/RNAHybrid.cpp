@@ -121,9 +121,9 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     BodyParser body;
     body.parse(fileOutput);
 
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpTarget.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpQuery.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpOutput.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpTarget.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpQuery.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpOutput.c_str()) == 0);
     
     return body.dG;
 }

@@ -134,7 +134,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     }
     BodyParser body;
     body.parse(fileOutput);    
-    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()) == 0);
 
     return body.dG;
 }

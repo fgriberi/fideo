@@ -169,8 +169,8 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     Fe energy;
     readFreeEnergy(aux, seqRNAm.length(), energy);
     
-    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()) == 0);
 
     return energy;
 }

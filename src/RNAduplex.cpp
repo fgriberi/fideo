@@ -125,8 +125,8 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     getline(fileOutput, line);
     body.parse(line);
     
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()) == 0);
     
     return body.dG;
 }

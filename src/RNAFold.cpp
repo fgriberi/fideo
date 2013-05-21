@@ -45,8 +45,8 @@ class RNAFold : public IFold
 {
 private:
 
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;  
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);  
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
 
     /** @brief Read free energy of line
     *
@@ -127,12 +127,12 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
     }
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) 
 {
     return 0; //temporal
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)  
 {
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);

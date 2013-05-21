@@ -58,7 +58,7 @@ struct IFold
      * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) = 0;
 
     /** @brief Fold an RNA sequence
      *
@@ -68,7 +68,7 @@ struct IFold
      * @param motif: specific implementation of IMotifObserfer
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Class destructor
      *

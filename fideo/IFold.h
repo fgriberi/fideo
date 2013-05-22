@@ -42,7 +42,6 @@
 #include "fideo/FideoHelper.h"
 #include "fideo/IMotifObserver.h"
 
-
 namespace fideo
 {
 

@@ -42,6 +42,5 @@
 
 #include "fideo/IFold.h"
 #include "fideo/IHybridize.h"
-#include "fideo/IMotifObserver.h" 
 			    
 #endif

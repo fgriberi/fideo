@@ -38,6 +38,7 @@
 #define _IFOLD_H
 
 #include <biopp/biopp.h>
+#include <mili/mili.h>
 #include "fideo/RnaBackendsTypes.h"
 #include "fideo/FideoHelper.h"
 #include "fideo/IMotifObserver.h"
@@ -45,11 +46,17 @@
 namespace fideo
 {
 
+struct IFold;
+
+typedef mili::FactoryRegistry<IFold, std::string> Folder;
+
 /** @brief Interface for sequence's folding services.
 *
 */
 struct IFold
 {
+    typedef mili::Factory<std::string, IFold> Factory;
+    
     /** @brief Fold an RNA sequence
      *
      * @param seqRNAm: the RNA sequence to fold.
@@ -82,7 +89,7 @@ struct IFold
      */
     static void getAvailableBackends(Backend& slist)
     {
-        mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Folder::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

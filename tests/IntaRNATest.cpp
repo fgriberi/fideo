@@ -33,7 +33,6 @@
 
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
@@ -48,7 +47,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
+    IHybridize* p = Hybridizer::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -72,7 +71,7 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     const biopp::NucSequence seq1(sequence1);
     const biopp::NucSequence seq2(sequence2);
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("IntaRNA");
+    IHybridize* p = Hybridizer::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

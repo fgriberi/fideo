@@ -35,7 +35,6 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "HelperTest.h"
@@ -47,7 +46,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAduplex");
+    IHybridize* p = Hybridizer::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

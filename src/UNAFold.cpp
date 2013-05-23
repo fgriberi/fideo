@@ -124,7 +124,7 @@ private:
     * @param secStructure: structure to fill
     * @return void
     */
-    static void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
+    void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
 
     /** @brief To store the temporal file name generated
      *

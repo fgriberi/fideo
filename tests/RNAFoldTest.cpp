@@ -35,7 +35,6 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
@@ -46,7 +45,7 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("RNAFold");
+    IFold* p = Folder::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
     Fe result = p->fold(seq, true, secStructure);

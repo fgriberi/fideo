@@ -35,7 +35,6 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
@@ -46,7 +45,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
+    IFold* p = Folder::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
     EXPECT_NO_THROW(p->fold(seq, true, secStructure));

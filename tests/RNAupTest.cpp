@@ -35,7 +35,6 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
@@ -47,7 +46,7 @@ TEST(RNAupBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAup");
+    IHybridize* p = Hybridizer::new_class("RNAup");
     EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

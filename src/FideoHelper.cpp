@@ -81,7 +81,7 @@ void write(const FilePath& file, FileLine& line)
 
 void readLine(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
-    std::ifstream in;
+    File in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try
     {

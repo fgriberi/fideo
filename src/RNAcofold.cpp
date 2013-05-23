@@ -107,7 +107,7 @@ Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const etilico::Command cmd = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(outputTmpFile.c_str());
+    File fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();

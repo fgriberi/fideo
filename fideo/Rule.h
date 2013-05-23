@@ -90,6 +90,8 @@ protected:
     static void getSecondElement(const Body& list, std::string& element);
 };
 
+static const size_t EXPECTED_DIFFERENCE = 1;
+
 class UNAFold::DetFileParser::ExternalRule : public Rule
 {
 private:

@@ -51,7 +51,7 @@ private:
          * @param file: file to parser
          * @return void
          */      
-        void parse(std::ifstream& file);
+        void parse(File& file);
         
         Fe dG; ///free energy
         static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
@@ -60,7 +60,7 @@ private:
     };
 };
 
-void RNAHybrid::BodyParser::parse(std::ifstream& file)
+void RNAHybrid::BodyParser::parse(File& file)
 {
     std::string temp;
     for (size_t i = 0; i < OBSOLETE_LINES; ++i)
@@ -113,7 +113,7 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const etilico::Command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(fileTmpOutput.c_str());
+    File fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
     {
 		throw NotFoundFileException();

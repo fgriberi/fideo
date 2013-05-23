@@ -43,12 +43,22 @@
 */
 typedef std::list<std::string> Body;
 
+/** @brief Represents the block name
+*
+*/
+typedef std::string BlockName;
+
+/** @brief Represents the file name
+*
+*/
+typedef std::string FileName;
+
 /** @brief Represents a block of the file to parse
 *
 */
 struct Block
 {
-    std::string motifName;
+    BlockName motifName;
     Body lines;
 };
 
@@ -65,7 +75,7 @@ public:
     * @param observer: specific implementacion
     * @return void
     */
-    void parseDet(const std::string& file, IMotifObserver* observer);
+    void parseDet(const FileName& file, IMotifObserver* observer);
 
 private:
     class Rule;
@@ -80,7 +90,7 @@ private:
     * @param file: file input
     * @return void
     */
-    void goToBegin(std::ifstream& file);
+    void goToBegin(File& file);
 
     /** @brief Prepares a block to parse
     *

@@ -46,14 +46,6 @@ class UNAFold : public IFold
 {
 private:
 
-    /** @brief Destructor of class
-    *
-    */
-    ~UNAFold()
-    {
-        deleteAllFiles();
-    }
-
     /** @brief Delete all files generated 
      *
      * @param nameFile: file name to delete
@@ -64,19 +56,26 @@ private:
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
 
+    /** @brief Destructor of class
+     *
+     */
+    virtual ~UNAFold();    
+
     /** @brief Class that allows parsing the header of a file
     *
     */
     class HeaderParser
     {
     public:
-        void parse(std::ifstream& file);
+
+        void parse(File& file);
 
         biopp::SeqIndex numberOfBases;
         Fe deltaG;
         std::string sequenceName;
 
     private:
+
         enum Columns
         {
             ColNumberOfBases,
@@ -95,13 +94,14 @@ private:
     {
     public:
 
-        bool parse(std::ifstream& file);
+        bool parse(File& file);
 
         char nuc;                  /// a nucleotid
         biopp::SeqIndex nucNumber; /// starts at 1!. Number of nucleotid in sequence
         biopp::SeqIndex pairedNuc; /// starts at 1!. Nucleotid paired.
 
     private:
+
         enum Columns
         {
             ColNucleotideNumber,
@@ -132,7 +132,12 @@ private:
     std::string temporalFileName;    
 };
 
-void UNAFold::HeaderParser::parse(std::ifstream& file)
+UNAFold::~UNAFold()
+{
+    deleteAllFiles();
+}
+
+void UNAFold::HeaderParser::parse(File& file)
 {
     std::vector<std::string> aux;
     if (file >> aux)
@@ -151,7 +156,7 @@ void UNAFold::HeaderParser::parse(std::ifstream& file)
     }
 }
 
-bool UNAFold::BodyLineParser::parse(std::ifstream& file)
+bool UNAFold::BodyLineParser::parse(File& file)
 {
     std::vector<std::string> aux;
     const bool ret = (file >> aux);
@@ -233,7 +238,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     */
 
     /// temporalFile.ct is the file to parse
-    std::ifstream fileIn((temporalFile + ".ct").c_str());
+    File fileIn((temporalFile + ".ct").c_str());
     if (!fileIn)
     {
         throw RNABackendException("output file not found.");
@@ -269,14 +274,14 @@ static const std::string BULGE_LOOP    = "Bulge loop";
 static const std::string STACK         = "Stack";
 
 
-void UNAFold::DetFileParser::goToBegin(std::ifstream& file)
+void UNAFold::DetFileParser::goToBegin(File& file)
 {
     std::string temporalLine;
     getline(file, temporalLine); //structure data line
     getline(file, temporalLine); //obsolete line
 }
 
-void UNAFold::DetFileParser::buildBlock(std::ifstream& file, Block& block)
+void UNAFold::DetFileParser::buildBlock(File& file, Block& block)
 {
     std::string currentLine;
     getline(file, currentLine);
@@ -284,9 +289,8 @@ void UNAFold::DetFileParser::buildBlock(std::ifstream& file, Block& block)
     removeConsecutiveWhiteSpaces(currentLine, temporalLine);
     parseMotifLine(temporalLine, block);
     std::string currentMotif = block.motifName;
-    while (currentMotif != HELIX && !file.eof())
-    {
-        getline(file, currentLine);
+    while (currentMotif != HELIX && getline(file, currentLine))
+    {        
         removeConsecutiveWhiteSpaces(currentLine, temporalLine);
         block.lines.push_back(temporalLine);
         if (temporalLine.find_first_of(":") != std::string::npos)
@@ -347,7 +351,7 @@ void UNAFold::DetFileParser::fillRules()
 
 void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* observer)
 {
-    std::ifstream fileToParse;
+    File fileToParse;
     fileToParse.open(file.c_str());
     if (!fileToParse)
     {
@@ -526,8 +530,6 @@ void UNAFold::DetFileParser::MultiRule::calcAttrib(const Block& block, IMotifObs
     motif.nameMotif = block.motifName;
     motif.stacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines 
 }
-
-static const size_t EXPECTED_DIFFERENCE = 1;
 
 void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {

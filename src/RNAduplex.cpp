@@ -115,7 +115,7 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const etilico::Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(outpTmpFile.c_str());
+    File fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();

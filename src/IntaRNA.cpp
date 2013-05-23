@@ -54,7 +54,7 @@ private:
          * @param file: file to parser
          * @return void
          */
-        void parse(std::ifstream& file);
+        void parse(File& file);
  
     private:
         static const unsigned int DELTA_G = 1;
@@ -71,7 +71,7 @@ private:
     };
 };
 
-void IntaRNA::BodyParser::parse(std::ifstream& file)
+void IntaRNA::BodyParser::parse(File& file)
 {
     std::string temp;
     ///advance to the required line
@@ -127,7 +127,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     const etilico::Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(tmpFileOutput.c_str());
+    File fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
     {
         throw RNABackendException("Output file not found.");

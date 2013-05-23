@@ -48,7 +48,7 @@ private:
     class BodyParser
     {        
     public:
-        void parse(std::ifstream& file);        
+        void parse(File& file);        
 
         Fe dG; ///free energy
     private:
@@ -69,7 +69,7 @@ private:
 
 };
 
-void RNAup::BodyParser::parse(std::ifstream& file)
+void RNAup::BodyParser::parse(File& file)
 {
     std::vector<std::string> aux;
     if (file >> aux)
@@ -117,7 +117,7 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     const etilico::Command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(outputTmpFile.c_str());
+    File fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();

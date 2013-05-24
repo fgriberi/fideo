@@ -36,6 +36,7 @@
 
 #include <stack>
 #include <etilico/etilico.h>
+#include "fideo/FideoStructureParser.h"
 #include "fideo/IFold.h"
 
 namespace fideo
@@ -56,21 +57,7 @@ private:
     */
     size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
 
-    /** @brief obtain structure
-    *
-    * @param str: to parse
-    * @param secStrucute: to fill with structure
-    * @return void
-    */
-    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
-
-    static const FileLineNo LINE_NO;
-    static const char OPEN_PAIR = '(';
-    static const char CLOSE_PAIR = ')';
-    static const char UNPAIR = '.';
 };
-
-const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
@@ -86,44 +73,6 @@ size_t RNAFold::readFreeEnergy(FileLine& line, size_t offset, Fe& energy) const
     catch (const mili::StringNotFound& e)
     {
         throw RNABackendException("Could not read free energy");
-    }
-}
-
-void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure)
-{
-    secStructure.set_sequence_size(str.length());
-    std::stack<biopp::SeqIndex> stackIndex;
-    for (size_t i = 0; i < str.length(); ++i)
-    {
-        biopp::SeqIndex open;
-        switch (str[i])
-        {
-            case UNPAIR:
-                secStructure.unpair(i);
-                break;
-            case OPEN_PAIR:
-                stackIndex.push(i);
-                break;
-            case CLOSE_PAIR:
-                if (!stackIndex.empty())
-                {
-                    open = stackIndex.top();
-                    secStructure.pair(open, i);
-                    stackIndex.pop();
-                }
-                else
-                {
-                    throw(InvalidStructureException("Unexpected closing pair"));
-                }
-                break;
-            default:
-                throw(InvalidStructureException("Unexpected symbol: " + secStructure.paired_with(i)));
-                break;
-        }
-    }
-    if (!stackIndex.empty())
-    {
-        throw(InvalidStructureException("Pairs pending to close"));
     }
 }
 
@@ -160,11 +109,11 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
      */
     FileLine aux;
-    helper::readLine(fileOutput, LINE_NO, aux);
+    helper::readLine(fileOutput, ViennaParser::LINE_NO, aux);
 
     std::string str;
     helper::readValue(aux, 0, seqRNAm.length(), str);
-    parseStructure(str, structureRNAm);
+    ViennaParser::parseStructure(str, structureRNAm);
 
     Fe energy;
     readFreeEnergy(aux, seqRNAm.length(), energy);

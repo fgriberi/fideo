@@ -45,5 +45,28 @@ namespace fideo
  */
 typedef double Fe;
 
+/**
+ * Distance between sequences
+ */
+typedef float Distance;
+
+/**
+ * Similitude between sequences or structures
+ */
+typedef float Similitude;
+
+typedef std::set<std::string> StringSequencesCt;
+
+/**
+ * Container of raw (string) RNA sequences
+ */
+typedef std::set<std::string> StringSequencesCt;
+
+/**
+ * Number of combination attemps.
+ */
+typedef unsigned int CombinationAttempts;
+
+
 }
 #endif  /* _RNA_BACKENDS_TYPES_H */

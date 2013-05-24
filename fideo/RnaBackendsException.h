@@ -72,6 +72,7 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, RNABackendExceptionRoot, "The .det 
 
 DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, RNABackendExceptionRoot, "Index out of range");
 
+DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Combinator Exception");
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */

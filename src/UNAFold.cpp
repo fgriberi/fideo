@@ -46,10 +46,10 @@ class UNAFold : public IFold
 {
 private:
 
-    /** @brief Delete all files generated 
+    /** @brief Delete all files generated
      *
      * @param nameFile: file name to delete
-     * @return void 
+     * @return void
      */
     void deleteAllFiles();
 
@@ -59,7 +59,7 @@ private:
     /** @brief Destructor of class
      *
      */
-    virtual ~UNAFold();    
+    virtual ~UNAFold();
 
     /** @brief Class that allows parsing the header of a file
     *
@@ -128,8 +128,8 @@ private:
 
     /** @brief To store the temporal file name generated
      *
-     */    
-    std::string temporalFileName;    
+     */
+    std::string temporalFileName;
 };
 
 UNAFold::~UNAFold()
@@ -205,7 +205,7 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     }
 }
 
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) 
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
@@ -253,7 +253,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
         fillStructure(bodyLine, structureRNAm);
     }
     structureRNAm.set_circular(isCircRNAm);
-    return headerLine.deltaG;    
+    return headerLine.deltaG;
 }
 
 //------------------------------------- DetFileParser --------------------------------------
@@ -290,7 +290,7 @@ void UNAFold::DetFileParser::buildBlock(File& file, Block& block)
     parseMotifLine(temporalLine, block);
     std::string currentMotif = block.motifName;
     while (currentMotif != HELIX && getline(file, currentLine))
-    {        
+    {
         removeConsecutiveWhiteSpaces(currentLine, temporalLine);
         block.lines.push_back(temporalLine);
         if (temporalLine.find_first_of(":") != std::string::npos)
@@ -528,7 +528,7 @@ void UNAFold::DetFileParser::MultiRule::calcAttrib(const Block& block, IMotifObs
     getSubstrInPos(currentLine, SS_MULTI, temporalValue);
     helper::convertFromString(temporalValue, motif.attribute);
     motif.nameMotif = block.motifName;
-    motif.stacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines 
+    motif.stacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines
 }
 
 void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
@@ -559,12 +559,12 @@ void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObs
 }
 
 //----------------------------------- Fold with observer --------------------------------------
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) 
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = fold(seqRNAm, isCircRNAm, structureRNAm);
     DetFileParser parser;
     const std::string detFile = temporalFileName + ".det";
     parser.parseDet(detFile, motifObserver);
-    return freeEnergy;   
+    return freeEnergy;
 }
 } // namespace fideo

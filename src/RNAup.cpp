@@ -46,9 +46,9 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class BodyParser
-    {        
+    {
     public:
-        void parse(File& file);        
+        void parse(File& file);
 
         Fe dG; ///free energy
     private:
@@ -64,7 +64,7 @@ private:
             ColPlusSymbol,
             ColdGu_l,
             NumberOfColumns
-        }; 
+        };
     };
 
 };
@@ -75,14 +75,14 @@ void RNAup::BodyParser::parse(File& file)
     if (file >> aux)
     {
         if (aux.size() != NumberOfColumns)
-        {   
+        {
             throw RNABackendException("Invalid output RNAup.");
         }
         const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-        helper::convertFromString(deltaG, dG);              
+        helper::convertFromString(deltaG, dG);
     }
     else
-    {              
+    {
         throw RNABackendException("Failured operation >>.");
     }
 }

@@ -35,7 +35,7 @@
  */
 
 #include <stack>
-#include <etilico/etilico.h> 
+#include <etilico/etilico.h>
 #include "fideo/IFold.h"
 
 namespace fideo
@@ -45,7 +45,7 @@ class RNAFold : public IFold
 {
 private:
 
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);  
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
 
     /** @brief Read free energy of line
@@ -62,7 +62,7 @@ private:
     * @param secStrucute: to fill with structure
     * @return void
     */
-    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);   
+    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
 
     static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';
@@ -127,12 +127,12 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
     }
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) 
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     return 0; //temporal
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)  
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
@@ -155,10 +155,10 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     const etilico::Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
     etilico::runCommand(cmd);
 
- 	/* output file look like this:
+    /* output file look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
-     */    
+     */
     FileLine aux;
     helper::readLine(fileOutput, LINE_NO, aux);
 
@@ -168,7 +168,7 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
 
     Fe energy;
     readFreeEnergy(aux, seqRNAm.length(), energy);
-    
+
     mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()) == 0);
     mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()) == 0);
 

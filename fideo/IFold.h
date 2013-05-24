@@ -56,7 +56,7 @@ typedef mili::FactoryRegistry<IFold, std::string> Folder;
 struct IFold
 {
     typedef mili::Factory<std::string, IFold> Factory;
-    
+
     /** @brief Fold an RNA sequence
      *
      * @param seqRNAm: the RNA sequence to fold.

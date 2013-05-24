@@ -42,16 +42,16 @@ class RNAcofold : public IHybridize
 private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-	///Class that allows parsing the body of a file
+    ///Class that allows parsing the body of a file
     class BodyParser
-    {     
-    public:      
-		/** @brief Parse the line and get the value dG
+    {
+    public:
+        /** @brief Parse the line and get the value dG
          *
          * @param line: line to parser
          * @return void
          */
-        void parse(std::string& line);      
+        void parse(std::string& line);
 
         Fe dG; ///free energy
 
@@ -76,7 +76,7 @@ void RNAcofold::BodyParser::parse(std::string& line)
         throw RNABackendException("Invalid output RNAcofold.");
     }
     const std::string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
-    helper::convertFromString(deltaG, dG);    
+    helper::convertFromString(deltaG, dG);
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");

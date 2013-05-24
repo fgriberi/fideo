@@ -65,7 +65,7 @@ protected:
     */
     static void getSubstrInPos(const std::string& lineInput, size_t pos, std::string& res);
 
-    /** @brief Get init position 
+    /** @brief Get init position
     *
     * @param line: line inut
     * @param motifName: specific motif name
@@ -77,7 +77,7 @@ protected:
     *
     * @param line: line input
     * @param motifName: specific motif name
-    * @return 
+    * @return
     */
     static size_t getEndPosOfNucleotid(const std::string line, const std::string motifName);
 

@@ -56,7 +56,7 @@ struct IHybridize
     typedef mili::Factory<std::string, IHybridize> Factory;
 
     /** @brief Hybridize an RNA sequence
-     * 
+     *
      * @param longerSeq: longer sequence the RNA sequence to Hybridize.
      * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
      * @param longerCirc: if the longerSeq it's circular.
@@ -69,12 +69,12 @@ struct IHybridize
      */
     virtual ~IHybridize() {}
 
-	 /** @brief Get availables backend
-     *
-     * Method that provide the available backends for hybridize service.
-     * @param slist: to fill with different backends
-     * @return void
-     */
+    /** @brief Get availables backend
+    *
+    * Method that provide the available backends for hybridize service.
+    * @param slist: to fill with different backends
+    * @return void
+    */
     static void getAvailableBackends(Backend& slist)
     {
         Factory::KeyIterator it(Hybridizer::getConstructibleObjectsKeys());
@@ -83,7 +83,7 @@ struct IHybridize
             slist.push_back(*it);
             it++;
         }
-    }    
+    }
 };
 
 } //namespace fideo

@@ -62,7 +62,7 @@ typedef std::list<std::string> Backend;
 
 namespace helper
 {
-	
+
 /** @brief Write a file with multiple lines.
  *
  * @param file: file path
@@ -72,7 +72,7 @@ namespace helper
 void write(const FilePath& file, FileLinesCt& lines);
 
 /** @brief Write a file with a single line.
- * 
+ *
  * @param file: file path
  * @param line: line to write
  * @return void
@@ -80,7 +80,7 @@ void write(const FilePath& file, FileLinesCt& lines);
 void write(const FilePath& file, FileLine& line);
 
 /** @brief Read a line from a file
- * 
+ *
  * @param file: file path
  * @param lineno: line number to read
  * @param line: where to write the read line

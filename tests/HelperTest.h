@@ -51,6 +51,6 @@ public:
     static bool isMyTmpFile(const std::string& fileTmpName);
     static bool checkDirTmp();
 };
-} //namespace fideo 
+} //namespace fideo
 
 #endif  /* _HELPER_TEST_H */

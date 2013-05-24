@@ -43,19 +43,19 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
-	///Class that allows parsing the body of a file
+    ///Class that allows parsing the body of a file
     class BodyParser
-    {    
+    {
     public:
         Fe dG; ///free energy to read the file
 
-		/** @brief Parse the file and get the value dG
+        /** @brief Parse the file and get the value dG
          *
          * @param file: file to parser
          * @return void
          */
         void parse(File& file);
- 
+
     private:
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
@@ -89,7 +89,7 @@ void IntaRNA::BodyParser::parse(File& file)
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);        
+        helper::convertFromString(deltaG, dG);
     }
 }
 
@@ -133,7 +133,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
         throw RNABackendException("Output file not found.");
     }
     BodyParser body;
-    body.parse(fileOutput);    
+    body.parse(fileOutput);
     mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()) == 0);
 
     return body.dG;

@@ -73,7 +73,7 @@ inline void readValue(const FileLine& line, const FileLine::size_type offset, co
 }
 
 /** @brief Read a value from a line file.
- * 
+ *
  * @param line: file line
  * @param t: where to write the value
  * @return void

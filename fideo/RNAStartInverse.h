@@ -48,7 +48,7 @@ class RNAStartInverse : public IFoldInverse
     static const char WILDCARD = 'N';
     std::string rstart;
     StringSequencesCt found;
-    const CombinationAttempts& combination_attempts;
+    const CombinationAttempts combination_attempts;
     SeqIndexesCombinator* const combinator;
     SeqIndexesCombination positions;
 
@@ -72,7 +72,7 @@ protected:
     virtual void execute(string&, Distance&, Similitude&) = 0;
 
 public:
-    RNAStartInverse(const biopp::SecStructure&, Similitude, Distance, const CombinationAttempts&);
+    RNAStartInverse(const biopp::SecStructure&, Similitude, Distance, CombinationAttempts);
 
     ~RNAStartInverse();
 };

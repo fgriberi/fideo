@@ -29,7 +29,7 @@
 namespace fideo
 {
 
-RNAStartInverse::RNAStartInverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, const CombinationAttempts& ca)
+RNAStartInverse::RNAStartInverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca)
     : combination_attempts(ca),
       combinator(new SeqIndexesCombinator(structure.size(), hd)),
       structure(structure),

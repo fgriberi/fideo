@@ -61,10 +61,10 @@ class RNAinverse : public RNAStartInverse
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
     size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
 
-    virtual void execute(string&, Distance&, Similitude&);
+    virtual void execute(std::string&, Distance&, Similitude&);
     virtual void query_start(IStartProvider*);
 public:
-    RNAinverse(const biopp::SecStructure&, Similitude, Distance, const CombinationAttempts&);
+    RNAinverse(const biopp::SecStructure&, Similitude, Distance, CombinationAttempts);
 };
 
 
@@ -74,7 +74,7 @@ const FileLineNo RNAinverse::LINE_NO = 0;
 const std::string RNAinverse::RNAinverse_PROG = "RNAinverse";
 
 
-RNAinverse::RNAinverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, const CombinationAttempts& ca) :
+RNAinverse::RNAinverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca) :
     RNAStartInverse(structure, sd, hd, ca)
 {}
 
@@ -85,7 +85,7 @@ void RNAinverse::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void RNAinverse::execute(string& seq, Distance& hd, Similitude& sd)
+void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
 {
     FileLinesCt lines;
     std::string structure_str;

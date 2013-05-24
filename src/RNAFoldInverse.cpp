@@ -71,7 +71,7 @@ public:
 const FilePath RNAinverse::IN = "inverse.in";
 const FilePath RNAinverse::OUT = "inverse.out";
 const FileLineNo RNAinverse::LINE_NO = 0;
-const std::string RNAinverse::RNAinverse_PROG = "";//TODO: ?
+const std::string RNAinverse::RNAinverse_PROG = "RNAinverse";
 
 
 RNAinverse::RNAinverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, const CombinationAttempts& ca) :

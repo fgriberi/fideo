@@ -302,7 +302,7 @@ void UNAFold::DetFileParser::buildBlock(File& file, Block& block)
 
 void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest)
 {
-    bool previousWhite;
+    bool previousWhite = false;
     std::string current = "";
     for (size_t i = 0; i < src.size(); ++i)
     {
@@ -349,6 +349,20 @@ void UNAFold::DetFileParser::fillRules()
     availableRules[BULGE_LOOP]    = new BulgeRule();
 }
 
+UNAFold::DetFileParser::~DetFileParser()
+{
+    freeRules();
+}
+
+void UNAFold::DetFileParser::freeRules()
+{
+    delete availableRules[EXTERNAL_LOOP];
+    delete availableRules[INTERIOR_LOOP];
+    delete availableRules[HAIRPIN_LOOP];
+    delete availableRules[MULTI_LOOP];
+    delete availableRules[BULGE_LOOP];
+}
+
 void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* observer)
 {
     File fileToParse;
@@ -368,7 +382,7 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
         parseBlock(currentBlock, motif);
         observer->processMotif(motif);
         currentBlock.lines.clear();
-    }
+    }    
 }
 
 //--------------------------------------------------- Rule ----------------------------------------------------

@@ -45,7 +45,7 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = Folder::new_class("RNAFold");
+    IFold* p = Fold::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
     Fe result = p->fold(seq, true, secStructure);

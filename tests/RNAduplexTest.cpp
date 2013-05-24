@@ -46,7 +46,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    IHybridize* p = Hybridizer::new_class("RNAduplex");
+    IHybridize* p = Hybridize::new_class("RNAduplex");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

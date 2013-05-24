@@ -45,7 +45,7 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = Hybridizer::new_class("RNAcofold");
+    IHybridize* p = Hybridize::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

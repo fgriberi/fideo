@@ -47,7 +47,7 @@ namespace fideo
 
 struct IHybridize;
 
-typedef mili::FactoryRegistry<IHybridize, std::string> Hybridizer;
+typedef mili::FactoryRegistry<IHybridize, std::string> Hybridize;
 
 ///Interface for sequence's hybridize services.
 struct IHybridize
@@ -77,7 +77,7 @@ struct IHybridize
     */
     static void getAvailableBackends(Backend& slist)
     {
-        Factory::KeyIterator it(Hybridizer::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Hybridize::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

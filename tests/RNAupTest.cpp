@@ -46,7 +46,7 @@ TEST(RNAupBackendTestSuite, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = Hybridizer::new_class("RNAup");
+    IHybridize* p = Hybridize::new_class("RNAup");
     EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

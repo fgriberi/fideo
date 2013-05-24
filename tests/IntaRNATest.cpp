@@ -47,7 +47,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    IHybridize* p = Hybridizer::new_class("IntaRNA");
+    IHybridize* p = Hybridize::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -71,7 +71,7 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     const biopp::NucSequence seq1(sequence1);
     const biopp::NucSequence seq2(sequence2);
 
-    IHybridize* p = Hybridizer::new_class("IntaRNA");
+    IHybridize* p = Hybridize::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);

@@ -77,13 +77,15 @@ public:
     */
     void parseDet(const FileName& file, IMotifObserver* observer);
 
+    ~DetFileParser();
+    
 private:
     class Rule;
     class ExternalRule;
     class InteriorRule;
     class HairpinRule;
     class MultiRule;
-    class BulgeRule;
+    class BulgeRule;   
 
     /** @brief Allows placing the file in the correct line
     *
@@ -137,6 +139,8 @@ private:
     * @return void
     */
     void fillRules();
+
+    void freeRules();
 
     /** @brief To store the available rules
     *

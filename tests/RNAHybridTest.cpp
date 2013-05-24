@@ -53,7 +53,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = Hybridizer::new_class("RNAHybrid");
+    IHybridize* p = Hybridize::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
@@ -90,7 +90,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = Hybridizer::new_class("RNAHybrid");
+    IHybridize* p = Hybridize::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);

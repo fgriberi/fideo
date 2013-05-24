@@ -48,7 +48,7 @@ namespace fideo
 
 struct IFold;
 
-typedef mili::FactoryRegistry<IFold, std::string> Folder;
+typedef mili::FactoryRegistry<IFold, std::string> Fold;
 
 /** @brief Interface for sequence's folding services.
 *
@@ -89,7 +89,7 @@ struct IFold
      */
     static void getAvailableBackends(Backend& slist)
     {
-        Factory::KeyIterator it(Folder::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Fold::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

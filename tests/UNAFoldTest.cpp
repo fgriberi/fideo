@@ -45,7 +45,7 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = Folder::new_class("UNAFold");
+    IFold* p = Fold::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
     EXPECT_NO_THROW(p->fold(seq, true, secStructure));

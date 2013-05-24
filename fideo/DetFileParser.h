@@ -92,7 +92,7 @@ private:
     * @param file: file input
     * @return void
     */
-    void goToBegin(File& file);
+    void goToBegin(File& file) const;
 
     /** @brief Prepares a block to parse
     *
@@ -100,7 +100,7 @@ private:
     * @param block: to fill with data of file
     * @return void
     */
-    void buildBlock(std::ifstream& file, Block& block);
+    void buildBlock(std::ifstream& file, Block& block) const;
 
     /** @brief Remove whitespace repeated
     *
@@ -108,7 +108,7 @@ private:
     * @param dest: strig without whitespace repeated
     * @return void
     */
-    void removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest);
+    void removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest) const;
 
     /** @brief Stored in block the motif name and the rest of the data
     *
@@ -116,7 +116,7 @@ private:
     * @param block: block to fill
     * @return void
     */
-    void parseMotifLine(const std::string& line, Block& block);
+    void parseMotifLine(const std::string& line, Block& block) const;
 
     /** @brief Parse a stack line.
     *
@@ -124,7 +124,7 @@ private:
     * @param nameToFill: to fill with stack
     * @return void
     */
-    void parseStackLine(const std::string& line, std::string& nameToFill);
+    void parseStackLine(const std::string& line, std::string& nameToFill) const;
 
     /** @brief Parse the current block and fill the motif
     *

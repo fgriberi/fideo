@@ -274,14 +274,14 @@ static const std::string BULGE_LOOP    = "Bulge loop";
 static const std::string STACK         = "Stack";
 
 
-void UNAFold::DetFileParser::goToBegin(File& file)
+void UNAFold::DetFileParser::goToBegin(File& file) const
 {
     std::string temporalLine;
     getline(file, temporalLine); //structure data line
     getline(file, temporalLine); //obsolete line
 }
 
-void UNAFold::DetFileParser::buildBlock(File& file, Block& block)
+void UNAFold::DetFileParser::buildBlock(File& file, Block& block) const
 {
     std::string currentLine;
     getline(file, currentLine);
@@ -300,7 +300,7 @@ void UNAFold::DetFileParser::buildBlock(File& file, Block& block)
     }
 }
 
-void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest)
+void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest) const
 {
     bool previousWhite = false;
     std::string current = "";
@@ -320,7 +320,7 @@ void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src
     dest = current;
 }
 
-void UNAFold::DetFileParser::parseMotifLine(const std::string& line, Block& block)
+void UNAFold::DetFileParser::parseMotifLine(const std::string& line, Block& block) const
 {
     const size_t to = mili::ensure_found(line.find_first_of(":"));
     block.motifName = line.substr(0, to);
@@ -328,7 +328,7 @@ void UNAFold::DetFileParser::parseMotifLine(const std::string& line, Block& bloc
     block.lines.push_back(data);
 }
 
-void UNAFold::DetFileParser::parseStackLine(const std::string& line, std::string& nameToFill)
+void UNAFold::DetFileParser::parseStackLine(const std::string& line, std::string& nameToFill) const
 {
     const size_t to = mili::ensure_found(line.find_first_of(":"));
     nameToFill = line.substr(0, to);
@@ -340,7 +340,7 @@ void UNAFold::DetFileParser::parseBlock(const Block& block, IMotifObserver::Moti
     rule->calcAttrib(block, motif);
 }
 
-void UNAFold::DetFileParser::fillRules()
+void UNAFold::DetFileParser::fillRules() 
 {
     availableRules[EXTERNAL_LOOP] = new ExternalRule();
     availableRules[INTERIOR_LOOP] = new InteriorRule();

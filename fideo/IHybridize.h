@@ -1,17 +1,17 @@
 /*
- * @file   IHybridize.h
- * @brief  IHybridize provides the interface to hybridize service.
+ * @file     IHybridize.h
+ * @brief    IHybridize provides the interface to hybridize service.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing struct IHybridize.
+ * Contents: Header file for fideo providing struct IHybridize.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 26, 2012, 7:37 PM
  *
@@ -45,11 +45,16 @@
 namespace fideo
 {
 
+/** @brief Represent a factory registry type
+ *
+ */
 struct IHybridize;
 
 typedef mili::FactoryRegistry<IHybridize, std::string> Hybridize;
 
-///Interface for sequence's hybridize services.
+/** @brief Interface for sequence's hybridize services.
+ *
+ */
 struct IHybridize
 {
 

@@ -69,7 +69,7 @@ class UNAFold::DetFileParser
 {
 public:
 
-    /** @brief Parse a det file
+    /** @brief Parse a '.det' file
     *
     * @param file: file name to parse
     * @param observer: specific implementacion
@@ -77,15 +77,20 @@ public:
     */
     void parseDet(const FileName& file, IMotifObserver* observer);
 
+    /** @brief Destructor of class
+    *
+    */
     ~DetFileParser();
-    
+
 private:
+
+    ///Predefinition of classes
     class Rule;
     class ExternalRule;
     class InteriorRule;
     class HairpinRule;
     class MultiRule;
-    class BulgeRule;   
+    class BulgeRule;
 
     /** @brief Allows placing the file in the correct line
     *
@@ -140,6 +145,10 @@ private:
     */
     void fillRules();
 
+    /** @brief Delete the available rules
+    *
+    * @return void
+    */
     void freeRules();
 
     /** @brief To store the available rules

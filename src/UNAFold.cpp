@@ -1,14 +1,14 @@
 /*
- * @file   UNAFold.cpp
- * @brief  UNAFold is the implementation of IFold interface. It's a specific backend to folding.
+ * @file     UNAFold.cpp
+ * @brief    UNAFold is an implementation of IFold interface. It's a specific backend to folding.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend UNAFold implementation.
+ * Contents: Source file for fideo providing backend UNAFold implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 10, 2010, 4:26 PM
  *
@@ -41,7 +41,9 @@ namespace fideo
 
 using namespace mili;
 
-//UNAFold package
+/** @brief UNAFold is an implementation of IFold interface that use UNAFold package
+ *
+ */
 class UNAFold : public IFold
 {
 private:
@@ -76,6 +78,9 @@ private:
 
     private:
 
+        /** @brief Represents the header columns of the file to parse
+         *
+         */
         enum Columns
         {
             ColNumberOfBases,
@@ -102,6 +107,9 @@ private:
 
     private:
 
+        /** @brief Represents the body columns of the file to parse
+         *
+         */
         enum Columns
         {
             ColNucleotideNumber,
@@ -116,6 +124,9 @@ private:
         };
     };
 
+    /** @brief Class that allows parse to '.det' file
+     *
+     */
     class DetFileParser;
 
     /** @brief fill structure
@@ -340,7 +351,7 @@ void UNAFold::DetFileParser::parseBlock(const Block& block, IMotifObserver::Moti
     rule->calcAttrib(block, motif);
 }
 
-void UNAFold::DetFileParser::fillRules() 
+void UNAFold::DetFileParser::fillRules()
 {
     availableRules[EXTERNAL_LOOP] = new ExternalRule();
     availableRules[INTERIOR_LOOP] = new InteriorRule();
@@ -382,7 +393,7 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
         parseBlock(currentBlock, motif);
         observer->processMotif(motif);
         currentBlock.lines.clear();
-    }    
+    }
 }
 
 //--------------------------------------------------- Rule ----------------------------------------------------

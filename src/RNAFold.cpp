@@ -1,17 +1,17 @@
 /*
- * @file   RNAFold.cpp
- * @brief  RNAFold is the implementation of IFold interface. It's a specific backend to folding.
+ * @file     RNAFold.cpp
+ * @brief    RNAFold is an implementation of IFold interface. It's a specific backend to folding.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAFold implementation.
+ * Contents: Source file for fideo providing backend RNAFold implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 10, 2010, 2012 4:26 PM
  *
@@ -40,7 +40,10 @@
 
 namespace fideo
 {
-//Vienna package
+
+/** @brief RNAFold is an implementation of IFold interface that use Vienna package
+ *
+ */
 class RNAFold : public IFold
 {
 private:
@@ -175,4 +178,3 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return energy;
 }
 } //namespace fideo
-

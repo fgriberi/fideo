@@ -1,17 +1,17 @@
 /*
- * @file   FideoHelper.h
- * @brief  This header defines necessary methods in fideo
+ * @file     FideoHelper.h
+ * @brief    This header defines necessary methods in fideo
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing necessary methods
+ * Contents: Header file for fideo providing necessary methods
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -45,8 +45,8 @@
 namespace fideo
 {
 
-/**
- * Filename path
+/** @brief necessary typedef
+ *
  */
 typedef std::string FilePath;
 

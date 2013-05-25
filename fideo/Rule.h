@@ -41,10 +41,10 @@ class UNAFold::DetFileParser::Rule
 {
 public:
 
-    /** @brief permite calcular los atributos de un motif
+    /** @brief To calculate the attributes of a motif
     *
-    * @param block:
-    * @param motif:
+    * @param block: input block
+    * @param motif: to fill with attributes of block
     * @return void
     */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const = 0;
@@ -61,23 +61,23 @@ protected:
     * @param lineInput: line input
     * @param pos: specific position
     * @param res: substring output
-    * @return init position of nucleotid
+    * @return void
     */
     static void getSubstrInPos(const std::string& lineInput, size_t pos, std::string& res);
 
     /** @brief Get init position
     *
-    * @param line: line inut
+    * @param line: line input
     * @param motifName: specific motif name
-    * @return end position of nucleotid
+    * @return init position of nucleotid
     */
     static size_t getInitPosOfNucleotid(const std::string line, const std::string motifName);
 
-    /** @brief Get
+    /** @brief Get end position
     *
     * @param line: line input
     * @param motifName: specific motif name
-    * @return
+    * @return end position of nucleotid
     */
     static size_t getEndPosOfNucleotid(const std::string line, const std::string motifName);
 
@@ -92,37 +92,73 @@ protected:
 
 static const size_t EXPECTED_DIFFERENCE = 1;
 
+/** @brief External rule
+*
+*/
 class UNAFold::DetFileParser::ExternalRule : public Rule
 {
 private:
+
+    /** @brief Calculate the amount of ss bases on the block
+    *
+    */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~ExternalRule() {}
 };
 
+/** @brief Interior rule
+*
+*/
 class UNAFold::DetFileParser::InteriorRule : public Rule
 {
 private:
+
+    /** @brief Calculate the amount of nucleotide on the block and determines the type
+    *          of interior loop (symmetric or asymmetric)
+    *
+    */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~InteriorRule() {}
 };
 
+/** @brief Hairpin rule
+*
+*/
 class UNAFold::DetFileParser::HairpinRule : public Rule
 {
 private:
+
+    /** @brief Calculate the amout of nucleotide on the hairpin loop
+    *
+    */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~HairpinRule() {}
 };
 
+/** @brief Multi rule
+*
+*/
 class UNAFold::DetFileParser::MultiRule : public Rule
 {
 private:
+
+    /** @brief Calculate the amount of ss bases on the block
+    *
+    */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~MultiRule() {}
 };
 
+/** @brief Bulge rule
+*
+*/
 class UNAFold::DetFileParser::BulgeRule : public Rule
 {
 private:
+
+    /** @brief Calculate the amount of nucleotide on the bulge loop
+    *
+    */
     virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~BulgeRule() {}
 };

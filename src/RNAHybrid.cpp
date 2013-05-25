@@ -1,14 +1,14 @@
 /*
- * @file   RANHybrid.cpp
- * @brief  RANHybrid is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     RNAHybrid.cpp
+ * @brief    RNAHybrid is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RANHybrid implementation.
+ * Contents: Source file for fideo providing backend RANHybrid implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 02, 2012, 19:35 PM
  *
@@ -36,16 +36,24 @@
 
 namespace fideo
 {
+
+/** @brief RNAHybrid is an implementation of IHybridize interface
+ *
+ */
 class RNAHybrid : public IHybridize
 {
 private:
+
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 6;
 
-    ///Class that allows parsing the body of a file
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
     class BodyParser
     {
     public:
+
         /** @brief Parse the file and get the value dG
          *
          * @param file: file to parser

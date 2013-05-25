@@ -1,17 +1,17 @@
 /*
- * @file   rna_backends_types.h
- * @brief  This file contains all the definitions needed in fideo
+ * @file    rna_backends_types.h
+ * @brief   This file contains all the definitions needed in fideo
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file providing fideo definitions.
+ * Contents: Header file providing fideo definitions.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 27, 2010, 2012 6:42 PM
  *

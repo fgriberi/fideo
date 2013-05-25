@@ -1,17 +1,17 @@
 /*
- * @file   IFold.h
- * @brief  IFold provides the interface to folding service.
+ * @file     IFold.h
+ * @brief    IFold provides the interface to folding service.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing struct IFold.
+ * Contents: Header file for fideo providing struct IFold.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -48,11 +48,14 @@ namespace fideo
 
 struct IFold;
 
+/** @brief Represent a factory registry type
+ *
+ */
 typedef mili::FactoryRegistry<IFold, std::string> Fold;
 
 /** @brief Interface for sequence's folding services.
-*
-*/
+ *
+ */
 struct IFold
 {
     typedef mili::Factory<std::string, IFold> Factory;

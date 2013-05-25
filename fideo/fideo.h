@@ -1,20 +1,14 @@
 /**
- * @file   fideo.h
- * @brief  Defines the interface of the fideo
+ * @file     fideo.h
+ * @brief    Defines the interface of the fideo
  *
- * @author Favio Bettiol
- * @email  favio.bettiol AT gmail.com
- *
- * @author Diego Diaz
- * @email  diazdiego86 AT gmail.com
- *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
  * Contents: Header file for fideo.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date August 2010
  *

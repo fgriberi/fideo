@@ -1,14 +1,14 @@
 /*
- * @file   RNAcofold.cpp
- * @brief  RNAcofold is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     RNAcofold.cpp
+ * @brief    RNAcofold is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAcofold implementation.
+ * Contents: Source file for fideo providing backend RNAcofold implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 28, 2012, 10:32 AM
  *
@@ -36,16 +36,23 @@
 
 namespace fideo
 {
-//Vienna package
+
+/** @brief RNAcofold is an implementation of IHybridize interface that use Vienna package
+ *
+ */
 class RNAcofold : public IHybridize
 {
 private:
+
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-    ///Class that allows parsing the body of a file
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
     class BodyParser
     {
     public:
+
         /** @brief Parse the line and get the value dG
          *
          * @param line: line to parser

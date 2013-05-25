@@ -1,14 +1,14 @@
 /*
- * @file   IntaRNA.cpp
- * @brief  IntaRNA is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     IntaRNA.cpp
+ * @brief    IntaRNA is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend IntaRNA implementation.
+ * Contents: Source file for fideo providing backend IntaRNA implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 02, 2012, 19:35 PM
  *
@@ -37,13 +37,20 @@
 
 namespace fideo
 {
+
+/** @brief IntaRNA is an implementation of IHybridize interface
+*
+*/
 class IntaRNA : public IHybridize
 {
 private:
+
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
-    ///Class that allows parsing the body of a file
+    /** @brief Class that allows parsing the body of a file
+    *
+    */
     class BodyParser
     {
     public:
@@ -57,10 +64,14 @@ private:
         void parse(File& file);
 
     private:
+
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
         static const unsigned int OBSOLETE_dG = 1000; ///no significant hybridization found
 
+        /** @brief Represents the columns of the file to parse
+         *
+         */
         enum Columns
         {
             ColEnergy,
@@ -74,7 +85,7 @@ private:
 void IntaRNA::BodyParser::parse(File& file)
 {
     std::string temp;
-    ///advance to the required line
+    //advance to the required line
     for (size_t i = 0; i < OBSOLETE_LINES; ++i)
     {
         getline(file, temp);

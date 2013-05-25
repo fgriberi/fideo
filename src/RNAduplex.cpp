@@ -1,14 +1,14 @@
 /*
- * @file   RNAduplex.cpp
- * @brief  RNAduplex is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     RNAduplex.cpp
+ * @brief    RNAduplex is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAduplex implementation.
+ * Contents: Source file for fideo providing backend RNAduplex implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 26, 2012, 7:48 PM
  *
@@ -39,16 +39,22 @@ namespace fideo
 
 using namespace mili;
 
-//Vienna package
+/** @brief RNAduplex is an implementation of IHybridize interface that use Vienna package
+ *
+ */
 class RNAduplex : public IHybridize
 {
 private:
+
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
-    ///Class that allows parsing the body of a file
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
     class BodyParser
     {
     public:
+
         /** @brief Parse the line and get the value dG
          *
          * @param line: line to parser
@@ -59,6 +65,10 @@ private:
         Fe dG; /// free energy
 
     private:
+
+        /** @brief Represents the columns of the file to parse
+         *
+         */
         enum Columns
         {
             ColRNAResults,

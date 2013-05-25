@@ -1,17 +1,17 @@
 /*
- * @file   rna_backends_exceptions.h
- * @brief  This header defines all fideo exceptions
+ * @file     rna_backends_exceptions.h
+ * @brief    This header defines all fideo exceptions
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing system exceptions definitions.
+ * Contents: Header file for fideo providing system exceptions definitions.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 27, 2010, 6:42 PM
  *
@@ -75,5 +75,3 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, RNABackendExceptionRoot, "Index 
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
-
-

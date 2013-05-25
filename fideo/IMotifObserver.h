@@ -52,14 +52,14 @@ struct IMotifObserver
         size_t stacks;
     };
 
-    /** @brief
+    /** @brief Processes the motif
      *
-     * @param mot: represent motif
+     * @param mot: current motif
      * @return void
      */
     virtual void processMotif(Motif& motif) = 0;
 
-    /** @brief Class destructor
+    /** @brief Destructor of class
      *
      */
     virtual ~IMotifObserver() {}

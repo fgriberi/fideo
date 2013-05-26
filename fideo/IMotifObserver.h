@@ -57,7 +57,7 @@ struct IMotifObserver
      * @param mot: current motif
      * @return void
      */
-    virtual void processMotif(Motif& motif) = 0;
+    virtual void processMotif(const Motif& motif) = 0;
 
     /** @brief Destructor of class
      *

@@ -37,7 +37,7 @@
 namespace fideo
 {
 
-using namespace mili;
+using mili::operator>>;
 
 /** @brief RNAup is an implementation of IHybridize interface that use Vienna package
  *

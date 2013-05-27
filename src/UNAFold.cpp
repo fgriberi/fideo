@@ -39,7 +39,7 @@
 namespace fideo
 {
 
-using namespace mili;
+using mili::operator>>;
 
 /** @brief UNAFold is an implementation of IFold interface that use UNAFold package
  *

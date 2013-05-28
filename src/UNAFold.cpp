@@ -513,12 +513,20 @@ void UNAFold::DetFileParser::InteriorRule::calcAttrib(const Block& block, IMotif
     if (firstTerm != secondTerm)
     {
         motif.nameMotif = ASYMMETRIC;
+        if (firstTerm >= secondTerm)
+        {
+            motif.attribute = firstTerm; 
+        }
+        else
+        {
+            motif.attribute = secondTerm;    
+        }        
     }
     else
     {
         motif.nameMotif = SYMMETRIC;
+        motif.attribute = firstTerm;        
     }
-    motif.attribute = firstTerm + secondTerm;
     motif.amountStacks = block.lines.size() - 2;
 }
 

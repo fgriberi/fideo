@@ -202,7 +202,7 @@ TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
     interiorLoopBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 102)-T( 110)");
     interiorLoopBlock.lines.push_back("Helix: ddG = -3.30 3 base pairs.");
 
-    const size_t attr = 9;
+    const size_t attr = 5;
     const size_t stacks = 2;
 
     UNAFold::DetFileParser::InteriorRule interiorRule;

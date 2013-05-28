@@ -77,6 +77,7 @@ public:
     ~RNAStartInverse();
 };
 
+
 }//namespace fideo
 
 #endif  /* _RNASTARTINVERSE_H */

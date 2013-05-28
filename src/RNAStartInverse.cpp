@@ -22,7 +22,7 @@
  * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
+#include <string>
 #include <mili/mili.h>
 #include "fideo/RNAStartInverse.h"
 

@@ -46,27 +46,10 @@
 #include <etilico/etilico.h>
 #include "fideo/FideoStructureParser.h"
 #include "fideo/FideoHelper.h"
-#include "fideo/RNAStartInverse.h"
+#include "fideo/RNAFoldInverse.h"
 
 namespace fideo
 {
-
-class RNAinverse : public RNAStartInverse
-{
-    static const FilePath IN;
-    static const FilePath OUT;
-    static const FileLineNo LINE_NO;
-    static const std::string RNAinverse_PROG;
-
-    size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
-    size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
-
-    virtual void execute(std::string&, Distance&, Similitude&);
-    virtual void query_start(IStartProvider*);
-public:
-    RNAinverse(const biopp::SecStructure&, Similitude, Distance, CombinationAttempts);
-};
-
 
 const FilePath RNAinverse::IN = "inverse.in";
 const FilePath RNAinverse::OUT = "inverse.out";
@@ -134,6 +117,10 @@ size_t RNAinverse::read_hamming_distance(FileLine& line, size_t offset, Distance
     {
         throw RNABackendException("Could not read hamming distance");
     }
+    catch (const fideo::NotReadValueUsingOffsetException& e)
+    {
+        throw RNABackendException("Could not read hamming distance");
+    }
 }
 
 size_t RNAinverse::read_structure_distance(FileLine& line, size_t offset, Similitude& sd) const
@@ -146,6 +133,10 @@ size_t RNAinverse::read_structure_distance(FileLine& line, size_t offset, Simili
         return to;
     }
     catch (const mili::StringNotFound& e)
+    {
+        throw RNABackendException("Could not read structure distance");
+    }
+    catch (const fideo::NotReadValueUsingOffsetException& e)
     {
         throw RNABackendException("Could not read structure distance");
     }

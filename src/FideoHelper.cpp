@@ -31,6 +31,10 @@
  *
  */
 
+#include <fstream>
+#include <cerrno>
+#include <unistd.h>
+
 #include "fideo/FideoHelper.h"
 
 /// Temporal functions

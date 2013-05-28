@@ -493,7 +493,7 @@ void UNAFold::DetFileParser::ExternalRule::calcAttrib(const Block& block, IMotif
     getSubstrInPos(currentLine, SS_EXTERNAL, temporalValue);
     motif.nameMotif = block.motifName;
     helper::convertFromString(temporalValue, motif.attribute);
-    motif.stacks = block.lines.size() - 2; //one by concreteMotif and one by helix line
+    motif.amountStacks = block.lines.size() - 2; //one by concreteMotif and one by helix line
 }
 
 void UNAFold::DetFileParser::InteriorRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
@@ -519,7 +519,7 @@ void UNAFold::DetFileParser::InteriorRule::calcAttrib(const Block& block, IMotif
         motif.nameMotif = SYMMETRIC;
     }
     motif.attribute = firstTerm + secondTerm;
-    motif.stacks = block.lines.size() - 2;
+    motif.amountStacks = block.lines.size() - 2;
 }
 
 void UNAFold::DetFileParser::HairpinRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
@@ -534,11 +534,11 @@ void UNAFold::DetFileParser::HairpinRule::calcAttrib(const Block& block, IMotifO
     motif.attribute = std::abs(endNucleotid - initNucleotid);
     if (block.lines.size() == 1)
     {
-        motif.stacks = 0;
+        motif.amountStacks = 0;
     }
     else
     {
-        motif.stacks = block.lines.size() - 2;
+        motif.amountStacks = block.lines.size() - 2;
     }
 }
 
@@ -553,7 +553,7 @@ void UNAFold::DetFileParser::MultiRule::calcAttrib(const Block& block, IMotifObs
     getSubstrInPos(currentLine, SS_MULTI, temporalValue);
     helper::convertFromString(temporalValue, motif.attribute);
     motif.nameMotif = block.motifName;
-    motif.stacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines
+    motif.amountStacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines
 }
 
 void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
@@ -580,7 +580,7 @@ void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObs
         motif.attribute = initDif;
     }
     motif.nameMotif = BULGE_LOOP;
-    motif.stacks = block.lines.size() - 2;
+    motif.amountStacks = block.lines.size() - 2;
 }
 
 //----------------------------------- Fold with observer --------------------------------------

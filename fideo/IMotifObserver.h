@@ -49,7 +49,7 @@ struct IMotifObserver
     {
         std::string nameMotif;
         size_t attribute;
-        size_t stacks;
+        size_t amountStacks;
     };
 
     /** @brief Processes the motif

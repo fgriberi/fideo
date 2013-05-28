@@ -178,7 +178,7 @@ TEST(DetFileParserTestSuite, ExternalRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, EXTERNAL_LOOP);
     EXPECT_EQ(motif.attribute, attr);
-    EXPECT_EQ(motif.stacks, stacks);
+    EXPECT_EQ(motif.amountStacks, stacks);
 
     // build incorrect block
     Block invalidBlock;
@@ -211,7 +211,7 @@ TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, ASYMMETRIC);
     EXPECT_EQ(motif.attribute, attr);
-    EXPECT_EQ(motif.stacks, stacks);
+    EXPECT_EQ(motif.amountStacks, stacks);
 
     // build incorrect block
     Block invalidBlock;
@@ -245,7 +245,7 @@ TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, attr);
-    EXPECT_EQ(motif.stacks, stacks);
+    EXPECT_EQ(motif.amountStacks, stacks);
 
     // build other block
     Block withoutStackBlock;
@@ -259,7 +259,7 @@ TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, numAttrib);
-    EXPECT_EQ(motif.stacks, amountStacks);
+    EXPECT_EQ(motif.amountStacks, amountStacks);
 }
 
 TEST(DetFileParserTestSuite, MultiLoopRuleCalcAttribTest)
@@ -286,7 +286,7 @@ TEST(DetFileParserTestSuite, MultiLoopRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, MULTI_LOOP);
     EXPECT_EQ(motif.attribute, attr);
-    EXPECT_EQ(motif.stacks, stacks);
+    EXPECT_EQ(motif.amountStacks, stacks);
 }
 
 TEST(DetFileParserTestSuite, BulgeRuleCalcAttribTest)
@@ -310,7 +310,7 @@ TEST(DetFileParserTestSuite, BulgeRuleCalcAttribTest)
 
     EXPECT_EQ(motif.nameMotif, BULGE_LOOP);
     EXPECT_EQ(motif.attribute, attr);
-    EXPECT_EQ(motif.stacks, stacks);
+    EXPECT_EQ(motif.amountStacks, stacks);
 }
 
 static const std::string DET_FILE_PATH = "/projects/fideo/tests/fileToParse.det";
@@ -370,21 +370,21 @@ TEST(DetFileParserTestSuite, builFirstBlockTest)
 //     parser.parseBlock(block, motif);
 //     EXPECT_EQ(motif.nameMotif, block.motifName);
 //     EXPECT_EQ(motif.attribute, 16);
-//     EXPECT_EQ(motif.stacks, 3);
+//     EXPECT_EQ(motif.amountStacks, 3);
 //     block.lines.clear();
 
 //     parser.buildBlock(fileToParse, block);
 //     parser.parseBlock(block, motif);
 //     EXPECT_EQ(motif.nameMotif, block.motifName);
 //     EXPECT_EQ(motif.attribute, 17);
-//     EXPECT_EQ(motif.stacks, 4);
+//     EXPECT_EQ(motif.amountStacks, 4);
 //     block.lines.clear();
 
 //     parser.buildBlock(fileToParse, block);
 //     parser.parseBlock(block, motif);
 //     EXPECT_EQ(motif.nameMotif, block.motifName);
 //     EXPECT_EQ(motif.attribute, 3);
-//     EXPECT_EQ(motif.stacks, 2);
+//     EXPECT_EQ(motif.amountStacks, 2);
 
 //     Block expectedBlock;
 //     expectedBlock.motifName = "Multi-loop";

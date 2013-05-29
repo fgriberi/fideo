@@ -56,7 +56,7 @@ public:
 
 TEST_F(INFORNATest, FoldInverse)
 {
-    IFoldInverse* inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -80,7 +80,7 @@ TEST_F(INFORNATest, FoldInverse)
 
 TEST_F(INFORNATest, BadStart1)
 {
-    IFoldInverse* inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -95,7 +95,7 @@ TEST_F(INFORNATest, BadStart1)
 
 TEST_F(INFORNATest, BadStart2)
 {
-    IFoldInverse* inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -110,7 +110,7 @@ TEST_F(INFORNATest, BadStart2)
 
 TEST_F(INFORNATest, BadStart3)
 {
-    IFoldInverse* inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))

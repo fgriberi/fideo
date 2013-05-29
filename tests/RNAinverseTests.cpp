@@ -50,7 +50,7 @@ public:
 
 TEST_F(RNAinverseTest, FoldInverse)
 {
-    fideo::IFoldInverse* inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -60,7 +60,7 @@ TEST_F(RNAinverseTest, FoldInverse)
 
     inverse->query_start(&provider);
 
-    biopp::NucSequence expected("GTAGCTTTATGCCGC");
+    const biopp::NucSequence expected("GTAGCTTTATGCCGC");
 
     biopp::NucSequence seq;
     inverse->fold_inverse(seq);
@@ -74,7 +74,7 @@ TEST_F(RNAinverseTest, FoldInverse)
 
 TEST_F(RNAinverseTest, BadStart1)
 {
-    fideo::IFoldInverse* inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -89,7 +89,7 @@ TEST_F(RNAinverseTest, BadStart1)
 
 TEST_F(RNAinverseTest, BadStart2)
 {
-    fideo::IFoldInverse* inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -104,7 +104,7 @@ TEST_F(RNAinverseTest, BadStart2)
 
 TEST_F(RNAinverseTest, BadStart3)
 {
-    fideo::IFoldInverse* inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))

@@ -56,7 +56,7 @@ void INFORNA::query_start(IStartProvider* provider)
 void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
 {
     std::stringstream ss;
-    int repeat = max_structure_distance == 0 ? -1 : 1;
+    const int repeat = max_structure_distance == 0 ? -1 : 1;
     std::string structure_str;
     ViennaParser::toString(structure, structure_str);
     ss << INFORNA_PROG << " '" << structure_str << "'"

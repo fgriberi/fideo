@@ -40,8 +40,6 @@ class IStartProvider;
  */
 struct IFoldInverse
 {
-    typedef mili::Factory<std::string, IFoldInverse> Factory;
-
     /**
      * Make the inverse folding
      * @param sequence the NucSequence to write to.

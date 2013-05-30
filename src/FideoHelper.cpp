@@ -33,7 +33,9 @@
 
 #include "fideo/FideoHelper.h"
 
-/// Temporal functions
+/** @brief Temporal functions
+*
+*/
 int linkFictitious()
 {
     return 1;

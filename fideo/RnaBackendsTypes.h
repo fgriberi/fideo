@@ -37,6 +37,11 @@
 #ifndef _RNA_BACKENDS_TYPES_H
 #define _RNA_BACKENDS_TYPES_H
 
+#include <string>
+#include <set>
+
+
+
 namespace fideo
 {
 

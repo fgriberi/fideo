@@ -102,12 +102,14 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string fileTmpTarget;
-    etilico::createTemporaryFilename(fileTmpTarget);
+    etilico::createTemporaryFile(fileTmpTarget, path, prefix);
     std::string fileTmpQuery;
-    etilico::createTemporaryFilename(fileTmpQuery);
+    etilico::createTemporaryFile(fileTmpQuery, path, prefix);
     std::string fileTmpOutput;
-    etilico::createTemporaryFilename(fileTmpOutput);
+    etilico::createTemporaryFile(fileTmpOutput, path, prefix);
 
     helper::write(fileTmpTarget, targetSequence);
     helper::write(fileTmpQuery, querySequence);

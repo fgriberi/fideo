@@ -152,12 +152,12 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
-
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string fileInput;
-    etilico::createTemporaryFilename(fileInput);
+    etilico::createTemporaryFile(fileInput, path, prefix);
     std::string fileOutput;
-    etilico::createTemporaryFilename(fileOutput);
-
+    etilico::createTemporaryFile(fileOutput, path, prefix);
     helper::write(fileInput, sseq);
     std::stringstream ss;
     ss << "RNAfold" << " -noPS ";

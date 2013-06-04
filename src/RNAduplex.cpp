@@ -105,10 +105,12 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
-    etilico::createTemporaryFilename(inputTmpFile);
+    etilico::createTemporaryFile(inputTmpFile, path, prefix);
     std::string outpTmpFile;
-    etilico::createTemporaryFilename(outpTmpFile);
+    etilico::createTemporaryFile(outpTmpFile, path, prefix);
 
     ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());

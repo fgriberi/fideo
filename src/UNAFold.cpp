@@ -221,8 +221,10 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     structureRNAm.clear();
     FileLine sseq = seqRNAm.getString();
 
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string temporalFile;
-    etilico::createTemporaryFilename(temporalFile);
+    etilico::createTemporaryFile(temporalFile, path, prefix);
     temporalFileName = temporalFile;
 
     helper::write(temporalFile, sseq);

@@ -40,8 +40,6 @@
 #include <string>
 #include <set>
 
-
-
 namespace fideo
 {
 

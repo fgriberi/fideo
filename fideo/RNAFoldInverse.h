@@ -36,8 +36,7 @@ class RNAinverse : public RNAStartInverse
     static const FilePath IN;
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
-    static const std::string RNAinverse_PROG;
-
+ 
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
     size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
 

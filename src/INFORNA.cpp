@@ -41,7 +41,6 @@ using mili::ensure_found;
 
 const FilePath INFORNA::OUT = "inverse.out";
 const FileLineNo INFORNA::LINE_NO = 13;
-const string INFORNA::INFORNA_PROG = "INFO-RNA";
 INFORNA::INFORNA(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca) :
     RNAStartInverse(structure, sd, hd, ca)
 {}
@@ -59,7 +58,19 @@ void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
     const int repeat = max_structure_distance == 0 ? -1 : 1;
     std::string structure_str;
     ViennaParser::toString(structure, structure_str);
-    ss << INFORNA_PROG << " '" << structure_str << "'"
+
+	//TODO: rewrite
+    std::string path;
+    etilico::getCurrentPath(path);
+    path += "/projects/fideo/fideo/";
+    #ifdef DEBUG_MODE
+        const std::string program("INFORNAMock.sh");
+    #else
+        const std::string program("INFORNA.sh");
+    #endif
+    const std::string programInAbstoluteDir(path + program);
+
+    ss << programInAbstoluteDir << " '" << structure_str << "'"
        << " -c '" << start << "'"
        << " -R " << repeat << " > " << OUT;
 

@@ -37,7 +37,6 @@ class INFORNA : public RNAStartInverse
 {
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
-    static const std::string INFORNA_PROG;
 
     size_t read_sequence(FileLine&, size_t, std::string&) const;
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;

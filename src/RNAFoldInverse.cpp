@@ -54,8 +54,6 @@ namespace fideo
 const FilePath RNAinverse::IN = "inverse.in";
 const FilePath RNAinverse::OUT = "inverse.out";
 const FileLineNo RNAinverse::LINE_NO = 0;
-const std::string RNAinverse::RNAinverse_PROG = "RNAinverse";
-
 
 RNAinverse::RNAinverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca) :
     RNAStartInverse(structure, sd, hd, ca)
@@ -79,7 +77,19 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
 
     std::stringstream ss;
     const int repeat = (max_structure_distance == 0) ? -1 : 1;
-    ss << RNAinverse_PROG << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
+
+	//TODO: rewrite
+    std::string path;
+    etilico::getCurrentPath(path);
+    path += "/projects/fideo/fideo/";
+
+    #ifdef DEBUG_MODE
+        const std::string program("RNAinverseMock.sh");
+    #else
+        const std::string program("RNAinverse.sh");
+    #endif
+    const std::string programInAbstoluteDir(path + program);
+    ss << programInAbstoluteDir << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
     etilico::runCommand(CMD);

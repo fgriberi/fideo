@@ -63,7 +63,7 @@ protected:
     * @param res: substring output
     * @return void
     */
-    static void getSubstrInPos(const std::string& lineInput, size_t pos, std::string& res);
+    static void getSubstrInPos(const std::string& lineInput, const size_t pos, std::string& res);
 
     /** @brief Get init position
     *
@@ -71,7 +71,7 @@ protected:
     * @param motifName: specific motif name
     * @return init position of nucleotid
     */
-    static size_t getInitPosOfNucleotid(const std::string line, const std::string motifName);
+    static size_t getInitPosOfNucleotid(const std::string& line, const std::string& motifName);
 
     /** @brief Get end position
     *
@@ -79,7 +79,7 @@ protected:
     * @param motifName: specific motif name
     * @return end position of nucleotid
     */
-    static size_t getEndPosOfNucleotid(const std::string line, const std::string motifName);
+    static size_t getEndPosOfNucleotid(const std::string& line, const std::string& motifName);
 
     /** @brief Get second element of list
     *

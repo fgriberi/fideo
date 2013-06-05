@@ -406,7 +406,7 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
 static const std::string ASYMMETRIC = "Interior Asymmetric";
 static const std::string SYMMETRIC = "Interior Symmetric";
 
-void UNAFold::DetFileParser::Rule::getSubstrInPos(const std::string& lineInput, size_t pos, std::string& res)
+void UNAFold::DetFileParser::Rule::getSubstrInPos(const std::string& lineInput, const size_t pos, std::string& res)
 {
     std::stringstream ss(lineInput);
     std::vector<std::string> result;
@@ -421,7 +421,7 @@ void UNAFold::DetFileParser::Rule::getSubstrInPos(const std::string& lineInput, 
 static const size_t INIT_STA_INT_BUL_LOOP = 9;
 static const size_t INIT_HAIRPIN_LOOP = 8;
 
-size_t UNAFold::DetFileParser::Rule::getInitPosOfNucleotid(const std::string line, const std::string motifName)
+size_t UNAFold::DetFileParser::Rule::getInitPosOfNucleotid(const std::string& line, const std::string& motifName)
 {
     size_t position;
     if (motifName == HAIRPIN_LOOP)
@@ -447,7 +447,7 @@ size_t UNAFold::DetFileParser::Rule::getInitPosOfNucleotid(const std::string lin
 static const size_t END_STA_INT_BUL_LOOP = 10;
 static const size_t END_HAIRPIN_LOOP = 9;
 
-size_t UNAFold::DetFileParser::Rule::getEndPosOfNucleotid(const std::string line, const std::string motifName)
+size_t UNAFold::DetFileParser::Rule::getEndPosOfNucleotid(const std::string& line, const std::string& motifName)
 {
     size_t position;
     if (motifName == HAIRPIN_LOOP)

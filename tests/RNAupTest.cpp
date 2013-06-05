@@ -40,7 +40,7 @@
 
 using namespace fideo;
 
-static const std::string FILE_NAME = "RNA_w25_u3_4_up.out";
+static const std::string FILE_NAME = "RNA_w25_u2.out";
 TEST(RNAupBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
@@ -50,7 +50,7 @@ TEST(RNAupBackendTestSuite, BasicTest)
     EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
-    EXPECT_DOUBLE_EQ(dG, -6.66);
+    EXPECT_DOUBLE_EQ(dG, -6.72);
     delete p;
 
     EXPECT_FALSE(HelperTest::checkDirTmp());

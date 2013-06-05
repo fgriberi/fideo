@@ -161,14 +161,14 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     etilico::createTemporaryFile(fileOutput, path, prefix);
     helper::write(fileInput, sseq);
     std::stringstream ss;
-    ss << "RNAfold" << " -noPS ";
+    ss << "RNAfold" << " --noPS ";
     if (isCircRNAm)
     {
-        ss << "-circ ";
+        ss << "--circ ";
     }
     ss << "< " << fileInput << " > " << fileOutput;
 
-    const etilico::Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
+    const etilico::Command cmd = ss.str(); /// RNAfold --noPS ("" | --circ) < fileInput > fileOutput
     etilico::runCommand(cmd);
 
     /* output file look like this:

@@ -45,7 +45,7 @@ class RNAHybrid : public IHybridize
 private:
 
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
-    virtual ~RNAHybrid() {}    
+    virtual ~RNAHybrid() {}
 
     static const unsigned int OBSOLETE_LINES = 6;
 

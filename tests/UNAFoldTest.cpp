@@ -56,5 +56,3 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
-
-

@@ -49,7 +49,7 @@ TEST(RNAcofoldBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
-    EXPECT_DOUBLE_EQ(dG, -9.80);
+    EXPECT_DOUBLE_EQ(dG, -10);
     delete p;
 
     EXPECT_FALSE(HelperTest::checkDirTmp());

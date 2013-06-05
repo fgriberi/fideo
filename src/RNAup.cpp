@@ -99,7 +99,7 @@ void RNAup::BodyParser::parse(File& file)
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
-static const std::string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
+static const std::string OUT_FILE = "RNA_w25_u2.out"; ///file generated to RNAup
 
 Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {

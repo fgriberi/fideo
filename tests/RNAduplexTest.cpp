@@ -50,7 +50,7 @@ TEST(RNAduplexBackendTestSuite, BasicTest)
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
-    EXPECT_DOUBLE_EQ(dG, -7.80);
+    EXPECT_DOUBLE_EQ(dG, -8.30);
     delete p;
 
     EXPECT_FALSE(HelperTest::checkDirTmp());

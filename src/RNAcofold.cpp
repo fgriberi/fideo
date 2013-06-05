@@ -66,7 +66,6 @@ private:
     private:
         enum Columns
         {
-            ColRNAcofoldResult,
             ColOpenParenthesis,
             ColdG,
             NumberOfColumns
@@ -83,7 +82,7 @@ void RNAcofold::BodyParser::parse(std::string& line)
     {
         throw RNABackendException("Invalid output RNAcofold.");
     }
-    const std::string deltaG = result[ColdG].substr(0, result[ColdG].size() - 1);
+    const std::string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
     helper::convertFromString(deltaG, dG);
 }
 

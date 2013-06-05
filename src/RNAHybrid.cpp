@@ -44,9 +44,9 @@ class RNAHybrid : public IHybridize
 {
 private:
 
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     virtual ~RNAHybrid() {}    
-    
+
     static const unsigned int OBSOLETE_LINES = 6;
 
     /** @brief Class that allows parsing the body of a file
@@ -93,7 +93,7 @@ void RNAHybrid::BodyParser::parse(File& file)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
-Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {

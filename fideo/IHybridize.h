@@ -67,7 +67,7 @@ struct IHybridize
      * @param longerCirc: if the longerSeq it's circular.
      * @return The free energy.
      */
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
 
     /** @brief Class destructor
      *

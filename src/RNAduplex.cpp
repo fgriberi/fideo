@@ -46,7 +46,7 @@ class RNAduplex : public IHybridize
 {
 private:
 
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     virtual ~RNAduplex() {}
 
     /** @brief Class that allows parsing the body of a file
@@ -97,7 +97,7 @@ void RNAduplex::BodyParser::parse(std::string& line)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {

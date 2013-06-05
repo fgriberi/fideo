@@ -57,7 +57,7 @@ class IntaRNA : public IHybridize
 {
 private:
 
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
     /** @brief Class that allows parsing the body of a file
@@ -120,7 +120,7 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
-Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {

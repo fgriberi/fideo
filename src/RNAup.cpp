@@ -46,7 +46,7 @@ class RNAup : public IHybridize
 {
 private:
 
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     virtual ~RNAup() {}
 
     /** @brief Class that allows parsing the body of a file
@@ -101,7 +101,7 @@ void RNAup::BodyParser::parse(File& file)
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 static const std::string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
 
-Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {

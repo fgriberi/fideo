@@ -62,6 +62,7 @@ private:
 
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
+    virtual ~RNAFold() {}
 
     /** @brief Read free energy of line
     *

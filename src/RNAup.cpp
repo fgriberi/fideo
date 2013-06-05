@@ -47,6 +47,7 @@ class RNAup : public IHybridize
 private:
 
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual ~RNAup() {}
 
     /** @brief Class that allows parsing the body of a file
     *

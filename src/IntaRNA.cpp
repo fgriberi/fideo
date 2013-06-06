@@ -58,7 +58,7 @@ class IntaRNA : public IHybridize
 private:
 
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
-    static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
+    static const size_t OBSOLETE_LINES = 9; ///obsolete lines in file
 
     /** @brief Class that allows parsing the body of a file
     *
@@ -77,9 +77,9 @@ private:
 
     private:
 
-        static const unsigned int DELTA_G = 1;
-        static const unsigned int SIZE_LINE = 3;
-        static const unsigned int OBSOLETE_dG = 1000; ///no significant hybridization found
+        static const size_t DELTA_G = 1;
+        static const size_t SIZE_LINE = 3;
+        static const size_t OBSOLETE_dG = 1000; ///no significant hybridization found
 
         /** @brief Represents the columns of the file to parse
          *

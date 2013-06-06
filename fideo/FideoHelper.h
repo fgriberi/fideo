@@ -54,7 +54,7 @@ typedef std::string FileLine;
 
 typedef std::ifstream File;
 
-typedef unsigned int FileLineNo;
+typedef size_t FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
 

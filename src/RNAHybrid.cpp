@@ -47,7 +47,7 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     virtual ~RNAHybrid() {}
 
-    static const unsigned int OBSOLETE_LINES = 6;
+    static const size_t OBSOLETE_LINES = 6;
 
     /** @brief Class that allows parsing the body of a file
      *
@@ -64,9 +64,9 @@ private:
         void parse(File& file);
 
         Fe dG; ///free energy
-        static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
-        static const unsigned int SIZE_LINE = 3;
-        static const unsigned int DELTA_G = 1;
+        static const size_t OBSOLETE_dG = 1000; //no significant hybridization found
+        static const size_t SIZE_LINE = 3;
+        static const size_t DELTA_G = 1;
     };
 };
 

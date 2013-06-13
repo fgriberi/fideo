@@ -27,7 +27,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
@@ -364,16 +364,7 @@ void UNAFold::DetFileParser::fillRules()
 
 UNAFold::DetFileParser::~DetFileParser()
 {
-    freeRules();
-}
-
-void UNAFold::DetFileParser::freeRules()
-{
-    delete availableRules[EXTERNAL_LOOP];
-    delete availableRules[INTERIOR_LOOP];
-    delete availableRules[HAIRPIN_LOOP];
-    delete availableRules[MULTI_LOOP];
-    delete availableRules[BULGE_LOOP];
+    mili::delete_container(availableRules);
 }
 
 void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* observer)

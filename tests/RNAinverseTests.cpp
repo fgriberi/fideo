@@ -4,7 +4,6 @@
 #include "fideo/IFoldInverse.h"
 #include "fideo/IStartProvider.h"
 #include "fideo/FideoStructureParser.h"
-#include "fideo/RNAFoldInverse.h"
 
 using ::testing::Invoke;
 
@@ -50,7 +49,7 @@ public:
 
 TEST_F(RNAinverseTest, FoldInverse)
 {
-    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = fideo::IFoldInverse::Factory::new_class("RNAinverseTest", fideo::InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -74,8 +73,7 @@ TEST_F(RNAinverseTest, FoldInverse)
 
 TEST_F(RNAinverseTest, BadStart1)
 {
-    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
-
+    fideo::IFoldInverse* const inverse = fideo::IFoldInverse::Factory::new_class("RNAinverseTest", fideo::InverseFoldParams(str, 4, 5, 10));
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
     .Times(1)
@@ -89,8 +87,7 @@ TEST_F(RNAinverseTest, BadStart1)
 
 TEST_F(RNAinverseTest, BadStart2)
 {
-    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
-
+    fideo::IFoldInverse* const inverse = fideo::IFoldInverse::Factory::new_class("RNAinverseTest", fideo::InverseFoldParams(str, 4, 5, 10));
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
     .Times(1)
@@ -104,7 +101,7 @@ TEST_F(RNAinverseTest, BadStart2)
 
 TEST_F(RNAinverseTest, BadStart3)
 {
-    fideo::IFoldInverse* const inverse = new fideo::RNAinverse(str, 4, 5, 10);
+    fideo::IFoldInverse* const inverse = fideo::IFoldInverse::Factory::new_class("RNAinverseTest", fideo::InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))

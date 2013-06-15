@@ -46,17 +46,35 @@
 #include <etilico/etilico.h>
 #include "fideo/FideoStructureParser.h"
 #include "fideo/FideoHelper.h"
-#include "fideo/RNAFoldInverse.h"
+#include "fideo/RNAStartInverse.h"
 
 namespace fideo
 {
+
+class RNAinverse : public RNAStartInverse
+{
+    static const FilePath IN;
+    static const FilePath OUT;
+    static const FileLineNo LINE_NO;
+ 
+    size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
+    size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
+
+    virtual void execute(std::string&, Distance&, Similitude&);
+    virtual void query_start(IStartProvider*);
+    virtual void getProgram(std::string& name);
+public:
+    RNAinverse(const InverseFoldParams& params);
+};
 
 const FilePath RNAinverse::IN = "inverse.in";
 const FilePath RNAinverse::OUT = "inverse.out";
 const FileLineNo RNAinverse::LINE_NO = 0;
 
-RNAinverse::RNAinverse(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca) :
-    RNAStartInverse(structure, sd, hd, ca)
+REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, RNAinverse, std::string, "RNAinverse", const InverseFoldParams&);
+
+RNAinverse::RNAinverse(const InverseFoldParams& params) :
+    RNAStartInverse(params)
 {}
 
 void RNAinverse::query_start(IStartProvider* provider)
@@ -64,6 +82,11 @@ void RNAinverse::query_start(IStartProvider* provider)
     provider->get_partial_start(this);
     if (start.size() != structure.size())
         throw RNABackendException("Partial start and target structure must have the same length");
+}
+
+void RNAinverse::getProgram(std::string& name)
+{
+    name = "/home/fudepan/fudepan-build/projects/fideo/fideo/RNAinverse.sh";//TODO: use etilico::Config       
 }
 
 void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
@@ -78,18 +101,10 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
     std::stringstream ss;
     const int repeat = (max_structure_distance == 0) ? -1 : 1;
 
-	//TODO: rewrite
-    std::string path;
-    etilico::getCurrentPath(path);
-    path += "/projects/fideo/fideo/";
+    std::string program;
+    getProgram(program);
 
-    #ifdef DEBUG_MODE
-        const std::string program("RNAinverseMock.sh");
-    #else
-        const std::string program("RNAinverse.sh");
-    #endif
-    const std::string programInAbstoluteDir(path + program);
-    ss << programInAbstoluteDir << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
+    ss << program << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
     etilico::runCommand(CMD);
@@ -151,6 +166,21 @@ size_t RNAinverse::read_structure_distance(FileLine& line, size_t offset, Simili
         throw RNABackendException("Could not read structure distance");
     }
 }
+
+class RNAinverseTest : public RNAinverse
+{
+protected:
+    virtual void getProgram(std::string& name)
+    {
+        name = "/home/fudepan/fudepan-build/projects/fideo/fideo/RNAinverseMock.sh";//TODO: use etilico::Config       
+    }
+public:
+    RNAinverseTest(const InverseFoldParams& params)
+      : RNAinverse(params)
+    {}
+};
+
+REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, RNAinverseTest, std::string, "RNAinverseTest", const InverseFoldParams&);
 
 
 } //end namespace fideo

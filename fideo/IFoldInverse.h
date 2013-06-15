@@ -29,17 +29,23 @@
 #include <mili/mili.h>
 #include <biopp/biopp.h>
 #include "fideo/IStartProvider.h"
+#include "fideo/RnaBackendsTypes.h"
+
 
 
 namespace fideo
 {
 
+struct InverseFoldParams;
 class IStartProvider;
+
 /**
  * Interface for sequence's inverse folding services.
  */
 struct IFoldInverse
 {
+    typedef mili::FactoryRegistry<IFoldInverse, std::string, const InverseFoldParams&> Factory;
+
     /**
      * Make the inverse folding
      * @param sequence the NucSequence to write to.
@@ -61,6 +67,20 @@ struct IFoldInverse
     virtual ~IFoldInverse() {}
 };
 
+struct InverseFoldParams {
+    InverseFoldParams(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca)
+      : structure(structure),
+        sd(sd),
+        hd(hd),
+        ca(ca)
+    {}
+    const biopp::SecStructure& structure;
+    const Similitude sd;
+    const Distance hd;
+    const CombinationAttempts ca;
+};
+
 } //namespace fideo
+
 #endif  /* _IFOLDINVERSE_H */
 

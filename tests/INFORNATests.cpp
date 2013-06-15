@@ -1,10 +1,10 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
-#include "fideo/INFORNA.h"
+#include <mili/mili.h>
+#include "fideo/IFoldInverse.h"
+#include "fideo/RNAStartInverse.h"
 #include "fideo/IStartProvider.h"
 #include "fideo/FideoStructureParser.h"
-
 
 using ::testing::Test;
 using ::testing::Invoke;
@@ -56,7 +56,7 @@ public:
 
 TEST_F(INFORNATest, FoldInverse)
 {
-    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = IFoldInverse::Factory::new_class("INFORNATest", InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -80,7 +80,7 @@ TEST_F(INFORNATest, FoldInverse)
 
 TEST_F(INFORNATest, BadStart1)
 {
-    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = IFoldInverse::Factory::new_class("INFORNATest", InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -95,7 +95,7 @@ TEST_F(INFORNATest, BadStart1)
 
 TEST_F(INFORNATest, BadStart2)
 {
-    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = IFoldInverse::Factory::new_class("INFORNATest", InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
@@ -110,7 +110,7 @@ TEST_F(INFORNATest, BadStart2)
 
 TEST_F(INFORNATest, BadStart3)
 {
-    IFoldInverse* const inverse = new INFORNA(str, 4, 5, 10);
+    IFoldInverse* const inverse = IFoldInverse::Factory::new_class("INFORNATest", InverseFoldParams(str, 4, 5, 10));
 
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))

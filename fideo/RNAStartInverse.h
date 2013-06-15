@@ -69,10 +69,10 @@ protected:
      * @param hd  to write the hamming distance between the start and found.
      * @param sd  to write the structure distance between the found and target
      */
-    virtual void execute(string&, Distance&, Similitude&) = 0;
+    virtual void execute(std::string&, Distance&, Similitude&) = 0;
 
 public:
-    RNAStartInverse(const biopp::SecStructure&, Similitude, Distance, CombinationAttempts);
+    RNAStartInverse(const InverseFoldParams&);
 
     ~RNAStartInverse();
 };

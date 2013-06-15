@@ -43,4 +43,6 @@
 #include "fideo/IFold.h"
 #include "fideo/IHybridize.h"
 
+void setTestMode();
+bool isTestMode();
 #endif

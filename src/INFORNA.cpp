@@ -28,21 +28,37 @@
 #include <mili/mili.h>
 #include <etilico/etilico.h>
 
-#include "fideo/INFORNA.h"
+#include "fideo/RNAStartInverse.h"
 #include "fideo/FideoHelper.h"
 #include "fideo/FideoStructureParser.h"
 
 namespace fideo
 {
 
-using std::string;
-using std::stringstream;
-using mili::ensure_found;
+class INFORNA : public RNAStartInverse
+{
+    static const FilePath OUT;
+    static const FileLineNo LINE_NO;
 
-const FilePath INFORNA::OUT = "inverse.out";
-const FileLineNo INFORNA::LINE_NO = 13;
-INFORNA::INFORNA(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca) :
-    RNAStartInverse(structure, sd, hd, ca)
+    size_t read_sequence(FileLine&, size_t, std::string&) const;
+    size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
+    size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
+
+    virtual void execute(std::string&, Distance&, Similitude&);
+    virtual void query_start(IStartProvider*);
+protected:
+    virtual void getProgram(std::string&);
+public:
+    INFORNA(const InverseFoldParams& params);
+};
+
+REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, INFORNA, std::string, "INFORNA", const InverseFoldParams&);
+
+const FilePath INFORNA::OUT = "inverse.out"; //TODO: rename
+const FileLineNo INFORNA::LINE_NO = 13; //TODO: rename
+
+INFORNA::INFORNA(const InverseFoldParams& params) :
+    RNAStartInverse(params)
 {}
 
 void INFORNA::query_start(IStartProvider* provider)
@@ -52,6 +68,11 @@ void INFORNA::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
+void INFORNA::getProgram(std::string& name) 
+{
+    name = "/home/fudepan/fudepan-build/projects/fideo/fideo/INFORNA.sh";//TODO: use etilico::Config
+}
+
 void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
 {
     std::stringstream ss;
@@ -59,18 +80,10 @@ void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
     std::string structure_str;
     ViennaParser::toString(structure, structure_str);
 
-	//TODO: rewrite
-    std::string path;
-    etilico::getCurrentPath(path);
-    path += "/projects/fideo/fideo/";
-    #ifdef DEBUG_MODE
-        const std::string program("INFORNAMock.sh");
-    #else
-        const std::string program("INFORNA.sh");
-    #endif
-    const std::string programInAbstoluteDir(path + program);
+    std::string program;
+    getProgram(program);
 
-    ss << programInAbstoluteDir << " '" << structure_str << "'"
+    ss << program << " '" << structure_str << "'"
        << " -c '" << start << "'"
        << " -R " << repeat << " > " << OUT;
 
@@ -78,7 +91,7 @@ void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
 
     etilico::runCommand(CMD);
 
-    FileLine aux;
+    FileLine aux;//TODO: rename
     fideo::helper::readLine(OUT, LINE_NO, aux);
     /* inverse.out looks like this:
      *
@@ -155,4 +168,20 @@ size_t INFORNA::read_structure_distance(FileLine& line, size_t offset, Similitud
         return line.size();
     }
 }
+
+class INFORNATest : public INFORNA
+{
+protected:
+    virtual void getProgram(std::string& name)
+    {
+        name = "/home/fudepan/fudepan-build/projects/fideo/fideo/INFORNAMock.sh";//TODO: use etilico::Config       
+    }
+public:
+    INFORNATest(const InverseFoldParams& params)
+      : INFORNA(params)
+    {}
+};
+
+REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, INFORNATest, std::string, "INFORNATest", const InverseFoldParams&);
+
 } //end namespace fideo

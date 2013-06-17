@@ -67,12 +67,13 @@ struct IFoldInverse
     virtual ~IFoldInverse() {}
 };
 
-struct InverseFoldParams {
+struct InverseFoldParams
+{
     InverseFoldParams(const biopp::SecStructure& structure, Similitude sd, Distance hd, CombinationAttempts ca)
-      : structure(structure),
-        sd(sd),
-        hd(hd),
-        ca(ca)
+        : structure(structure),
+          sd(sd),
+          hd(hd),
+          ca(ca)
     {}
     const biopp::SecStructure& structure;
     const Similitude sd;

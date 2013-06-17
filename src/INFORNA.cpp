@@ -68,7 +68,7 @@ void INFORNA::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void INFORNA::getProgram(std::string& executablePath) const 
+void INFORNA::getProgram(std::string& executablePath) const
 {
     etilico::Config::getInstance()->getPath("INFORNA", executablePath);
 }
@@ -174,11 +174,11 @@ class INFORNATest : public INFORNA
 protected:
     virtual void getProgram(std::string& executablePath) const
     {
-        etilico::Config::getInstance()->getPath("INFORNAMock", executablePath);    
+        etilico::Config::getInstance()->getPath("INFORNAMock", executablePath);
     }
 public:
     INFORNATest(const InverseFoldParams& params)
-      : INFORNA(params)
+        : INFORNA(params)
     {}
 };
 

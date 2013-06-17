@@ -47,7 +47,7 @@ class RNAinverse : public RNAStartInverse
     static const FilePath IN;
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
- 
+
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
     size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
 
@@ -168,7 +168,7 @@ protected:
     }
 public:
     RNAinverseTest(const InverseFoldParams& params)
-      : RNAinverse(params)
+        : RNAinverse(params)
     {}
 };
 

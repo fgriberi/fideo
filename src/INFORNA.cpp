@@ -47,7 +47,7 @@ class INFORNA : public RNAStartInverse
     virtual void execute(std::string&, Distance&, Similitude&);
     virtual void query_start(IStartProvider*);
 protected:
-    virtual void getProgram(std::string&);
+    virtual void getProgram(std::string&) const;
 public:
     INFORNA(const InverseFoldParams& params);
 };
@@ -68,9 +68,9 @@ void INFORNA::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void INFORNA::getProgram(std::string& name) 
+void INFORNA::getProgram(std::string& executablePath) const 
 {
-    name = "/home/fudepan/fudepan-build/projects/fideo/fideo/INFORNA.sh";//TODO: use etilico::Config
+    etilico::Config::getInstance()->getPath("INFORNA", executablePath);
 }
 
 void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
@@ -172,9 +172,9 @@ size_t INFORNA::read_structure_distance(FileLine& line, size_t offset, Similitud
 class INFORNATest : public INFORNA
 {
 protected:
-    virtual void getProgram(std::string& name)
+    virtual void getProgram(std::string& executablePath) const
     {
-        name = "/home/fudepan/fudepan-build/projects/fideo/fideo/INFORNAMock.sh";//TODO: use etilico::Config       
+        etilico::Config::getInstance()->getPath("INFORNAMock", executablePath);    
     }
 public:
     INFORNATest(const InverseFoldParams& params)

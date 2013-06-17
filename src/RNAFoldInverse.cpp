@@ -31,15 +31,6 @@
  * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-/**
-* Base class implementation for RNA inverse folding
-* backends that accept a start sequence.
-* (e.g. RNAinverse or INFO-RNA)
-*
-* This class takes care of avoid repeated sequences
-* and change the free positions in the start sequence
-* when the attempts for each combination it's reached.
-*/
 
 #include <string>
 #include <biopp/biopp.h>
@@ -62,7 +53,8 @@ class RNAinverse : public RNAStartInverse
 
     virtual void execute(std::string&, Distance&, Similitude&);
     virtual void query_start(IStartProvider*);
-    virtual void getProgram(std::string& name);
+protected:
+    virtual void getProgram(std::string& name) const;
 public:
     RNAinverse(const InverseFoldParams& params);
 };
@@ -84,9 +76,9 @@ void RNAinverse::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void RNAinverse::getProgram(std::string& name)
+void RNAinverse::getProgram(std::string& executablePath) const
 {
-    name = "/home/fudepan/fudepan-build/projects/fideo/fideo/RNAinverse.sh";//TODO: use etilico::Config       
+    etilico::Config::getInstance()->getPath("RNAinverse", executablePath);
 }
 
 void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
@@ -101,10 +93,10 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
     std::stringstream ss;
     const int repeat = (max_structure_distance == 0) ? -1 : 1;
 
-    std::string program;
-    getProgram(program);
+    std::string executablePath;
+    getProgram(executablePath);
 
-    ss << program << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
+    ss << executablePath << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
     etilico::runCommand(CMD);
@@ -170,9 +162,9 @@ size_t RNAinverse::read_structure_distance(FileLine& line, size_t offset, Simili
 class RNAinverseTest : public RNAinverse
 {
 protected:
-    virtual void getProgram(std::string& name)
+    virtual void getProgram(std::string& executablePath) const
     {
-        name = "/home/fudepan/fudepan-build/projects/fideo/fideo/RNAinverseMock.sh";//TODO: use etilico::Config       
+        etilico::Config::getInstance()->getPath("RNAinverseMock", executablePath);
     }
 public:
     RNAinverseTest(const InverseFoldParams& params)

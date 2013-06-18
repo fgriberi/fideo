@@ -31,16 +31,25 @@
  *
  */
 
+#define private public
+
 #include <string>
 #include <fstream>
+#include <iostream>
 #include <fideo/fideo.h>
+#include <etilico/etilico.h>
 #include <biopp/biopp.h>
+#include <mili/mili.h>
 #include <gtest/gtest.h>
+#define UNA_FOLD_H
+#include "fideo/UNAFold.h"
+#undef UNA_FOLD_H
 #include "HelperTest.h"
 
 using namespace fideo;
+using namespace etilico;
 
-TEST(UnaFoldBackendTestSuite, BasicTest)
+TEST(UnaFoldBackendTestSuite1, BasicTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
@@ -55,4 +64,61 @@ TEST(UnaFoldBackendTestSuite, BasicTest)
     EXPECT_TRUE(secStructure.is_circular());
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
+TEST(UnaFoldBackendTestSuite2, correctCommad1)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+    UNAFold unafold;
+    Command cmd;
+    unafold.prepareFileToFold(seq, true, cmd);
+
+    EXPECT_TRUE(HelperTest::checkDirTmp());
+    std::stringstream cmdExpected;
+    cmdExpected << "UNAFold.pl --max=1 --circular ";
+    cmdExpected << unafold.temporalFileName;
+
+    EXPECT_EQ(cmdExpected.str(), cmd);
+    etilico::runCommand(cmd);
+}
+
+TEST(UnaFoldBackendTestSuite2, correctCommad2)
+{
+    const biopp::NucSequence seq("GGGGAAAAAAAAGGGGCCCCCCCCTTTTCCCCCCCTTTTT");
+    biopp::SecStructure secStructure;
+    UNAFold unafold;
+    etilico::Command cmd;
+    unafold.prepareFileToFold(seq, false, cmd);
+
+    EXPECT_TRUE(HelperTest::checkDirTmp());
+    std::stringstream cmdExpected;
+    cmdExpected << "UNAFold.pl --max=1 ";
+    cmdExpected << unafold.temporalFileName;
+
+    EXPECT_EQ(cmdExpected.str(), cmd);
+    etilico::runCommand(cmd);
+}
+
+TEST(UnaFoldBackendTestSuite2, InvalidFileToParse)
+{
+    const std::string fileTest = "fileTest";
+    const std::string fileName = "fileTest.ct";
+    std::ofstream file(fileName.c_str());
+    file << "32      dG = -15.1      fideo-9I1tef \n";
+    file << "1       A       32      2       0       1       0       0 \n";
+    file << "2       A       1       3       0       2       0       0 \n";
+    file << "3       A       2       4       30      3       0       \n";
+    file.close();
+    UNAFold unafold;
+    unafold.temporalFileName = fileTest;
+    biopp::SecStructure secStructure;
+    Fe freeEnergy;
+
+    EXPECT_THROW(unafold.parseCTFile(true, secStructure, freeEnergy), InvalidBodyLine);
+
+    //To avoid "Error unlink" when calling the destructor
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    secStructure.clear();
+    unafold.fold(seq, true, secStructure);
 }

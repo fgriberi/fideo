@@ -72,7 +72,7 @@ private:
     */
     size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
 
-    /** @brief obtain structure
+    /** @brief Obtain secondary structure
     *
     * @param str: to parse
     * @param secStrucute: to fill with structure

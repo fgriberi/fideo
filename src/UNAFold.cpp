@@ -53,7 +53,7 @@ void UNAFold::HeaderParser::parse(File& file)
     {
         if (aux.size() != NumberOfColumns)
         {
-            throw RNABackendException("Invalid Header.");
+            throw InvalidaHeader();
         }
         helper::convertFromString(aux[ColNumberOfBases], numberOfBases);
         helper::convertFromString(aux[ColDeltaG], deltaG);
@@ -61,7 +61,7 @@ void UNAFold::HeaderParser::parse(File& file)
     }
     else
     {
-        throw RNABackendException("Failured operation >>.");
+        throw FailOperation();
     }
 }
 
@@ -74,7 +74,7 @@ bool UNAFold::BodyLineParser::parse(File& file)
     {
         if (aux.size() != NumberOfColumns)
         {
-            throw RNABackendException("Invalid BodyLine.");
+            throw InvalidBodyLine();
         }
         helper::convertFromString(aux[ColNucl], nuc);
         helper::convertFromString(aux[ColNucleotideNumber], nucNumber);
@@ -114,11 +114,9 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     }
 }
 
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
+void UNAFold::prepareFileToFold(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command)
 {
-    structureRNAm.clear();
-    FileLine sseq = seqRNAm.getString();
-
+    FileLine sseq = sequence.getString();
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
     std::string temporalFile;
@@ -128,7 +126,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     helper::write(temporalFile, sseq);
     std::stringstream ss;
     ss << "UNAFold.pl --max=1 ";
-    if (isCircRNAm)
+    if (isCirc)
     {
         ss << "--circular ";
     }
@@ -138,18 +136,12 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     {
         throw RNABackendException("Invalid path of temp files.");
     }
-    const etilico::Command cmd = ss.str();  /// UNAFold.pl --max=1 ("" | --circular) temporalFile
-    etilico::runCommand(cmd);
+    command = ss.str(); /// UNAFold.pl --max=1 ("" | --circular) temporalFile
+}
 
-    /* file output look like this:
-     * amountOfNucleotids dG = 'value'  nameSequence
-     * nucleotideNumber  nucleotide previus next pairedWith nucleotideNumber   -    -
-     *       1                A        0     2       0             1           0    0
-     *       .                .        .     .       .             .           .    .
-    */
-
-    /// temporalFile.ct is the file to parse
-    File fileIn((temporalFile + ".ct").c_str());
+void UNAFold::parseCTFile(const bool isCirc, biopp::SecStructure& structureRNAm, Fe& freeEnergy)
+{
+    File fileIn((temporalFileName + ".ct").c_str());
     if (!fileIn)
     {
         throw RNABackendException("output file not found.");
@@ -163,8 +155,29 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     {
         fillStructure(bodyLine, structureRNAm);
     }
-    structureRNAm.set_circular(isCircRNAm);
-    return headerLine.deltaG;
+    structureRNAm.set_circular(isCirc);
+    freeEnergy = headerLine.deltaG;
+}
+
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
+{
+    structureRNAm.clear();
+    etilico::Command cmd;
+    prepareFileToFold(seqRNAm, isCircRNAm, cmd);
+    etilico::runCommand(cmd);
+
+    /* file output look like this:
+     * amountOfNucleotids dG = 'value'  nameSequence
+     * nucleotideNumber  nucleotide previus next pairedWith nucleotideNumber   -    -
+     *       1                A        0     2       0             1           0    0
+     *       .                .        .     .       .             .           .    .
+    */
+
+    Fe freeEnergy;
+    parseCTFile(isCircRNAm, structureRNAm, freeEnergy);
+    return freeEnergy;
+
+    // return headerLine.deltaG;
 }
 
 //------------------------------------- DetFileParser --------------------------------------

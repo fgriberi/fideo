@@ -65,6 +65,9 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, FideoExceptionHierarchy, "Invalid m
 DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, FideoExceptionHierarchy, "The .det file not exist");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, FideoExceptionHierarchy, "Index out of range");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidDerived, FideoExceptionHierarchy, "Invalid derived class");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidBodyLine, FideoExceptionHierarchy, "Invalid BodyLine");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidaHeader, FideoExceptionHierarchy, "Invalid Header");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FailOperation, FideoExceptionHierarchy, "Failured operation >>");
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */

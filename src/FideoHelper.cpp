@@ -33,14 +33,6 @@
 
 #include "fideo/FideoHelper.h"
 
-/** @brief Temporal functions
-*
-*/
-int linkFictitious()
-{
-    return 1;
-}
-
 namespace fideo
 {
 namespace helper

@@ -4,6 +4,6 @@ name = 'fideo'
 inc = env.Dir('.'), env.Dir('../../etilico')
 src = env.Glob('*.cpp')
 
-deps = ['fideo', 'etilico', 'biopp', 'gmock', 'gtest_main', 'gtest']
+deps = ['etilico', 'biopp', 'gmock', 'gtest_main', 'gtest']
 
 env.CreateTest(name, inc, src, deps)

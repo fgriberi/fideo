@@ -54,10 +54,16 @@ struct IMotifObserver
 
     /** @brief Processes the motif
      *
-     * @param mot: current motif
+     * @param motif: current motif
      * @return void
      */
-    virtual void processMotif(const Motif& motif) = 0;
+    virtual void processMotif(const Motif& Motif) = 0;
+
+    /** @brief Process data of last motif
+    *
+    * @return void
+    */
+    virtual void finalization() = 0;
 
     /** @brief Destructor of class
      *

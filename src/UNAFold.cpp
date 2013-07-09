@@ -276,12 +276,12 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
     IMotifObserver::Motif motif;
     while (!fileToParse.eof())
     {
-
         buildBlock(fileToParse, currentBlock);
         parseBlock(currentBlock, motif);
         observer->processMotif(motif);
         currentBlock.lines.clear();
     }
+    observer->finalization();
 }
 
 //--------------------------------------------------- Rule ----------------------------------------------------

@@ -1,6 +1,6 @@
 /*
  * @file     UNAFold.h
- * @brief    UNAFold is a specific backend to folding.
+ * @brief    UNAFold is a specific header backend to folding.
  *
  *
  * @author   Franco Riberi
@@ -38,7 +38,8 @@
 
 #include <unistd.h>
 #include <map>
-#include "fideo/IFold.h"
+#include <etilico/etilico.h>
+#include "fideo/IFoldIntermediate.h"
 
 namespace fideo
 {
@@ -46,9 +47,18 @@ namespace fideo
 /** @brief UNAFold is an implementation of IFold interface that use UNAFold package
  *
  */
-class UNAFold : public IFold
+class UNAFold : public IFoldIntermediate
 {
 private:
+
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
+    virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
+    virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy);    
+
+    /** @brief Destructor of class
+     *
+     */
+    virtual ~UNAFold();
 
     /** @brief Delete all files generated
      *
@@ -57,40 +67,17 @@ private:
      */
     void deleteAllFiles();
 
-    /** @brief Prepare a file to fold
-     *
-     * Write a sequence in the file to fold
-     * @param sequence: sequence to write in the file
-     * @param isCirs: sequence is circ
-     * @param command: to fill with execute Command
-     * @return void
-     */
-    void prepareFileToFold(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command);
-
-    /* @brief Parse a *.ct file and complete the secondary structure with that data
-     *
-     * @param isCirc: the sequence analyzed is circular
-     * @param structureRNAm: structure to fill
-     * @param freeEnergy: to fill with free energy
-     * @return void
-     */
-    void parseCTFile(const bool isCirc, biopp::SecStructure& structureRNAm, Fe& freeEnergy);
-
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
-
-    /** @brief Destructor of class
-     *
-     */
-    virtual ~UNAFold();
-
     /** @brief Class that allows parsing the header of a file
-    *
-    */
+     *
+     */
     class HeaderParser
     {
     public:
-
+        /** @brief Parser header file
+         *
+         * @param file: input file
+         * @return void
+         */
         void parse(File& file);
 
         biopp::SeqIndex numberOfBases;
@@ -114,12 +101,16 @@ private:
     };
 
     /** @brief Class that allows parsing the body of a file
-    *
-    */
+     *
+     */
     class BodyLineParser
     {
     public:
-
+        /** @brief Parser body line
+         *
+         * @param file: input file
+         * @return true if correct parse, otherwise false
+         */
         bool parse(File& file);
 
         char nuc;                  /// a nucleotid
@@ -151,11 +142,11 @@ private:
     class DetFileParser;
 
     /** @brief fill structure
-    *
-    * @param bodyLine: to parse.
-    * @param secStructure: structure to fill
-    * @return void
-    */
+     *
+     * @param bodyLine: to parse.
+     * @param secStructure: structure to fill
+     * @return void
+     */
     void fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure);
 
     /** @brief To store the temporal file name generated

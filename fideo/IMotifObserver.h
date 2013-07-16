@@ -52,6 +52,12 @@ struct IMotifObserver
         size_t amountStacks;
     };
 
+    /** @brief Start observer
+    *
+    * @return void
+    */
+    virtual void start() = 0;
+
     /** @brief Processes the motif
      *
      * @param motif: current motif
@@ -59,11 +65,11 @@ struct IMotifObserver
      */
     virtual void processMotif(const Motif& Motif) = 0;
 
-    /** @brief Process data of last motif
+    /** @brief Finalize observer
     *
     * @return void
     */
-    virtual void finalization() = 0;
+    virtual void finalize() = 0;
 
     /** @brief Destructor of class
      *

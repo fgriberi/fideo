@@ -160,7 +160,7 @@ TEST(DetFileParserTestSuite, getInitAndEndPosOfNucleotidTest)
     EXPECT_EQ(endStack, 174);
 }
 
-TEST(DetFileParserTestSuite, ExternalRuleCalcAttribTest)
+TEST(DetFileParserTestSuite, ExternalRulecalculateAttribTest)
 {
     // build correct block
     Block externalLoopBlock;
@@ -176,7 +176,7 @@ TEST(DetFileParserTestSuite, ExternalRuleCalcAttribTest)
 
     UNAFold::DetFileParser::ExternalRule externalRule;
     IMotifObserver::Motif motif;
-    externalRule.calcAttrib(externalLoopBlock, motif);
+    externalRule.calculateAttrib(externalLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, EXTERNAL_LOOP);
     EXPECT_EQ(motif.attribute, attr);
@@ -191,10 +191,10 @@ TEST(DetFileParserTestSuite, ExternalRuleCalcAttribTest)
     invalidBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is C( 4)-G( 202)");
     invalidBlock.lines.push_back("Helix: ddG = -7.90 4 base pairs.");
 
-    ASSERT_DEATH(externalRule.calcAttrib(invalidBlock, motif), "");
+    ASSERT_DEATH(externalRule.calculateAttrib(invalidBlock, motif), "");
 }
 
-TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
+TEST(DetFileParserTestSuite, InteriorRulecalculateAttribTest)
 {
     // build correct block
     Block interiorLoopBlock;
@@ -209,7 +209,7 @@ TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
 
     UNAFold::DetFileParser::InteriorRule interiorRule;
     IMotifObserver::Motif motif;
-    interiorRule.calcAttrib(interiorLoopBlock, motif);
+    interiorRule.calculateAttrib(interiorLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, ASYMMETRIC);
     EXPECT_EQ(motif.attribute, attr);
@@ -224,10 +224,10 @@ TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
     invalidBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is C( 4)-G( 202)");
     invalidBlock.lines.push_back("Helix: ddG = -7.90 4 base pairs.");
 
-    EXPECT_THROW(interiorRule.calcAttrib(invalidBlock, motif), IndexOutOfRange);
+    EXPECT_THROW(interiorRule.calculateAttrib(invalidBlock, motif), IndexOutOfRange);
 }
 
-TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
+TEST(DetFileParserTestSuite, HairpinRulecalculateAttribTest)
 {
     // build correct block
     Block hairpinLoopBlock;
@@ -243,7 +243,7 @@ TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
 
     UNAFold::DetFileParser::HairpinRule hairpinRule;
     IMotifObserver::Motif motif;
-    hairpinRule.calcAttrib(hairpinLoopBlock, motif);
+    hairpinRule.calculateAttrib(hairpinLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, attr);
@@ -257,14 +257,14 @@ TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
     const size_t numAttrib = 4;
     const size_t amountStacks = 0;
 
-    hairpinRule.calcAttrib(withoutStackBlock, motif);
+    hairpinRule.calculateAttrib(withoutStackBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, numAttrib);
     EXPECT_EQ(motif.amountStacks, amountStacks);
 }
 
-TEST(DetFileParserTestSuite, MultiLoopRuleCalcAttribTest)
+TEST(DetFileParserTestSuite, MultiLoopRulecalculateAttribTest)
 {
     // build correct block
     Block multiLoopBlock;
@@ -284,14 +284,14 @@ TEST(DetFileParserTestSuite, MultiLoopRuleCalcAttribTest)
 
     UNAFold::DetFileParser::MultiRule multiRule;
     IMotifObserver::Motif motif;
-    multiRule.calcAttrib(multiLoopBlock, motif);
+    multiRule.calculateAttrib(multiLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, MULTI_LOOP);
     EXPECT_EQ(motif.attribute, attr);
     EXPECT_EQ(motif.amountStacks, stacks);
 }
 
-TEST(DetFileParserTestSuite, BulgeRuleCalcAttribTest)
+TEST(DetFileParserTestSuite, BulgeRulecalculateAttribTest)
 {
     // build correct block
     Block bulgeLoopBlock;
@@ -308,7 +308,7 @@ TEST(DetFileParserTestSuite, BulgeRuleCalcAttribTest)
 
     UNAFold::DetFileParser::BulgeRule bulgeRule;
     IMotifObserver::Motif motif;
-    bulgeRule.calcAttrib(bulgeLoopBlock, motif);
+    bulgeRule.calculateAttrib(bulgeLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, BULGE_LOOP);
     EXPECT_EQ(motif.attribute, attr);

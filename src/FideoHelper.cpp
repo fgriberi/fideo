@@ -31,6 +31,7 @@
  *
  */
 
+#include <mili/mili.h>
 #include "fideo/FideoHelper.h"
 
 namespace fideo

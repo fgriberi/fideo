@@ -99,10 +99,15 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
     ss << executablePath << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
+    //CMD looks like "RNAinverse -R -1 -a ATGC < inverse.in > inverse.out"
     etilico::runCommand(CMD);
 
+    //BUG: inverse.out looks like "TGCCTGTACTCATTAATGGAACTTCcuaccagucgcgau    6"
     FileLine aux;
     fideo::helper::readLine(OUT, LINE_NO, aux);
+
+    // If the the search was unsuccessful, a structure distance to the target is appended.
+
     /* aux looks like this
      * accagggATCgcaggtaccccgcaGGcgcagAacccta   5 2   d= 2
      *

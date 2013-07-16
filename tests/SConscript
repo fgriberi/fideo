@@ -1,0 +1,9 @@
+Import ('env')
+
+name = 'fideo'
+inc = env.Dir('.'), env.Dir('../../etilico')
+src = env.Glob('*.cpp')
+
+deps = ['etilico', 'biopp', 'gmock', 'gtest_main', 'gtest']
+
+env.CreateTest(name, inc, src, deps)

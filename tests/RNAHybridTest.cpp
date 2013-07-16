@@ -35,7 +35,6 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
@@ -54,7 +53,7 @@ TEST(RNAHybridBackendTestSuite, BasicTest1)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
+    IHybridize* p = Hybridizer::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
@@ -91,7 +90,7 @@ TEST(RNAHybridBackendTestSuite, TestExampleInRNAhybridPackage)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAHybrid");
+    IHybridize* p = Hybridizer::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);

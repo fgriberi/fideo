@@ -31,7 +31,7 @@
  *
  */
 
-#include <etilico/etilico.h> 
+#include <etilico/etilico.h>
 #include "fideo/IHybridize.h"
 
 namespace fideo
@@ -42,17 +42,17 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 6;
 
-	///Class that allows parsing the body of a file
+    ///Class that allows parsing the body of a file
     class BodyParser
     {
-    public: 
- 		/** @brief Parse the file and get the value dG
+    public:
+        /** @brief Parse the file and get the value dG
          *
          * @param file: file to parser
          * @return void
-         */      
-        void parse(std::ifstream& file);
-        
+         */
+        void parse(File& file);
+
         Fe dG; ///free energy
         static const unsigned int OBSOLETE_dG = 1000; //no significant hybridization found
         static const unsigned int SIZE_LINE = 3;
@@ -60,7 +60,7 @@ private:
     };
 };
 
-void RNAHybrid::BodyParser::parse(std::ifstream& file)
+void RNAHybrid::BodyParser::parse(File& file)
 {
     std::string temp;
     for (size_t i = 0; i < OBSOLETE_LINES; ++i)
@@ -77,7 +77,7 @@ void RNAHybrid::BodyParser::parse(std::ifstream& file)
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);                
+        helper::convertFromString(deltaG, dG);
     }
 }
 
@@ -87,19 +87,19 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
 {
     if (longerCirc)
     {
-         throw UnsupportedException();
+        throw UnsupportedException();
     }
 
-	///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
+    ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
     std::string fileTmpTarget;
-    helper::createTmpFile(fileTmpTarget);
+    etilico::createTemporaryFilename(fileTmpTarget);
     std::string fileTmpQuery;
-    helper::createTmpFile(fileTmpQuery);
+    etilico::createTemporaryFilename(fileTmpQuery);
     std::string fileTmpOutput;
-    helper::createTmpFile(fileTmpOutput);
+    etilico::createTemporaryFilename(fileTmpOutput);
 
     helper::write(fileTmpTarget, targetSequence);
     helper::write(fileTmpQuery, querySequence);
@@ -113,18 +113,18 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const etilico::Command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(fileTmpOutput.c_str());
+    File fileOutput(fileTmpOutput.c_str());
     if (!fileOutput)
     {
-		throw NotFoundFileException();
+        throw NotFoundFileException();
     }
     BodyParser body;
     body.parse(fileOutput);
 
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpTarget.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpQuery.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpOutput.c_str()));
-    
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpTarget.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpQuery.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpOutput.c_str()) == 0);
+
     return body.dG;
 }
 } // namespace fideo

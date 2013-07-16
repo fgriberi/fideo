@@ -1,0 +1,18 @@
+#INFO-RNA program mock
+echo ""
+echo "========================="
+echo "Initializing Step:"
+echo "========================="
+echo "Wanted Structure    : (..((.....))..)"
+echo "Sequence Constraints: NNNNNNNNNUGCCGC"
+echo "Allowed Mismatches  : 000000000000000"
+echo "Designed Sequence   : GUAGCUUUAUGCCGC"
+echo "designed randomly   : 0"
+echo ""
+echo "========================="
+echo "Local Search Results:"
+echo "========================="
+echo "MFE:    GUAGCUUUAUGCCGC    0  (-1.70)   d= 1"
+echo "number of mismatches: 0"
+echo ""
+

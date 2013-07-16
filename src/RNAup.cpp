@@ -46,9 +46,9 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
 
     class BodyParser
-    {        
+    {
     public:
-        void parse(std::ifstream& file);        
+        void parse(File& file);
 
         Fe dG; ///free energy
     private:
@@ -64,25 +64,25 @@ private:
             ColPlusSymbol,
             ColdGu_l,
             NumberOfColumns
-        }; 
+        };
     };
 
 };
 
-void RNAup::BodyParser::parse(std::ifstream& file)
+void RNAup::BodyParser::parse(File& file)
 {
     std::vector<std::string> aux;
     if (file >> aux)
     {
         if (aux.size() != NumberOfColumns)
-        {   
+        {
             throw RNABackendException("Invalid output RNAup.");
         }
         const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-        helper::convertFromString(deltaG, dG);              
+        helper::convertFromString(deltaG, dG);
     }
     else
-    {              
+    {
         throw RNABackendException("Failured operation >>.");
     }
 }
@@ -100,9 +100,9 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     const std::string seq2 = shorterSeq.getString();
 
     std::string inputTmpFile;
-    helper::createTmpFile(inputTmpFile);
+    etilico::createTemporaryFilename(inputTmpFile);
     std::string outputTmpFile;
-    helper::createTmpFile(outputTmpFile);
+    etilico::createTemporaryFilename(outputTmpFile);
 
     ///Constructed as required by RNAup
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -117,7 +117,7 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     const etilico::Command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(outputTmpFile.c_str());
+    File fileOutput(outputTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();
@@ -125,9 +125,9 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     BodyParser body;
     body.parse(fileOutput);
 
-    mili::assert_throw<ExceptionUnlink>(unlink(OUT_FILE.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()));
+    mili::assert_throw<ExceptionUnlink>(unlink(OUT_FILE.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()) == 0);
 
     return body.dG;
 }

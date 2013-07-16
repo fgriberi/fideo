@@ -35,7 +35,8 @@
  */
 
 #include <stack>
-#include <etilico/etilico.h> 
+#include <etilico/etilico.h>
+#include "fideo/FideoStructureParser.h"
 #include "fideo/IFold.h"
 
 namespace fideo
@@ -44,7 +45,9 @@ namespace fideo
 class RNAFold : public IFold
 {
 private:
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
+
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
 
     /** @brief Read free energy of line
     *
@@ -54,21 +57,7 @@ private:
     */
     size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
 
-    /** @brief obtain structure
-    *
-    * @param str: to parse
-    * @param secStrucute: to fill with structure
-    * @return void
-    */
-    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);   
-
-    static const FileLineNo LINE_NO;
-    static const char OPEN_PAIR = '(';
-    static const char CLOSE_PAIR = ')';
-    static const char UNPAIR = '.';
 };
-
-const FileLineNo RNAFold::LINE_NO = 1;
 
 REGISTER_FACTORIZABLE_CLASS(IFold, RNAFold, std::string, "RNAFold");
 
@@ -87,54 +76,21 @@ size_t RNAFold::readFreeEnergy(FileLine& line, size_t offset, Fe& energy) const
     }
 }
 
-void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure)
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
-    secStructure.set_sequence_size(str.length());
-    std::stack<biopp::SeqIndex> stackIndex;
-    for (size_t i = 0; i < str.length(); ++i)
-    {
-        biopp::SeqIndex open;
-        switch (str[i])
-        {
-            case UNPAIR:
-                secStructure.unpair(i);
-                break;
-            case OPEN_PAIR:
-                stackIndex.push(i);
-                break;
-            case CLOSE_PAIR:
-                if (!stackIndex.empty())
-                {
-                    open = stackIndex.top();
-                    secStructure.pair(open, i);
-                    stackIndex.pop();
-                }
-                else
-                {
-                    throw(InvalidStructureException("Unexpected closing pair"));
-                }
-                break;
-            default:
-                throw(InvalidStructureException("Unexpected symbol: " + secStructure.paired_with(i)));
-                break;
-        }
-    }
-    if (!stackIndex.empty())
-    {
-        throw(InvalidStructureException("Pairs pending to close"));
-    }
+    return 0; //temporal
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
     structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     FileLine sseq = seqRNAm.getString();
 
     std::string fileInput;
-    helper::createTmpFile(fileInput);
+    etilico::createTemporaryFilename(fileInput);
     std::string fileOutput;
-    helper::createTmpFile(fileOutput);
+    etilico::createTemporaryFilename(fileOutput);
 
     helper::write(fileInput, sseq);
     std::stringstream ss;
@@ -148,22 +104,22 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecS
     const etilico::Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
     etilico::runCommand(cmd);
 
- 	/* output file look like this:
+    /* output file look like this:
      * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
      * ...(((((((....(..((.....))..).))).)))). (-10.80)
-     */    
+     */
     FileLine aux;
-    helper::readLine(fileOutput, LINE_NO, aux);
+    helper::readLine(fileOutput, ViennaParser::LINE_NO, aux);
 
     std::string str;
     helper::readValue(aux, 0, seqRNAm.length(), str);
-    parseStructure(str, structureRNAm);
+    ViennaParser::parseStructure(str, structureRNAm);
 
     Fe energy;
     readFreeEnergy(aux, seqRNAm.length(), energy);
-    
-    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()));
+
+    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()) == 0);
 
     return energy;
 }

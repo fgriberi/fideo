@@ -47,14 +47,14 @@ private:
 
     ///Class that allows parsing the body of a file
     class BodyParser
-    {       
+    {
     public:
- 		/** @brief Parse the line and get the value dG
+        /** @brief Parse the line and get the value dG
          *
          * @param line: line to parser
          * @return void
          */
-        void parse(std::string& line);        
+        void parse(std::string& line);
 
         Fe dG; /// free energy
 
@@ -72,7 +72,7 @@ private:
 };
 
 void RNAduplex::BodyParser::parse(std::string& line)
-{   
+{
     std::stringstream ss(line);
     std::vector<std::string> result;
     ss >> result;
@@ -81,7 +81,7 @@ void RNAduplex::BodyParser::parse(std::string& line)
         throw RNABackendException("Invalid output RNAduplex.");
     }
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-    helper::convertFromString(deltaG, dG);            
+    helper::convertFromString(deltaG, dG);
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
@@ -96,11 +96,11 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const std::string seq2 = shorterSeq.getString();
 
     std::string inputTmpFile;
-    helper::createTmpFile(inputTmpFile);
+    etilico::createTemporaryFilename(inputTmpFile);
     std::string outpTmpFile;
-    helper::createTmpFile(outpTmpFile);
+    etilico::createTemporaryFilename(outpTmpFile);
 
-	///Constructed as required by RNAduplex
+    ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1;
     toHybridize << "\n";
@@ -115,7 +115,7 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const etilico::Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(outpTmpFile.c_str());
+    File fileOutput(outpTmpFile.c_str());
     if (!fileOutput)
     {
         throw NotFoundFileException();
@@ -124,10 +124,10 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     std::string line;
     getline(fileOutput, line);
     body.parse(line);
-    
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()));
-    
+
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()) == 0);
+
     return body.dG;
 }
 } // namespace fideo

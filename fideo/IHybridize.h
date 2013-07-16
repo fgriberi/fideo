@@ -38,17 +38,25 @@
 #define _IHYBRIDIZE_H
 
 #include <biopp/biopp.h>
+#include <mili/mili.h>
 #include "fideo/FideoHelper.h"
 #include "fideo/RnaBackendsTypes.h"
 
 namespace fideo
 {
 
+struct IHybridize;
+
+typedef mili::FactoryRegistry<IHybridize, std::string> Hybridizer;
+
 ///Interface for sequence's hybridize services.
 struct IHybridize
 {
+
+    typedef mili::Factory<std::string, IHybridize> Factory;
+
     /** @brief Hybridize an RNA sequence
-     * 
+     *
      * @param longerSeq: longer sequence the RNA sequence to Hybridize.
      * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
      * @param longerCirc: if the longerSeq it's circular.
@@ -61,21 +69,21 @@ struct IHybridize
      */
     virtual ~IHybridize() {}
 
-	 /** @brief Get availables backend
-     *
-     * Method that provide the available backends for hybridize service.
-     * @param slist: to fill with different backends
-     * @return void
-     */
+    /** @brief Get availables backend
+    *
+    * Method that provide the available backends for hybridize service.
+    * @param slist: to fill with different backends
+    * @return void
+    */
     static void getAvailableBackends(Backend& slist)
     {
-        mili::Factory<std::string, IHybridize>::KeyIterator it(mili::FactoryRegistry<IHybridize, std::string>::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Hybridizer::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);
             it++;
         }
-    }    
+    }
 };
 
 } //namespace fideo

@@ -1,6 +1,6 @@
 /*
- * @file      unafold_test.cpp
- * @brief     unafold_test is a test file to UNAFold backend.
+ * @file      RNAcofoldTest.cpp
+ * @brief     RNAcofoldTest is a test file to RNAcofold backend.
  *
  * @author    Franco Riberi
  * @email     fgriberi AT gmail.com
@@ -10,9 +10,9 @@
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
- * @date November 2012
+ * @date 2013
  *
- * Copyright (C) 2012 Franco Riberi, FuDePAN
+ * Copyright (C) 2013 Franco Riberi, FuDePAN
  *
  * This file is part of fideo.
  *
@@ -35,27 +35,22 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
 using namespace fideo;
 
-TEST(UnaFoldBackendTestSuite, BasicTest)
+TEST(RNAcofoldBackendTestSuite, BasicTest)
 {
-    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
-    biopp::SecStructure secStructure;
+    const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGACAACCU");
 
-    IFold* p = mili::FactoryRegistry<IFold, std::string>::new_class("UNAFold");
+    IHybridize* p = Hybridizer::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
-    EXPECT_NO_THROW(p->fold(seq, true, secStructure));
+    double dG = p->hybridize(seq1, false, seq2);
+    EXPECT_DOUBLE_EQ(dG, -9.80);
     delete p;
-
-    EXPECT_EQ(32, secStructure.size());
-    EXPECT_TRUE(secStructure.is_circular());
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
-
-

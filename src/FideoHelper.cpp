@@ -31,6 +31,10 @@
  *
  */
 
+#include <fstream>
+#include <cerrno>
+#include <unistd.h>
+
 #include "fideo/FideoHelper.h"
 
 /// Temporal functions
@@ -43,17 +47,6 @@ namespace fideo
 {
 namespace helper
 {
-
-void createTmpFile(std::string& nameTmpFile)
-{
-    char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
-    const int fileDescriptor = mkstemp(nameFileAux);
-    if (fileDescriptor < 1)
-    {
-        throw TmpFileCreateException();
-    }
-    nameTmpFile = nameFileAux;
-}
 
 void write(const FilePath& file, FileLinesCt& lines)
 {
@@ -92,7 +85,7 @@ void write(const FilePath& file, FileLine& line)
 
 void readLine(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
-    std::ifstream in;
+    File in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try
     {

@@ -31,6 +31,7 @@
  *
  */
 
+#include <etilico/etilico.h>
 #include <HelperTest.h>
 
 namespace fideo

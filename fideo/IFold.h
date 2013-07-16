@@ -38,23 +38,43 @@
 #define _IFOLD_H
 
 #include <biopp/biopp.h>
+#include <mili/mili.h>
 #include "fideo/RnaBackendsTypes.h"
 #include "fideo/FideoHelper.h"
+#include "fideo/IMotifObserver.h"
 
 namespace fideo
 {
 
-///Interface for sequence's folding services.
+struct IFold;
+
+typedef mili::FactoryRegistry<IFold, std::string> Folder;
+
+/** @brief Interface for sequence's folding services.
+*
+*/
 struct IFold
-{    
+{
+    typedef mili::Factory<std::string, IFold> Factory;
+
     /** @brief Fold an RNA sequence
-     * 
+     *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
-     * @param structureRNAm: the structure where to write the folding.     
+     * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) = 0;
+
+    /** @brief Fold an RNA sequence
+     *
+     * @param seqRNAm: the RNA sequence to fold.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param motif: specific implementation of IMotifObserfer
+     * @return The free energy in the structure.
+     */
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Class destructor
      *
@@ -67,9 +87,9 @@ struct IFold
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(Backend& slist)    
+    static void getAvailableBackends(Backend& slist)
     {
-        mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Folder::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

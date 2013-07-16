@@ -43,19 +43,19 @@ private:
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
     static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
-	///Class that allows parsing the body of a file
+    ///Class that allows parsing the body of a file
     class BodyParser
-    {    
+    {
     public:
         Fe dG; ///free energy to read the file
 
-		/** @brief Parse the file and get the value dG
+        /** @brief Parse the file and get the value dG
          *
          * @param file: file to parser
          * @return void
          */
-        void parse(std::ifstream& file);
- 
+        void parse(File& file);
+
     private:
         static const unsigned int DELTA_G = 1;
         static const unsigned int SIZE_LINE = 3;
@@ -71,7 +71,7 @@ private:
     };
 };
 
-void IntaRNA::BodyParser::parse(std::ifstream& file)
+void IntaRNA::BodyParser::parse(File& file)
 {
     std::string temp;
     ///advance to the required line
@@ -89,7 +89,7 @@ void IntaRNA::BodyParser::parse(std::ifstream& file)
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);        
+        helper::convertFromString(deltaG, dG);
     }
 }
 
@@ -108,7 +108,7 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     const std::string seq2 = shorterSeq.getString();
 
     std::string tmpFileOutput;
-    helper::createTmpFile(tmpFileOutput);
+    etilico::createTemporaryFilename(tmpFileOutput);
 
     std::stringstream exec;
     exec << "./IntaRNA ";
@@ -127,14 +127,14 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     const etilico::Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
     etilico::runCommand(cmd);
 
-    std::ifstream fileOutput(tmpFileOutput.c_str());
+    File fileOutput(tmpFileOutput.c_str());
     if (!fileOutput)
     {
         throw RNABackendException("Output file not found.");
     }
     BodyParser body;
-    body.parse(fileOutput);    
-    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()));
+    body.parse(fileOutput);
+    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()) == 0);
 
     return body.dG;
 }

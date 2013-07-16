@@ -37,9 +37,8 @@
 #ifndef FIDEO_HELPER_H
 #define FIDEO_HELPER_H
 
-#include <fstream>
-#include <cerrno>
-#include <unistd.h>
+#include <string>
+#include <list>
 #include "fideo/RnaBackendsException.h"
 
 namespace fideo
@@ -52,6 +51,8 @@ typedef std::string FilePath;
 
 typedef std::string FileLine;
 
+typedef std::ifstream File;
+
 typedef unsigned int FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
@@ -60,12 +61,6 @@ typedef std::list<std::string> Backend;
 
 namespace helper
 {
-/** @brief Create a temporal file
- * 
- * @param nameTmpFile: to fill with name file created
- * @return void
- */
-void createTmpFile(std::string& nameTmpFile);
 
 /** @brief Write a file with multiple lines.
  *
@@ -76,7 +71,7 @@ void createTmpFile(std::string& nameTmpFile);
 void write(const FilePath& file, FileLinesCt& lines);
 
 /** @brief Write a file with a single line.
- * 
+ *
  * @param file: file path
  * @param line: line to write
  * @return void
@@ -84,7 +79,7 @@ void write(const FilePath& file, FileLinesCt& lines);
 void write(const FilePath& file, FileLine& line);
 
 /** @brief Read a line from a file
- * 
+ *
  * @param file: file path
  * @param lineno: line number to read
  * @param line: where to write the read line

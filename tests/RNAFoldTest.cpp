@@ -1,6 +1,6 @@
 /*
- * @file      RNAduplexTest.cpp
- * @brief     RNARNAduplexTest is a test file to RNAduplex backend.
+ * @file      RNAFoldTest.cpp
+ * @brief     RNAFoldTest is a test file to RNAFold backend.
  *
  * @author    Franco Riberi
  * @email     fgriberi AT gmail.com
@@ -10,9 +10,9 @@
  * System:    fideo: Folding Interface Dynamic Exchange Operations
  * Language:  C++
  *
- * @date 2013
+ * @date November 2012
  *
- * Copyright (C) 2013 Franco Riberi, FuDePAN
+ * Copyright (C) 2012 Franco Riberi, FuDePAN
  *
  * This file is part of fideo.
  *
@@ -35,24 +35,24 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "HelperTest.h"
 
 using namespace fideo;
 
-TEST(RNAduplexBackendTestSuite, BasicTest)
+TEST(RNAFoldBackendTestSuite, BasicTest)
 {
-    const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
-    const biopp::NucSequence seq2("AGGACAACCUUUGC");
+    const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAduplex");
+    IFold* p = Folder::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    double dG = p->hybridize(seq1, false, seq2);
-    EXPECT_DOUBLE_EQ(dG, -7.80);
+    Fe result = p->fold(seq, true, secStructure);
     delete p;
+
+    EXPECT_DOUBLE_EQ(result, -18.70);
+    EXPECT_TRUE(secStructure.is_circular());
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

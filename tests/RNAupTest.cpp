@@ -1,6 +1,6 @@
 /*
- * @file      RNAcofoldTest.cpp
- * @brief     RNAcofoldTest is a test file to RNAcofold backend.
+ * @file      RNAupTest.cpp
+ * @brief     RNAupTest is a test file to RNAup backend.
  *
  * @author    Franco Riberi
  * @email     fgriberi AT gmail.com
@@ -35,23 +35,24 @@
 #include <fstream>
 #include <fideo/fideo.h>
 #include <biopp/biopp.h>
-#include <mili/mili.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
 
 using namespace fideo;
 
-TEST(RNAcofoldBackendTestSuite, BasicTest)
+static const std::string FILE_NAME = "RNA_w25_u3_4_up.out";
+TEST(RNAupBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = mili::FactoryRegistry<IHybridize, std::string>::new_class("RNAcofold");
-    ASSERT_TRUE(p != NULL);
+    IHybridize* p = Hybridizer::new_class("RNAup");
+    EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
-    EXPECT_DOUBLE_EQ(dG, -9.80);
+    EXPECT_DOUBLE_EQ(dG, -6.66);
     delete p;
 
     EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(std::ifstream(FILE_NAME.c_str()));
 }

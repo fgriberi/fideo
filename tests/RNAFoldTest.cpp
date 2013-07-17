@@ -60,6 +60,12 @@ TEST(RNAFoldBackendTestSuite1, BasicTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(RNAFoldBackendTestSuite1, InvalidBackend)
+{
+    IFold* rnafold = Fold::new_class("RNAfold");    
+    ASSERT_TRUE(rnafold == NULL);
+}
+
 TEST(RNAFoldBackendTestSuite2, correctCommad1)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");

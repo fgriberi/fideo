@@ -83,7 +83,7 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 }
 
 void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{       
+{
     File OutputFile(inputFiles[FILE_2].c_str());
     if (!OutputFile)
     {

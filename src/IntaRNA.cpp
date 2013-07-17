@@ -93,7 +93,7 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
 }
 
 void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{   
+{
     File outputFile(inputFiles[FILE_1].c_str());
     if (!outputFile)
     {

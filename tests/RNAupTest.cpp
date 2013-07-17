@@ -63,6 +63,12 @@ TEST(RNAupBackendTestSuite1, BasicTest)
     EXPECT_FALSE(std::ifstream(FILE_NAME.c_str()));
 }
 
+TEST(RNAupBackendTestSuite1, InvalidBackend)
+{
+    IHybridize* rnaup = Hybridize::new_class("RNAUP");
+    ASSERT_TRUE(rnaup == NULL);
+}
+
 TEST(RNAupBackendTestSuite2, correctCommad)
 {
     const std::string seq1 = "AAAAAAAAGGGGGGGGCCCCCCCCTTTAAGGGGGGGGCCCCCCCCTTTTTTTT";

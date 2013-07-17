@@ -82,6 +82,12 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(IntaRNABackendTestSuite1, InvalidBackend)
+{
+    IHybridize* intarna = Hybridize::new_class("intaRNA");
+    ASSERT_TRUE(intarna == NULL);
+}
+
 TEST(IntaRNABackendTestSuite2, correctCommad)
 {
     const std::string seq1 = "AAAAAAAAGGGGGGGGCCCCCCCCUUUAAGGGGGGGGCCCCCCCCCUUUUUUUU";

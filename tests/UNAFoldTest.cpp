@@ -62,6 +62,12 @@ TEST(UnaFoldBackendTestSuite1, BasicTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(UnaFoldBackendTestSuite1, InvalidBackend)
+{
+    IFold* unafold = Fold::new_class("UNAFOLD");    
+    ASSERT_TRUE(unafold == NULL);
+}
+
 TEST(UnaFoldBackendTestSuite2, correctCommad1)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");

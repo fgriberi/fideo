@@ -54,7 +54,7 @@ private:
     /** @brief Obsolete lines in file
      *
      */
-    static const size_t OBSOLETE_LINES = 9; 
+    static const size_t OBSOLETE_LINES = 9;
 
     /** @brief Destructor of class
      *

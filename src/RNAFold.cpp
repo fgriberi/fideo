@@ -99,14 +99,14 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
     }
 }
 
-void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)                                                                                       
+void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
 {
     FileLine sseq = sequence.getString();
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
     std::string inputFile;
     etilico::createTemporaryFile(inputFile, path, prefix);
-    outputFiles.push_back(inputFile);   
+    outputFiles.push_back(inputFile);
     std::string outputFile;
     etilico::createTemporaryFile(outputFile, path, prefix);
     outputFiles.push_back(outputFile);
@@ -122,7 +122,7 @@ void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
 }
 
 void RNAFold::processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy)
-{    
+{
     FileLine aux;
     helper::readLine(inputFiles[OUTPUT_FILE], LINE_NO, aux);
 
@@ -139,6 +139,6 @@ void RNAFold::processingResult(const bool isCirc, biopp::SecStructure& structure
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     return 0; //temporal
-}  
+}
 
 } //namespace fideo

@@ -140,7 +140,7 @@ void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
 }
 
 void UNAFold::processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy)
-{    
+{
     File fileIn((inputFiles[INPUT_FILE] + ".ct").c_str());
     if (!fileIn)
     {

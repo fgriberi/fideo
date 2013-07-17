@@ -44,13 +44,13 @@ namespace fideo
 {
 
 class IHybridizeIntermediate : public IHybridize
-{	    
+{
 public:
 
-	/** @brief Represent intermediate files (input files and output files)
-	*
-	*/
-	typedef std::vector<std::string> IntermediateFiles;
+    /** @brief Represent intermediate files (input files and output files)
+    *
+    */
+    typedef std::vector<std::string> IntermediateFiles;
 
     /** @brief Represent a string separated by a char
     *
@@ -64,7 +64,7 @@ public:
      * @param longerCirc: if the longerSeq it's circular.
      * @return The free energy.
      */
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, 
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
                          const biopp::NucSequence& shorterSeq) const
     {
         if (longerCirc)
@@ -84,32 +84,32 @@ public:
     /** @brief Destructor of class
     *
     */
-	virtual ~IHybridizeIntermediate() {}	
+    virtual ~IHybridizeIntermediate() {}
 
     static const size_t FILE_1 = 0;
     static const size_t FILE_2 = 1;
     static const size_t FILE_3 = 2;
-    
+
 private:
 
-	/** @brief Prepare the necessary data for hybridize service
-	*
+    /** @brief Prepare the necessary data for hybridize service
+    *
     * @param longerSeq: longer sequence to Hybridize.
     * @param shorterSeq: shorter sequence to Hybridize
-	* @param command: to fill with execute Command
-	* @param outputFiles: created temporal file names
-	* @return void
-	*/
-	virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, 
+    * @param command: to fill with execute Command
+    * @param outputFiles: created temporal file names
+    * @return void
+    */
+    virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
                              etilico::Command& command, IntermediateFiles& outputFiles) const = 0;
 
-	/** @brief  Processing hybridize results
+    /** @brief  Processing hybridize results
      *
-     * @param inputFiles: temporal file names 
-     * @param freeEnergy: to fill with free energy     
+     * @param inputFiles: temporal file names
+     * @param freeEnergy: to fill with free energy
      * @return void
      */
-	virtual void processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const = 0;    
+    virtual void processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const = 0;
 };
 
 } //namespace fideo

@@ -80,7 +80,7 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 }
 
 void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{   
+{
     File outputFile(inputFiles[FILE_2].c_str());
     if (!outputFile)
     {
@@ -97,7 +97,7 @@ void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEn
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
 
-    freeEnergy = body.dG;       
+    freeEnergy = body.dG;
 }
 } // namespace fideo
 

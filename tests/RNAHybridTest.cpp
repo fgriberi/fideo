@@ -103,6 +103,12 @@ TEST(RNAHybridBackendTestSuite1, TestExampleInRNAhybridPackage)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(RNAHybridBackendTestSuite1, InvalidBackend)
+{
+    IHybridize* rnahybrid = Hybridize::new_class("RNAhybrid");
+    ASSERT_TRUE(rnahybrid == NULL);
+}
+
 TEST(RNAHybridBackendTestSuite2, correctCommad)
 {
     const std::string seq1 = "AAAAAAAAGGGGGGGGCCCCCCCCTTTAAGGGGGGGGCCCCCCCCTTTTTTTT";

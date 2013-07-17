@@ -49,7 +49,7 @@ namespace fideo
 typedef std::vector<std::string> IntermediateFiles;
 
 class IFoldIntermediate : public IFold
-{		
+{
 public:
 
     /** @brief Represent a string separated by a char
@@ -67,14 +67,14 @@ public:
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
     {
         structureRNAm.clear();
-        structureRNAm.set_circular(isCircRNAm);   
+        structureRNAm.set_circular(isCircRNAm);
         etilico::Command cmd;
         IntermediateFiles files;
-        prepareData(seqRNAm, isCircRNAm, cmd, files);    
+        prepareData(seqRNAm, isCircRNAm, cmd, files);
         etilico::runCommand(cmd);
         Fe freeEnergy;
         processingResult(isCircRNAm, structureRNAm, seqRNAm.length(), files, freeEnergy);
-        return freeEnergy;    
+        return freeEnergy;
     }
 
     /** @brief Fold a RNA sequence
@@ -90,33 +90,33 @@ public:
     /** @brief Destructor of class
     *
     */
-    virtual ~IFoldIntermediate() {} 
+    virtual ~IFoldIntermediate() {}
 
-    static const size_t INPUT_FILE = 0;    
+    static const size_t INPUT_FILE = 0;
     static const size_t OUTPUT_FILE = 1;
-    
+
 private:
 
-	/** @brief Prepare the necessary data for folding service
-	*
-	* @param sequence: the RNA sequence to fold.
-	* @param isCirc: if the sequence's circular.
-	* @param command: to fill with execute Command
-	* @param outputFiles: temporary file names created
-	* @return void
-	*/
-	virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles) = 0;
+    /** @brief Prepare the necessary data for folding service
+    *
+    * @param sequence: the RNA sequence to fold.
+    * @param isCirc: if the sequence's circular.
+    * @param command: to fill with execute Command
+    * @param outputFiles: temporary file names created
+    * @return void
+    */
+    virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles) = 0;
 
-	/** @brief Processing folding results
+    /** @brief Processing folding results
      *
      * @param isCirc: the sequence analyzed is circular
      * @param structureRNAm: structure to fill
      * @param sizeSequence: size of sequence
      * @param freeEnergy: to fill with free energy
-     * @param inputFiles: temporal file names 
+     * @param inputFiles: temporal file names
      * @return void
      */
-	virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy) = 0;
+    virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy) = 0;
 };
 
 } //namespace fideo

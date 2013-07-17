@@ -52,7 +52,7 @@ private:
 
     virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const;
     virtual void processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const;
-    
+
     /** @brief Destructor of class
      *
      */

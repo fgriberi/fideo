@@ -39,6 +39,18 @@
 #include "fideo/RNAFold.h"
 #undef RNA_FOLD_H
 
+/** @brief Temporal method requerid to execute remo
+*
+* @param derivedKey: name of derived class
+* @return pointer to the base class
+*/
+fideo::IFold* getDerivedFold(const std::string& derivedKey)
+{
+    fideo::IFold* const ptr = fideo::Fold::new_class(derivedKey);
+    mili::assert_throw<fideo::InvalidDerived>(ptr != NULL);
+    return ptr;
+}
+
 namespace fideo
 {
 

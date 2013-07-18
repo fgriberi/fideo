@@ -64,18 +64,7 @@ public:
      * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
-    {
-        structureRNAm.clear();
-        structureRNAm.set_circular(isCircRNAm);
-        etilico::Command cmd;
-        IntermediateFiles files;
-        prepareData(seqRNAm, isCircRNAm, cmd, files);
-        etilico::runCommand(cmd);
-        Fe freeEnergy;
-        processingResult(isCircRNAm, structureRNAm, seqRNAm.length(), files, freeEnergy);
-        return freeEnergy;
-    }
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
 
     /** @brief Fold a RNA sequence
      *

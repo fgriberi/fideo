@@ -65,22 +65,8 @@ public:
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
-                         const biopp::NucSequence& shorterSeq) const
-    {
-        if (longerCirc)
-        {
-            throw RNABackendException("Unsupported Sequence.");
-        }
-        IntermediateFiles files;
-        etilico::Command cmd;
-        prepareData(longerSeq, shorterSeq, cmd, files);
-        etilico::runCommand(cmd);
-
-        Fe freeEnergy;
-        processingResult(files, freeEnergy);
-        return freeEnergy;
-    }
-
+                         const biopp::NucSequence& shorterSeq) const;
+    
     /** @brief Destructor of class
     *
     */

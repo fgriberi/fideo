@@ -31,17 +31,61 @@
  *
  */
 
-#define RNA_DUPLEX_H
-#include "fideo/RNAduplex.h"
-#undef RNA_DUPLEX_H
+#include <etilico/etilico.h>
+#include "fideo/IHybridize.h"
 
 namespace fideo
 {
 
+using namespace mili;
+
+/** @brief RNAduplex is an implementation of IHybridize interface that use Vienna package
+ *
+ */
+class RNAduplex : public IHybridize
+{
+private:
+
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual ~RNAduplex() {}
+
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
+    class BodyParser
+    {
+    public:
+
+        /** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
+        void parse(std::string& line);
+
+        Fe dG; /// free energy
+
+    private:
+
+        /** @brief Represents the columns of the file to parse
+         *
+         */
+        enum Columns
+        {
+            ColRNAResults,
+            ColIndiceIJ,
+            ColTwoPoints,
+            ColIndiceKL,
+            ColdG,
+            NumberOfColumns
+        };
+    };
+};
+
 void RNAduplex::BodyParser::parse(std::string& line)
 {
     std::stringstream ss(line);
-    ResultLine result;
+    std::vector<std::string> result;
     ss >> result;
     if (result.size() != NumberOfColumns)
     {
@@ -53,8 +97,12 @@ void RNAduplex::BodyParser::parse(std::string& line)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
+    if (longerCirc)
+    {
+        throw RNABackendException("Unsupported Sequence.");
+    }
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
@@ -62,10 +110,8 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
-    std::string outputTmpFile;
-    etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
+    std::string outpTmpFile;
+    etilico::createTemporaryFile(outpTmpFile, path, prefix);
 
     ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -77,26 +123,24 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::stringstream cmd2;
     cmd2 << "RNAduplex ";
     cmd2 << "< " << inputTmpFile;
-    cmd2 << " > " << outputTmpFile;
+    cmd2 << " > " << outpTmpFile;
 
-    command = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
-}
+    const etilico::Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+    etilico::runCommand(cmd);
 
-void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{
-    File OutputFile(inputFiles[FILE_2].c_str());
-    if (!OutputFile)
+    File fileOutput(outpTmpFile.c_str());
+    if (!fileOutput)
     {
         throw NotFoundFileException();
     }
     BodyParser body;
     std::string line;
-    getline(OutputFile, line);
+    getline(fileOutput, line);
     body.parse(line);
 
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-    freeEnergy = body.dG;
-}
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()) == 0);
 
+    return body.dG;
+}
 } // namespace fideo

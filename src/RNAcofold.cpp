@@ -31,17 +31,52 @@
  *
  */
 
-#define RNA_COFOLD_H
-#include "fideo/RNAcofold.h"
-#undef RNA_COFOLD_H
+#include <etilico/etilico.h>
+#include "fideo/IHybridize.h"
 
 namespace fideo
 {
 
+/** @brief RNAcofold is an implementation of IHybridize interface that use Vienna package
+ *
+ */
+class RNAcofold : public IHybridize
+{
+private:
+
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual ~RNAcofold() {}
+
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
+    class BodyParser
+    {
+    public:
+
+        /** @brief Parse the line and get the value dG
+         *
+         * @param line: line to parser
+         * @return void
+         */
+        void parse(std::string& line);
+
+        Fe dG; ///free energy
+
+    private:
+        enum Columns
+        {
+            ColOpenParenthesis,
+            ColdG,
+            NumberOfColumns
+        };
+    };
+};
+
 void RNAcofold::BodyParser::parse(std::string& line)
 {
     std::stringstream ss(line);
-    ResultLine result;
+    std::vector<std::string> result;
     ss >> mili::Separator(result, ' ');
     if (result.size() != NumberOfColumns)
     {
@@ -53,8 +88,12 @@ void RNAcofold::BodyParser::parse(std::string& line)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
-void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+Fe RNAcofold::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
+    if (longerCirc)
+    {
+        throw RNABackendException("Unsupported Sequence.");
+    }
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
@@ -62,10 +101,8 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
     etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
 
     std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -76,28 +113,26 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     exec << "< " << inputTmpFile;
     exec << " > " << outputTmpFile;
 
-    command = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
-}
+    const etilico::Command cmd = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
+    etilico::runCommand(cmd);
 
-void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{
-    File outputFile(inputFiles[FILE_2].c_str());
-    if (!outputFile)
+    File fileOutput(outputTmpFile.c_str());
+    if (!fileOutput)
     {
         throw NotFoundFileException();
     }
 
     std::string temp;
-    getline(outputFile, temp);
-    getline(outputFile, temp);
+    getline(fileOutput, temp);
+    getline(fileOutput, temp);
 
     BodyParser body;
     body.parse(temp);
 
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()) == 0);
 
-    freeEnergy = body.dG;
+    return body.dG;
 }
 } // namespace fideo
 

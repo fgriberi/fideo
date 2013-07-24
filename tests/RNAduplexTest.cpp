@@ -31,8 +31,6 @@
  *
  */
 
-#define private public
-
 #include <string>
 #include <fstream>
 #include <fideo/fideo.h>
@@ -40,13 +38,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "HelperTest.h"
-#define RNA_DUPLEX_H
-#include "fideo/RNAduplex.h"
-#undef RNA_DUPLEX_H
 
 using namespace fideo;
 
-TEST(RNAduplexBackendTestSuite1, BasicTest)
+TEST(RNAduplexBackendTestSuite, BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
@@ -58,85 +53,5 @@ TEST(RNAduplexBackendTestSuite1, BasicTest)
     EXPECT_DOUBLE_EQ(dG, -8.30);
     delete p;
 
-    EXPECT_FALSE(HelperTest::checkDirTmp());
-}
-
-TEST(RNAduplexBackendTestSuite2, correctCommad)
-{	
-    const biopp::NucSequence longer("AAAAAAAAGGGGGGGGCCCCCCCCTTTAAGGGGGGGGCCCCCCCCTTTTTTTT");
-    const biopp::NucSequence shorter("AAGAUGUGGAAAAAUUGGAAUC");
-
-    biopp::SecStructure secStructure;
-    RNAduplex rnaduplex;
-    IHybridizeIntermediate::IntermediateFiles files;
-    etilico::Command cmd;    
-    rnaduplex.prepareData(longer, shorter, cmd, files);
-    
-    EXPECT_TRUE(HelperTest::checkDirTmp());
-    std::stringstream cmdExpected;
-    cmdExpected << "RNAduplex < "; 
-    cmdExpected << files[IHybridizeIntermediate::FILE_1];
-    cmdExpected << " > ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_2];
-    EXPECT_EQ(cmdExpected.str(), cmd);
-
-    unlink((files[IHybridizeIntermediate::FILE_1]).c_str());
-    unlink((files[IHybridizeIntermediate::FILE_2]).c_str());
-    EXPECT_FALSE(HelperTest::checkDirTmp());
-}
-
-static const size_t INVALID_COMMAND = 1;
-TEST(RNAduplexBackendTestSuite2, incorrectCommad)
-{
-   const etilico::Command cmd = "RNAcofold<inputTmpFile outputTmpFile";      
-   EXPECT_EQ(etilico::runCommand(cmd), INVALID_COMMAND);
-}
-
-TEST(RNAduplexBackendTestSuite2, FileNotExist)
-{
-    const std::string obsoleteFile = "/tmp/fideo-fileNotExist";
-    const std::string fileName = "/tmp/fideo-rnaduplex.test";        
-    RNAduplex rnaduplex;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
-    Fe freeEnergy;
-
-    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), NotFoundFileException);  
-    EXPECT_FALSE(HelperTest::checkDirTmp());   
-}
-
-TEST(RNAduplexBackendTestSuite2, InvalidFile)
-{
-    const std::string obsoleteFile = "/tmp/fideo-fileNotExist";
-    const std::string fileName = "/tmp/fideo-rnaduplex.test";        
-    std::ofstream file(fileName.c_str());
-    RNAduplex rnaduplex;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
-    Fe freeEnergy;
-
-    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), RNABackendException);    
-    unlink(fileName.c_str());
-    EXPECT_FALSE(HelperTest::checkDirTmp());
-}
-
-TEST(RNAduplexBackendTestSuite2, InvalidFile2)
-{
-    const std::string obsoleteFile = "/tmp/fideo-fileNotExist2";
-    const std::string fileName = "/tmp/fideo-rnaduplex.test";        
-    std::ofstream file(fileName.c_str());
-    file << ".(((((((.&))))))).18,26:1,8(-5.10)\n";   
-    file.close();
-
-    RNAduplex rnaduplex;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
-    Fe freeEnergy;
-
-    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), RNABackendException);    
-    unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

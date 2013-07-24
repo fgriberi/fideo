@@ -65,7 +65,7 @@ inline void convertFromString(const std::string& from, T& to)
 template<class T>
 inline void readValue(const FileLine& line, const FileLine::size_type offset, const size_t n, T& t)
 {
-    const bool success = mili::from_string(line.substr(offset, n),  t);
+    const bool success = mili::from_string(line.substr(offset, n), t);
     if (!success)
     {
         throw NotReadValueUsingOffsetException();

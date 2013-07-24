@@ -31,16 +31,58 @@
  *
  */
 
-#define RNA_UP_H
-#include "fideo/RNAup.h"
-#undef RNA_UP_H
+#include <etilico/etilico.h>
+#include "fideo/IHybridize.h"
 
 namespace fideo
 {
 
+using mili::operator>>;
+
+/** @brief RNAup is an implementation of IHybridize interface that use Vienna package
+ *
+ */
+class RNAup : public IHybridize
+{
+private:
+
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual ~RNAup() {}
+
+    /** @brief Class that allows parsing the body of a file
+    *
+    */
+    class BodyParser
+    {
+    public:
+        void parse(File& file);
+
+        Fe dG; ///free energy
+    private:
+
+        /** @brief Represents the columns of the file to parse
+         *
+         */
+        enum Columns
+        {
+            ColRNAduplexResults,
+            ColIndiceIJ,
+            ColTwoPoints,
+            ColIndiceKL,
+            ColdGTotal,
+            ColEqualSymbol,
+            ColdGInt,
+            ColPlusSymbol,
+            ColdGu_l,
+            NumberOfColumns
+        };
+    };
+
+};
+
 void RNAup::BodyParser::parse(File& file)
 {
-    ResultLine aux;
+    std::vector<std::string> aux;
     if (file >> aux)
     {
         if (aux.size() != NumberOfColumns)
@@ -59,9 +101,12 @@ void RNAup::BodyParser::parse(File& file)
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 static const std::string OUT_FILE = "RNA_w25_u2.out"; ///file generated to RNAup
 
-
-void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
+    if (longerCirc)
+    {
+        throw RNABackendException("Unsupported Sequence.");
+    }
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
@@ -69,10 +114,8 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
     etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
 
     ///Constructed as required by RNAup
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -84,25 +127,21 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
-}
+    const etilico::Command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
+    etilico::runCommand(cmd);
 
-void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{
-
-    File outputFile(inputFiles[FILE_2].c_str());
-    if (!outputFile)
+    File fileOutput(outputTmpFile.c_str());
+    if (!fileOutput)
     {
         throw NotFoundFileException();
     }
     BodyParser body;
-    body.parse(outputFile);
+    body.parse(fileOutput);
 
-    mili::assert_throw<UnlinkException>(unlink(OUT_FILE.c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(OUT_FILE.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()) == 0);
 
-    freeEnergy = body.dG;
+    return body.dG;
 }
-
 }

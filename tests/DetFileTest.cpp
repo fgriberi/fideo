@@ -39,9 +39,7 @@
 #include <fideo/fideo.h>
 #include <etilico/etilico.h>
 #include <gtest/gtest.h>
-#define UNA_FOLD_H
-#include "fideo/UNAFold.h"
-#undef UNA_FOLD_H
+#include "src/UNAFold.cpp" //Only include .cpp in tests file
 #include "HelperTest.h"
 
 using namespace fideo;
@@ -160,7 +158,7 @@ TEST(DetFileParserTestSuite, getInitAndEndPosOfNucleotidTest)
     EXPECT_EQ(endStack, 174);
 }
 
-TEST(DetFileParserTestSuite, ExternalRulecalculateAttribTest)
+TEST(DetFileParserTestSuite, ExternalRuleCalcAttribTest)
 {
     // build correct block
     Block externalLoopBlock;
@@ -176,7 +174,7 @@ TEST(DetFileParserTestSuite, ExternalRulecalculateAttribTest)
 
     UNAFold::DetFileParser::ExternalRule externalRule;
     IMotifObserver::Motif motif;
-    externalRule.calculateAttrib(externalLoopBlock, motif);
+    externalRule.calcAttrib(externalLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, EXTERNAL_LOOP);
     EXPECT_EQ(motif.attribute, attr);
@@ -191,10 +189,10 @@ TEST(DetFileParserTestSuite, ExternalRulecalculateAttribTest)
     invalidBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is C( 4)-G( 202)");
     invalidBlock.lines.push_back("Helix: ddG = -7.90 4 base pairs.");
 
-    ASSERT_DEATH(externalRule.calculateAttrib(invalidBlock, motif), "");
+    ASSERT_DEATH(externalRule.calcAttrib(invalidBlock, motif), "");
 }
 
-TEST(DetFileParserTestSuite, InteriorRulecalculateAttribTest)
+TEST(DetFileParserTestSuite, InteriorRuleCalcAttribTest)
 {
     // build correct block
     Block interiorLoopBlock;
@@ -209,7 +207,7 @@ TEST(DetFileParserTestSuite, InteriorRulecalculateAttribTest)
 
     UNAFold::DetFileParser::InteriorRule interiorRule;
     IMotifObserver::Motif motif;
-    interiorRule.calculateAttrib(interiorLoopBlock, motif);
+    interiorRule.calcAttrib(interiorLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, ASYMMETRIC);
     EXPECT_EQ(motif.attribute, attr);
@@ -224,10 +222,10 @@ TEST(DetFileParserTestSuite, InteriorRulecalculateAttribTest)
     invalidBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is C( 4)-G( 202)");
     invalidBlock.lines.push_back("Helix: ddG = -7.90 4 base pairs.");
 
-    EXPECT_THROW(interiorRule.calculateAttrib(invalidBlock, motif), IndexOutOfRange);
+    EXPECT_THROW(interiorRule.calcAttrib(invalidBlock, motif), IndexOutOfRange);
 }
 
-TEST(DetFileParserTestSuite, HairpinRulecalculateAttribTest)
+TEST(DetFileParserTestSuite, HairpinRuleCalcAttribTest)
 {
     // build correct block
     Block hairpinLoopBlock;
@@ -243,7 +241,7 @@ TEST(DetFileParserTestSuite, HairpinRulecalculateAttribTest)
 
     UNAFold::DetFileParser::HairpinRule hairpinRule;
     IMotifObserver::Motif motif;
-    hairpinRule.calculateAttrib(hairpinLoopBlock, motif);
+    hairpinRule.calcAttrib(hairpinLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, attr);
@@ -257,14 +255,14 @@ TEST(DetFileParserTestSuite, HairpinRulecalculateAttribTest)
     const size_t numAttrib = 4;
     const size_t amountStacks = 0;
 
-    hairpinRule.calculateAttrib(withoutStackBlock, motif);
+    hairpinRule.calcAttrib(withoutStackBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, HAIRPIN_LOOP);
     EXPECT_EQ(motif.attribute, numAttrib);
     EXPECT_EQ(motif.amountStacks, amountStacks);
 }
 
-TEST(DetFileParserTestSuite, MultiLoopRulecalculateAttribTest)
+TEST(DetFileParserTestSuite, MultiLoopRuleCalcAttribTest)
 {
     // build correct block
     Block multiLoopBlock;
@@ -284,14 +282,14 @@ TEST(DetFileParserTestSuite, MultiLoopRulecalculateAttribTest)
 
     UNAFold::DetFileParser::MultiRule multiRule;
     IMotifObserver::Motif motif;
-    multiRule.calculateAttrib(multiLoopBlock, motif);
+    multiRule.calcAttrib(multiLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, MULTI_LOOP);
     EXPECT_EQ(motif.attribute, attr);
     EXPECT_EQ(motif.amountStacks, stacks);
 }
 
-TEST(DetFileParserTestSuite, BulgeRulecalculateAttribTest)
+TEST(DetFileParserTestSuite, BulgeRuleCalcAttribTest)
 {
     // build correct block
     Block bulgeLoopBlock;
@@ -308,7 +306,7 @@ TEST(DetFileParserTestSuite, BulgeRulecalculateAttribTest)
 
     UNAFold::DetFileParser::BulgeRule bulgeRule;
     IMotifObserver::Motif motif;
-    bulgeRule.calculateAttrib(bulgeLoopBlock, motif);
+    bulgeRule.calcAttrib(bulgeLoopBlock, motif);
 
     EXPECT_EQ(motif.nameMotif, BULGE_LOOP);
     EXPECT_EQ(motif.attribute, attr);
@@ -351,54 +349,54 @@ TEST(DetFileParserTestSuite, builFirstBlockTest)
     ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
 }
 
-TEST(DetFileParserTestSuite, builBlockAndParserBlockTest)
-{
-    std::string nameFile;
-    getDetFilePath(nameFile);
-    std::ifstream fileToParse;
-    fileToParse.open(nameFile.c_str());
-    if (!fileToParse)
-    {
-        throw FileNotExist();
-    }
+// TEST(DetFileParserTestSuite, builBlockAndParserBlockTest)
+// {
+//     std::string nameFile;
+//     getDetFilePath(nameFile);
+//     std::ifstream fileToParse;
+//     fileToParse.open(nameFile.c_str());
+//     if (!fileToParse)
+//     {
+//         throw FileNotExist();
+//     }
 
-    UNAFold::DetFileParser parser;
-    parser.fillRules();
-    parser.goToBegin(fileToParse);
-    Block block;
-    parser.buildBlock(fileToParse, block);
+//     UNAFold::DetFileParser parser;
+//     parser.fillRules();
+//     parser.goToBegin(fileToParse);
+//     Block block;
+//     parser.buildBlock(fileToParse, block);
 
-    IMotifObserver::Motif motif;
-    parser.parseBlock(block, motif);
-    EXPECT_EQ(motif.nameMotif, block.motifName);
-    EXPECT_EQ(motif.attribute, 16);
-    EXPECT_EQ(motif.amountStacks, 3);
-    block.lines.clear();
+//     IMotifObserver::Motif motif;
+//     parser.parseBlock(block, motif);
+//     EXPECT_EQ(motif.nameMotif, block.motifName);
+//     EXPECT_EQ(motif.attribute, 16);
+//     EXPECT_EQ(motif.amountStacks, 3);
+//     block.lines.clear();
 
-    parser.buildBlock(fileToParse, block);
-    parser.parseBlock(block, motif);
-    EXPECT_EQ(motif.nameMotif, block.motifName);
-    EXPECT_EQ(motif.attribute, 17);
-    EXPECT_EQ(motif.amountStacks, 4);
-    block.lines.clear();
+//     parser.buildBlock(fileToParse, block);
+//     parser.parseBlock(block, motif);
+//     EXPECT_EQ(motif.nameMotif, block.motifName);
+//     EXPECT_EQ(motif.attribute, 17);
+//     EXPECT_EQ(motif.amountStacks, 4);
+//     block.lines.clear();
 
-    parser.buildBlock(fileToParse, block);
-    parser.parseBlock(block, motif);
-    EXPECT_EQ(motif.nameMotif, block.motifName);
-    EXPECT_EQ(motif.attribute, 3);
-    EXPECT_EQ(motif.amountStacks, 2);
+//     parser.buildBlock(fileToParse, block);
+//     parser.parseBlock(block, motif);
+//     EXPECT_EQ(motif.nameMotif, block.motifName);
+//     EXPECT_EQ(motif.attribute, 3);
+//     EXPECT_EQ(motif.amountStacks, 2);
 
-    Block expectedBlock;
-    expectedBlock.motifName = "Multi-loop";
-    expectedBlock.lines.push_back(": ddG = +2.40 External closing pair is A( 37)-T( 195)");
-    expectedBlock.lines.push_back(" 3 ss bases & 3 closing helices.");
-    expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 52)-T( 193)");
-    expectedBlock.lines.push_back("Stack: ddG = -2.10 External closing pair is A( 53)-T( 192)");
-    expectedBlock.lines.push_back("Helix: ddG = -3.00 3 base pairs.");
+//     Block expectedBlock;
+//     expectedBlock.motifName = "Multi-loop";
+//     expectedBlock.lines.push_back(": ddG = +2.40 External closing pair is A( 37)-T( 195)");
+//     expectedBlock.lines.push_back(" 3 ss bases & 3 closing helices.");
+//     expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 52)-T( 193)");
+//     expectedBlock.lines.push_back("Stack: ddG = -2.10 External closing pair is A( 53)-T( 192)");
+//     expectedBlock.lines.push_back("Helix: ddG = -3.00 3 base pairs.");
 
-    EXPECT_EQ(block.motifName, expectedBlock.motifName);
-    ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
-}
+//     EXPECT_EQ(block.motifName, expectedBlock.motifName);
+//     ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
+// }
 
 TEST(DetFileParserTestSuite, parseDetFileNotExistTest)
 {
@@ -413,31 +411,31 @@ TEST(DetFileParserTestSuite, parseDetFileNotExistTest)
 
 static const size_t AMOUNT_OF_BLOCKS = 15;
 
-TEST(DetFileParserTestSuite, builBlockWithLastBlockTest)
-{
-    std::string nameFile;
-    getDetFilePath(nameFile);
-    std::ifstream fileToParse;
-    fileToParse.open(nameFile.c_str());
-    if (!fileToParse)
-    {
-        throw FileNotExist();
-    }
+// TEST(DetFileParserTestSuite, builBlockWithLastBlockTest)
+// {
+//     std::string nameFile;
+//     getDetFilePath(nameFile);
+//     std::ifstream fileToParse;
+//     fileToParse.open(nameFile.c_str());
+//     if (!fileToParse)
+//     {
+//         throw FileNotExist();
+//     }
 
-    UNAFold::DetFileParser parser;
-    parser.fillRules();
-    parser.goToBegin(fileToParse);
-    Block block;
-    for (int i = 0; i < AMOUNT_OF_BLOCKS; ++i)
-    {
-        block.lines.clear();
-        parser.buildBlock(fileToParse, block);
-    }
+//     UNAFold::DetFileParser parser;
+//     parser.fillRules();
+//     parser.goToBegin(fileToParse);
+//     Block block;
+//     for (int i = 0; i < AMOUNT_OF_BLOCKS; ++i)
+//     {
+//         block.lines.clear();
+//         parser.buildBlock(fileToParse, block);
+//     }
 
-    Block expectedBlock;
-    expectedBlock.motifName = "Hairpin loop";
-    expectedBlock.lines.push_back(": ddG = +5.70 Closing pair is G( 16)-C( 20)");
+//     Block expectedBlock;
+//     expectedBlock.motifName = "Hairpin loop";
+//     expectedBlock.lines.push_back(": ddG = +5.70 Closing pair is G( 16)-C( 20)");
 
-    EXPECT_EQ(block.motifName, expectedBlock.motifName);
-    ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
-}
+//     EXPECT_EQ(block.motifName, expectedBlock.motifName);
+//     ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
+// }

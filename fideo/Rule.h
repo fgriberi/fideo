@@ -47,7 +47,7 @@ public:
     * @param motif: to fill with attributes of block
     * @return void
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const = 0;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const = 0;
 
     /** @brief Destructor of class
     *
@@ -102,7 +102,7 @@ private:
     /** @brief Calculate the amount of ss bases on the block
     *
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~ExternalRule() {}
 };
 
@@ -117,7 +117,7 @@ private:
     *          of interior loop (symmetric or asymmetric)
     *
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~InteriorRule() {}
 };
 
@@ -131,7 +131,7 @@ private:
     /** @brief Calculate the amout of nucleotide on the hairpin loop
     *
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~HairpinRule() {}
 };
 
@@ -145,7 +145,7 @@ private:
     /** @brief Calculate the amount of ss bases on the block
     *
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~MultiRule() {}
 };
 
@@ -159,6 +159,6 @@ private:
     /** @brief Calculate the amount of nucleotide on the bulge loop
     *
     */
-    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~BulgeRule() {}
 };

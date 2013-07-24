@@ -31,12 +31,44 @@
  *
  */
 
-#define RNA_HYBRID_H
-#include "fideo/RNAHybrid.h"
-#undef RNA_HYBRID_H
+#include <etilico/etilico.h>
+#include "fideo/IHybridize.h"
 
 namespace fideo
 {
+
+/** @brief RNAHybrid is an implementation of IHybridize interface
+ *
+ */
+class RNAHybrid : public IHybridize
+{
+private:
+
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    virtual ~RNAHybrid() {}
+
+    static const size_t OBSOLETE_LINES = 6;
+
+    /** @brief Class that allows parsing the body of a file
+     *
+     */
+    class BodyParser
+    {
+    public:
+
+        /** @brief Parse the file and get the value dG
+         *
+         * @param file: file to parser
+         * @return void
+         */
+        void parse(File& file);
+
+        Fe dG; ///free energy
+        static const size_t OBSOLETE_dG = 1000; //no significant hybridization found
+        static const size_t SIZE_LINE = 3;
+        static const size_t DELTA_G = 1;
+    };
+};
 
 void RNAHybrid::BodyParser::parse(File& file)
 {
@@ -46,7 +78,7 @@ void RNAHybrid::BodyParser::parse(File& file)
         getline(file, temp);
     }
     std::stringstream ss(temp);
-    ResultLine result;
+    std::vector<std::string> result;
     ss >> mili::Separator(result, ' ');
     if (result.size() != SIZE_LINE)
     {
@@ -61,50 +93,50 @@ void RNAHybrid::BodyParser::parse(File& file)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
-void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
+    if (longerCirc)
+    {
+        throw UnsupportedException();
+    }
+
     ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
-    std::string tmpTargetFile;
-    etilico::createTemporaryFile(tmpTargetFile, path, prefix);
-    outputFiles.push_back(tmpTargetFile);
-    std::string tmpQueryFile;
-    etilico::createTemporaryFile(tmpQueryFile, path, prefix);
-    outputFiles.push_back(tmpQueryFile);
-    std::string tmpOutputFile;
-    etilico::createTemporaryFile(tmpOutputFile, path, prefix);
-    outputFiles.push_back(tmpOutputFile);
+    std::string fileTmpTarget;
+    etilico::createTemporaryFile(fileTmpTarget, path, prefix);
+    std::string fileTmpQuery;
+    etilico::createTemporaryFile(fileTmpQuery, path, prefix);
+    std::string fileTmpOutput;
+    etilico::createTemporaryFile(fileTmpOutput, path, prefix);
 
-    helper::write(tmpTargetFile, targetSequence);
-    helper::write(tmpQueryFile, querySequence);
+    helper::write(fileTmpTarget, targetSequence);
+    helper::write(fileTmpQuery, querySequence);
 
     std::stringstream exec;
     exec << "RNAhybrid -s 3utr_human ";
-    exec << "-t " << tmpTargetFile;
-    exec << " -q " << tmpQueryFile;
-    exec << " > " << tmpOutputFile;
+    exec << "-t " << fileTmpTarget;
+    exec << " -q " << fileTmpQuery;
+    exec << " > " << fileTmpOutput;
 
-    command = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > tmpOutputFile
-}
+    const etilico::Command cmd = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > fileTmpOutput
+    etilico::runCommand(cmd);
 
-void RNAHybrid::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{
-    File outputFile(inputFiles[FILE_3].c_str());
-    if (!outputFile)
+    File fileOutput(fileTmpOutput.c_str());
+    if (!fileOutput)
     {
         throw NotFoundFileException();
     }
     BodyParser body;
-    body.parse(outputFile);
+    body.parse(fileOutput);
 
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_3].c_str()) == 0);
-    freeEnergy = body.dG;
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpTarget.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpQuery.c_str()) == 0);
+    mili::assert_throw<ExceptionUnlink>(unlink(fileTmpOutput.c_str()) == 0);
+
+    return body.dG;
 }
-
 } // namespace fideo

@@ -32,9 +32,8 @@
  */
 
 #include <unistd.h>
-#define INTA_RNA_H
-#include "fideo/IntaRNA.h"
-#undef INTA_RNA_H
+#include <etilico/etilico.h>
+#include "fideo/IHybridize.h"
 
 /** @brief Temporal method requerid to execute remo
 *
@@ -51,6 +50,50 @@ fideo::IHybridize* getDerivedHybridize(const std::string& derivedKey)
 namespace fideo
 {
 
+/** @brief IntaRNA is an implementation of IHybridize interface
+*
+*/
+class IntaRNA : public IHybridize
+{
+private:
+
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const;
+    static const size_t OBSOLETE_LINES = 9; ///obsolete lines in file
+
+    /** @brief Class that allows parsing the body of a file
+    *
+    */
+    class BodyParser
+    {
+    public:
+        Fe dG; ///free energy to read the file
+
+        /** @brief Parse the file and get the value dG
+         *
+         * @param file: file to parser
+         * @return void
+         */
+        void parse(File& file);
+
+    private:
+
+        static const size_t DELTA_G = 1;
+        static const size_t SIZE_LINE = 3;
+        static const size_t OBSOLETE_dG = 1000; ///no significant hybridization found
+
+        /** @brief Represents the columns of the file to parse
+         *
+         */
+        enum Columns
+        {
+            ColEnergy,
+            ColdG,
+            ColUnit,
+            NumberOfColumns
+        };
+    };
+};
+
 void IntaRNA::BodyParser::parse(File& file)
 {
     std::string temp;
@@ -60,7 +103,7 @@ void IntaRNA::BodyParser::parse(File& file)
         getline(file, temp);
     }
     std::stringstream ss(temp);
-    ResultLine result;
+    std::vector<std::string> result;
     ss >> mili::Separator(result, ' ');
     if (result.size() != SIZE_LINE)
     {
@@ -77,22 +120,26 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
-void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const
 {
+    if (longerCirc)
+    {
+        throw RNABackendException("Unsupported Sequence.");
+    }
+
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
-    std::string tmpOutputFile;
-    etilico::createTemporaryFile(tmpOutputFile, path, prefix);
-    outputFiles.push_back(tmpOutputFile);
+    std::string tmpFileOutput;
+    etilico::createTemporaryFile(tmpFileOutput, path, prefix);
 
     std::stringstream exec;
     exec << "./IntaRNA ";
     exec << seq1;
     exec << " " << seq2;
-    exec << " > " << tmpOutputFile;
+    exec << " > " << tmpFileOutput;
 
     //move to the directory where is the folding
     std::string executablePath;
@@ -101,20 +148,21 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     {
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
-    command = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
-}
 
-void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
-{
-    File outputFile(inputFiles[FILE_1].c_str());
-    if (!outputFile)
+    const etilico::Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+    etilico::runCommand(cmd);
+
+    File fileOutput(tmpFileOutput.c_str());
+    if (!fileOutput)
     {
-        throw NotFoundFileException();
+        throw RNABackendException("Output file not found.");
     }
     BodyParser body;
-    body.parse(outputFile);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    freeEnergy = body.dG;
-}
+    body.parse(fileOutput);
+    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()) == 0);
 
+    return body.dG;
+}
 } // namespace fideo
+
+

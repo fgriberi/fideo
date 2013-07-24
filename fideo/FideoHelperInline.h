@@ -81,7 +81,7 @@ inline void readValue(const FileLine& line, const FileLine::size_type offset, co
 template<class T>
 inline void readValue(const FileLine& line, T& t)
 {
-    const bool success = mili::from_string(line, t);
+    const bool success = from_string(line, t);
     if (!success)
     {
         throw NotReadValueException();

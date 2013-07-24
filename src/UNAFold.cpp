@@ -31,7 +31,6 @@
  *
  */
 
-#include <etilico/etilico.h>
 #define UNA_FOLD_H
 #include "fideo/UNAFold.h"
 #undef UNA_FOLD_H
@@ -48,7 +47,7 @@ UNAFold::~UNAFold()
 
 void UNAFold::HeaderParser::parse(File& file)
 {
-    std::vector<std::string> aux;
+    ResultLine aux;
     if (file >> aux)
     {
         if (aux.size() != NumberOfColumns)
@@ -67,7 +66,7 @@ void UNAFold::HeaderParser::parse(File& file)
 
 bool UNAFold::BodyLineParser::parse(File& file)
 {
-    std::vector<std::string> aux;
+    ResultLine aux;
     const bool ret = (file >> aux);
 
     if (ret)
@@ -89,17 +88,17 @@ static const std::string PATH_TMP = "/tmp/";
 
 void UNAFold::deleteAllFiles()
 {
-    mili::assert_throw<ExceptionUnlink>(unlink(temporalFileName.c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".ct").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + "_1.ct").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".dG").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".h-num").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".rnaml").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".plot").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".run").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".ss-count").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".ann").c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink((temporalFileName + ".det").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink(temporalFileName.c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".ct").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + "_1.ct").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".dG").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".h-num").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".rnaml").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".plot").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".run").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".ss-count").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".ann").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".det").c_str()) == 0);
 }
 
 void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure& secStructure)
@@ -114,7 +113,7 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     }
 }
 
-void UNAFold::prepareFileToFold(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command)
+void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
 {
     FileLine sseq = sequence.getString();
     const std::string path = "/tmp/";
@@ -122,6 +121,7 @@ void UNAFold::prepareFileToFold(const biopp::NucSequence& sequence, const bool i
     std::string temporalFile;
     etilico::createTemporaryFile(temporalFile, path, prefix);
     temporalFileName = temporalFile;
+    outputFiles.push_back(temporalFile);
 
     helper::write(temporalFile, sseq);
     std::stringstream ss;
@@ -139,12 +139,12 @@ void UNAFold::prepareFileToFold(const biopp::NucSequence& sequence, const bool i
     command = ss.str(); /// UNAFold.pl --max=1 ("" | --circular) temporalFile
 }
 
-void UNAFold::parseCTFile(const bool isCirc, biopp::SecStructure& structureRNAm, Fe& freeEnergy)
+void UNAFold::processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy)
 {
-    File fileIn((temporalFileName + ".ct").c_str());
+    File fileIn((inputFiles[INPUT_FILE] + ".ct").c_str());
     if (!fileIn)
     {
-        throw RNABackendException("output file not found.");
+        throw NotFoundFileException();
     }
     HeaderParser headerLine;
     headerLine.parse(fileIn);
@@ -157,27 +157,6 @@ void UNAFold::parseCTFile(const bool isCirc, biopp::SecStructure& structureRNAm,
     }
     structureRNAm.set_circular(isCirc);
     freeEnergy = headerLine.deltaG;
-}
-
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
-{
-    structureRNAm.clear();
-    etilico::Command cmd;
-    prepareFileToFold(seqRNAm, isCircRNAm, cmd);
-    etilico::runCommand(cmd);
-
-    /* file output look like this:
-     * amountOfNucleotids dG = 'value'  nameSequence
-     * nucleotideNumber  nucleotide previus next pairedWith nucleotideNumber   -    -
-     *       1                A        0     2       0             1           0    0
-     *       .                .        .     .       .             .           .    .
-    */
-
-    Fe freeEnergy;
-    parseCTFile(isCircRNAm, structureRNAm, freeEnergy);
-    return freeEnergy;
-
-    // return headerLine.deltaG;
 }
 
 //------------------------------------- DetFileParser --------------------------------------
@@ -245,7 +224,7 @@ void UNAFold::DetFileParser::parseStackLine(const std::string& line, std::string
 void UNAFold::DetFileParser::parseBlock(const Block& block, IMotifObserver::Motif& motif)
 {
     Rule* rule = availableRules[block.motifName];
-    rule->calcAttrib(block, motif);
+    rule->calculateAttrib(block, motif);
 }
 
 void UNAFold::DetFileParser::fillRules()
@@ -274,14 +253,15 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
     goToBegin(fileToParse);
     Block currentBlock;
     IMotifObserver::Motif motif;
+    observer->start();
     while (!fileToParse.eof())
     {
-
         buildBlock(fileToParse, currentBlock);
         parseBlock(currentBlock, motif);
         observer->processMotif(motif);
         currentBlock.lines.clear();
     }
+    observer->finalize();
 }
 
 //--------------------------------------------------- Rule ----------------------------------------------------
@@ -289,7 +269,7 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
 void UNAFold::DetFileParser::Rule::getSubstrInPos(const std::string& lineInput, const size_t pos, std::string& res)
 {
     std::stringstream ss(lineInput);
-    std::vector<std::string> result;
+    ResultLine result;
     ss >> mili::Separator(result, ' ');
     if (pos > result.size())
     {
@@ -367,7 +347,7 @@ void UNAFold::DetFileParser::Rule::getSecondElement(const Body& list, std::strin
 
 static const size_t SS_EXTERNAL = 4;
 
-void UNAFold::DetFileParser::ExternalRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
+void UNAFold::DetFileParser::ExternalRule::calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {
     assert(block.motifName == EXTERNAL_LOOP);
     const std::string currentLine = block.lines.front();
@@ -378,7 +358,7 @@ void UNAFold::DetFileParser::ExternalRule::calcAttrib(const Block& block, IMotif
     motif.amountStacks = block.lines.size() - 2; //one by concreteMotif and one by helix line
 }
 
-void UNAFold::DetFileParser::InteriorRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
+void UNAFold::DetFileParser::InteriorRule::calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {
     assert(block.motifName == INTERIOR_LOOP);
     const std::string currentLine = block.lines.front();
@@ -412,7 +392,7 @@ void UNAFold::DetFileParser::InteriorRule::calcAttrib(const Block& block, IMotif
     motif.amountStacks = block.lines.size() - 2;
 }
 
-void UNAFold::DetFileParser::HairpinRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
+void UNAFold::DetFileParser::HairpinRule::calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {
     assert(block.motifName == HAIRPIN_LOOP);
     const std::string currentLine = block.lines.front();
@@ -434,7 +414,7 @@ void UNAFold::DetFileParser::HairpinRule::calcAttrib(const Block& block, IMotifO
 
 static const size_t SS_MULTI = 1;
 
-void UNAFold::DetFileParser::MultiRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
+void UNAFold::DetFileParser::MultiRule::calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {
     assert(block.motifName == MULTI_LOOP);
     std::string currentLine;
@@ -446,7 +426,7 @@ void UNAFold::DetFileParser::MultiRule::calcAttrib(const Block& block, IMotifObs
     motif.amountStacks = block.lines.size() - 3; // the information of multi-loop motif is in 2 lines
 }
 
-void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObserver::Motif& motif) const
+void UNAFold::DetFileParser::BulgeRule::calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const
 {
     assert(block.motifName == BULGE_LOOP);
 
@@ -476,10 +456,11 @@ void UNAFold::DetFileParser::BulgeRule::calcAttrib(const Block& block, IMotifObs
 //----------------------------------- Fold with observer --------------------------------------
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
-    const Fe freeEnergy = fold(seqRNAm, isCircRNAm, structureRNAm);
+    const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, structureRNAm);
     DetFileParser parser;
     const std::string detFile = temporalFileName + ".det";
     parser.parseDet(detFile, motifObserver);
     return freeEnergy;
+    return 0;
 }
 } // namespace fideo

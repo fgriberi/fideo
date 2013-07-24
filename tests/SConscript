@@ -1,7 +1,7 @@
 Import ('env')
 
 name = 'fideo'
-inc = env.Dir('.')
+inc = env.Dir('.'), env.Dir('src/RNAFold.cpp')
 src = env.Glob('*.cpp')
 deps = ['etilico', 'biopp', 'gtest_main', 'gtest']
 

@@ -60,7 +60,7 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidStructureException, FideoExceptionHierarch
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, FideoExceptionHierarchy, "Error in string parser");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, FideoExceptionHierarchy, "Unsupported Sequence");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, FideoExceptionHierarchy, "Output file not found");
-DEFINE_SPECIFIC_EXCEPTION_TEXT(ExceptionUnlink, FideoExceptionHierarchy, "Error unlink");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(UnlinkException, FideoExceptionHierarchy, "Error unlink");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, FideoExceptionHierarchy, "Invalid motif");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, FideoExceptionHierarchy, "The .det file not exist");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, FideoExceptionHierarchy, "Index out of range");

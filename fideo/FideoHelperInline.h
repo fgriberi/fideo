@@ -1,17 +1,17 @@
 /*
- * @file   FideoHelperInline.h
- * @brief  Inline definitions.
+ * @file     FideoHelperInline.h
+ * @brief    Inline definitions.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing necessary methods
+ * Contents: Header file for fideo providing necessary methods
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -65,7 +65,7 @@ inline void convertFromString(const std::string& from, T& to)
 template<class T>
 inline void readValue(const FileLine& line, const FileLine::size_type offset, const size_t n, T& t)
 {
-    const bool success = mili::from_string(line.substr(offset, n), t);
+    const bool success = mili::from_string(line.substr(offset, n),  t);
     if (!success)
     {
         throw NotReadValueUsingOffsetException();
@@ -73,7 +73,7 @@ inline void readValue(const FileLine& line, const FileLine::size_type offset, co
 }
 
 /** @brief Read a value from a line file.
- * 
+ *
  * @param line: file line
  * @param t: where to write the value
  * @return void

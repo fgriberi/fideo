@@ -1,14 +1,14 @@
 /*
- * @file   FideoHelper.cpp
- * @brief  This is the implementation of FideoHelper interface.
+ * @file     FideoHelper.cpp
+ * @brief    This is the implementation of FideoHelper interface.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing class FideoHelper implementation.
+ * Contents: Source file for fideo providing class FideoHelper implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date April 2013
  *
@@ -31,29 +31,13 @@
  *
  */
 
+#include <mili/mili.h>
 #include "fideo/FideoHelper.h"
-
-/// Temporal functions
-int linkFictitious()
-{
-    return 1;
-}
 
 namespace fideo
 {
 namespace helper
 {
-
-void createTmpFile(std::string& nameTmpFile)
-{
-    char nameFileAux[] = "/tmp/myTmpFile-XXXXXX";
-    const int fileDescriptor = mkstemp(nameFileAux);
-    if (fileDescriptor < 1)
-    {
-        throw TmpFileCreateException();
-    }
-    nameTmpFile = nameFileAux;
-}
 
 void write(const FilePath& file, FileLinesCt& lines)
 {
@@ -92,7 +76,7 @@ void write(const FilePath& file, FileLine& line)
 
 void readLine(const FilePath& file, FileLineNo lineno, FileLine& line)
 {
-    std::ifstream in;
+    File in;
     in.exceptions(std::ifstream::eofbit | std::ifstream::failbit | std::ifstream::badbit);
     try
     {

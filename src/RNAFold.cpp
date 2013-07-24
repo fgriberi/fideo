@@ -1,17 +1,17 @@
 /*
- * @file   RNAFold.cpp
- * @brief  RNAFold is the implementation of IFold interface. It's a specific backend to folding.
+ * @file     RNAFold.cpp
+ * @brief    RNAFold is an implementation of IFold interface. It's a specific backend to folding.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAFold implementation.
+ * Contents: Source file for fideo providing backend RNAFold implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 10, 2010, 2012 4:26 PM
  *
@@ -35,38 +35,24 @@
  */
 
 #include <stack>
-#include <etilico/etilico.h> 
-#include "fideo/IFold.h"
+#define RNA_FOLD_H
+#include "fideo/RNAFold.h"
+#undef RNA_FOLD_H
+
+/** @brief Temporal method requerid to execute remo
+*
+* @param derivedKey: name of derived class
+* @return pointer to the base class
+*/
+fideo::IFold* getDerivedFold(const std::string& derivedKey)
+{
+    fideo::IFold* const ptr = fideo::Fold::new_class(derivedKey);
+    mili::assert_throw<fideo::InvalidDerived>(ptr != NULL);
+    return ptr;
+}
 
 namespace fideo
 {
-//Vienna package
-class RNAFold : public IFold
-{
-private:
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const;
-
-    /** @brief Read free energy of line
-    *
-    * @param file: to read
-    * @param energy: to fill with free energy
-    * @return index of first ")" in file
-    */
-    size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
-
-    /** @brief obtain structure
-    *
-    * @param str: to parse
-    * @param secStrucute: to fill with structure
-    * @return void
-    */
-    static void parseStructure(std::string& str, biopp::SecStructure& secStructure);   
-
-    static const FileLineNo LINE_NO;
-    static const char OPEN_PAIR = '(';
-    static const char CLOSE_PAIR = ')';
-    static const char UNPAIR = '.';
-};
 
 const FileLineNo RNAFold::LINE_NO = 1;
 
@@ -111,61 +97,60 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
                 }
                 else
                 {
-                    throw(InvalidStructureException("Unexpected closing pair"));
+                    throw InvalidStructureException("Unexpected closing pair");
                 }
                 break;
             default:
-                throw(InvalidStructureException("Unexpected symbol: " + secStructure.paired_with(i)));
+                throw InvalidStructureException("Unexpected symbol: " + secStructure.paired_with(i));
                 break;
         }
     }
     if (!stackIndex.empty())
     {
-        throw(InvalidStructureException("Pairs pending to close"));
+        throw InvalidStructureException("Pairs pending to close");
     }
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const
+void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
 {
-    structureRNAm.clear();
-    structureRNAm.set_circular(isCircRNAm);
-    FileLine sseq = seqRNAm.getString();
-
-    std::string fileInput;
-    helper::createTmpFile(fileInput);
-    std::string fileOutput;
-    helper::createTmpFile(fileOutput);
-
-    helper::write(fileInput, sseq);
+    FileLine sseq = sequence.getString();
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
+    std::string inputFile;
+    etilico::createTemporaryFile(inputFile, path, prefix);
+    outputFiles.push_back(inputFile);
+    std::string outputFile;
+    etilico::createTemporaryFile(outputFile, path, prefix);
+    outputFiles.push_back(outputFile);
+    helper::write(inputFile, sseq);
     std::stringstream ss;
-    ss << "RNAfold" << " -noPS ";
-    if (isCircRNAm)
+    ss << "RNAfold" << " --noPS ";
+    if (isCirc)
     {
-        ss << "-circ ";
+        ss << "--circ ";
     }
-    ss << "< " << fileInput << " > " << fileOutput;
+    ss << "< " << inputFile << " > " << outputFile;
+    command = ss.str(); /// RNAfold --noPS ("" | --circ) < inputFile > outputFile
+}
 
-    const etilico::Command cmd = ss.str(); /// RNAfold -noPS ("" | -circ) < fileInput > fileOutput
-    etilico::runCommand(cmd);
-
- 	/* output file look like this:
-     * CGCAGGGAUCGCAGGUACCCCGCAGGCGCAGAUACCCUA
-     * ...(((((((....(..((.....))..).))).)))). (-10.80)
-     */    
+void RNAFold::processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy)
+{
     FileLine aux;
-    helper::readLine(fileOutput, LINE_NO, aux);
+    helper::readLine(inputFiles[OUTPUT_FILE], LINE_NO, aux);
 
     std::string str;
-    helper::readValue(aux, 0, seqRNAm.length(), str);
+    helper::readValue(aux, 0, sizeSequence, str);
     parseStructure(str, structureRNAm);
-
-    Fe energy;
-    readFreeEnergy(aux, seqRNAm.length(), energy);
-    
-    mili::assert_throw<ExceptionUnlink>(unlink(fileInput.c_str()));
-    mili::assert_throw<ExceptionUnlink>(unlink(fileOutput.c_str()));
-
-    return energy;
+    readFreeEnergy(aux, sizeSequence, freeEnergy);
+    //delete temporal files
+    mili::assert_throw<UnlinkException>(unlink(inputFiles[INPUT_FILE].c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink(inputFiles[OUTPUT_FILE].c_str()) == 0);
 }
-} //namespace fideo
 
+
+Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+{
+    return 0; //temporal
+}
+
+} //namespace fideo

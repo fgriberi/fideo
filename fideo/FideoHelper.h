@@ -1,17 +1,17 @@
 /*
- * @file   FideoHelper.h
- * @brief  This header defines necessary methods in fideo
+ * @file     FideoHelper.h
+ * @brief    This header defines necessary methods in fideo
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing necessary methods
+ * Contents: Header file for fideo providing necessary methods
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -45,14 +45,16 @@
 namespace fideo
 {
 
-/**
- * Filename path
+/** @brief necessary typedef
+ *
  */
 typedef std::string FilePath;
 
 typedef std::string FileLine;
 
-typedef unsigned int FileLineNo;
+typedef std::ifstream File;
+
+typedef size_t FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
 
@@ -60,12 +62,6 @@ typedef std::list<std::string> Backend;
 
 namespace helper
 {
-/** @brief Create a temporal file
- * 
- * @param nameTmpFile: to fill with name file created
- * @return void
- */
-void createTmpFile(std::string& nameTmpFile);
 
 /** @brief Write a file with multiple lines.
  *
@@ -76,7 +72,7 @@ void createTmpFile(std::string& nameTmpFile);
 void write(const FilePath& file, FileLinesCt& lines);
 
 /** @brief Write a file with a single line.
- * 
+ *
  * @param file: file path
  * @param line: line to write
  * @return void
@@ -84,7 +80,7 @@ void write(const FilePath& file, FileLinesCt& lines);
 void write(const FilePath& file, FileLine& line);
 
 /** @brief Read a line from a file
- * 
+ *
  * @param file: file path
  * @param lineno: line number to read
  * @param line: where to write the read line

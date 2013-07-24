@@ -1,17 +1,17 @@
 /*
- * @file   IFold.h
- * @brief  IFold provides the interface to folding service.
+ * @file     IFold.h
+ * @brief    IFold provides the interface to folding service.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing struct IFold.
+ * Contents: Header file for fideo providing struct IFold.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -38,23 +38,46 @@
 #define _IFOLD_H
 
 #include <biopp/biopp.h>
+#include <mili/mili.h>
 #include "fideo/RnaBackendsTypes.h"
 #include "fideo/FideoHelper.h"
+#include "fideo/IMotifObserver.h"
 
 namespace fideo
 {
 
-///Interface for sequence's folding services.
+struct IFold;
+
+/** @brief Represent a factory registry type
+ *
+ */
+typedef mili::FactoryRegistry<IFold, std::string> Fold;
+
+/** @brief Interface for sequence's folding services.
+ *
+ */
 struct IFold
-{    
+{
+    typedef mili::Factory<std::string, IFold> Factory;
+
     /** @brief Fold an RNA sequence
-     * 
+     *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
-     * @param structureRNAm: the structure where to write the folding.     
+     * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, bool isCircRNAm, biopp::SecStructure& structureRNAm) const = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) = 0;
+
+    /** @brief Fold an RNA sequence
+     *
+     * @param seqRNAm: the RNA sequence to fold.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param motif: specific implementation of IMotifObserfer
+     * @return The free energy in the structure.
+     */
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Class destructor
      *
@@ -67,9 +90,9 @@ struct IFold
      * @param slist: to fill with different backends
      * @return void
      */
-    static void getAvailableBackends(Backend& slist)    
+    static void getAvailableBackends(Backend& slist)
     {
-        mili::Factory<std::string, IFold>::KeyIterator it(mili::FactoryRegistry<IFold, std::string>::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Fold::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

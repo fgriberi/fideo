@@ -1,14 +1,14 @@
 /*
- * @file   IntaRNA.cpp
- * @brief  IntaRNA is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     IntaRNA.cpp
+ * @brief    IntaRNA is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend IntaRNA implementation.
+ * Contents: Source file for fideo providing backend IntaRNA implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date November 02, 2012, 19:35 PM
  *
@@ -32,55 +32,35 @@
  */
 
 #include <unistd.h>
-#include <etilico/etilico.h>
-#include "fideo/IHybridize.h"
+#define INTA_RNA_H
+#include "fideo/IntaRNA.h"
+#undef INTA_RNA_H
+
+/** @brief Temporal method requerid to execute remo
+*
+* @param derivedKey: name of derived class
+* @return pointer to the base class
+*/
+fideo::IHybridize* getDerivedHybridize(const std::string& derivedKey)
+{
+    fideo::IHybridize* const ptr = fideo::Hybridize::new_class(derivedKey);
+    mili::assert_throw<fideo::InvalidDerived>(ptr != NULL);
+    return ptr;
+}
 
 namespace fideo
 {
-class IntaRNA : public IHybridize
-{
-private:
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
-    static const unsigned int OBSOLETE_LINES = 9; ///obsolete lines in file
 
-	///Class that allows parsing the body of a file
-    class BodyParser
-    {    
-    public:
-        Fe dG; ///free energy to read the file
-
-		/** @brief Parse the file and get the value dG
-         *
-         * @param file: file to parser
-         * @return void
-         */
-        void parse(std::ifstream& file);
- 
-    private:
-        static const unsigned int DELTA_G = 1;
-        static const unsigned int SIZE_LINE = 3;
-        static const unsigned int OBSOLETE_dG = 1000; ///no significant hybridization found
-
-        enum Columns
-        {
-            ColEnergy,
-            ColdG,
-            ColUnit,
-            NumberOfColumns
-        };
-    };
-};
-
-void IntaRNA::BodyParser::parse(std::ifstream& file)
+void IntaRNA::BodyParser::parse(File& file)
 {
     std::string temp;
-    ///advance to the required line
+    //advance to the required line
     for (size_t i = 0; i < OBSOLETE_LINES; ++i)
     {
         getline(file, temp);
     }
     std::stringstream ss(temp);
-    std::vector<std::string> result;
+    ResultLine result;
     ss >> mili::Separator(result, ' ');
     if (result.size() != SIZE_LINE)
     {
@@ -89,7 +69,7 @@ void IntaRNA::BodyParser::parse(std::ifstream& file)
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);        
+        helper::convertFromString(deltaG, dG);
     }
 }
 
@@ -97,24 +77,22 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
-Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
 {
-    if (longerCirc)
-    {
-        throw RNABackendException("Unsupported Sequence.");
-    }
-
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
-    std::string tmpFileOutput;
-    helper::createTmpFile(tmpFileOutput);
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
+    std::string tmpOutputFile;
+    etilico::createTemporaryFile(tmpOutputFile, path, prefix);
+    outputFiles.push_back(tmpOutputFile);
 
     std::stringstream exec;
     exec << "./IntaRNA ";
     exec << seq1;
     exec << " " << seq2;
-    exec << " > " << tmpFileOutput;
+    exec << " > " << tmpOutputFile;
 
     //move to the directory where is the folding
     std::string executablePath;
@@ -123,21 +101,20 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     {
         throw RNABackendException("Invalid path of IntaRNA executable.");
     }
+    command = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+}
 
-    const etilico::Command cmd = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
-    etilico::runCommand(cmd);
-
-    std::ifstream fileOutput(tmpFileOutput.c_str());
-    if (!fileOutput)
+void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+{
+    File outputFile(inputFiles[FILE_1].c_str());
+    if (!outputFile)
     {
-        throw RNABackendException("Output file not found.");
+        throw NotFoundFileException();
     }
     BodyParser body;
-    body.parse(fileOutput);    
-    mili::assert_throw<ExceptionUnlink>(unlink(tmpFileOutput.c_str()));
-
-    return body.dG;
+    body.parse(outputFile);
+    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
+    freeEnergy = body.dG;
 }
+
 } // namespace fideo
-
-

@@ -31,6 +31,7 @@
  *
  */
 
+#include <etilico/etilico.h>
 #include <HelperTest.h>
 
 namespace fideo
@@ -43,7 +44,7 @@ bool HelperTest::isMyTmpFile(const std::string& fileTmpName)
     std::stringstream ss(fileTmpName);
     ParserResult result;
     ss >> mili::Separator(result, '-');
-    if (result.size() == 2 && result[0] == "myTmpFile")
+    if (result.size() == 2 && result[0] == "fideo")
         ret = true;
     return ret;
 }

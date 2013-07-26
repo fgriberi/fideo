@@ -107,6 +107,13 @@ private:
     */
     void buildBlock(std::ifstream& file, Block& block) const;
 
+    /** Determine whether the line contain a motif
+    *
+    * @param line: input line
+    * @return true if the line contain a motif, otherwise false
+    */
+    bool containMotif(const std::string& line) const;
+
     /** @brief Remove whitespace repeated
     *
     * @param src: string to analyze

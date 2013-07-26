@@ -168,25 +168,6 @@ void UNAFold::DetFileParser::goToBegin(File& file) const
     getline(file, temporalLine); //obsolete line
 }
 
-void UNAFold::DetFileParser::buildBlock(File& file, Block& block) const
-{
-    std::string currentLine;
-    getline(file, currentLine);
-    std::string temporalLine;
-    removeConsecutiveWhiteSpaces(currentLine, temporalLine);
-    parseMotifLine(temporalLine, block);
-    std::string currentMotif = block.motifName;
-    while (currentMotif != HELIX && getline(file, currentLine))
-    {
-        removeConsecutiveWhiteSpaces(currentLine, temporalLine);
-        block.lines.push_back(temporalLine);
-        if (temporalLine.find_first_of(":") != std::string::npos)
-        {
-            parseStackLine(temporalLine, currentMotif);
-        }
-    }
-}
-
 void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest) const
 {
     bool previousWhite = false;
@@ -219,6 +200,53 @@ void UNAFold::DetFileParser::parseStackLine(const std::string& line, std::string
 {
     const size_t to = mili::ensure_found(line.find_first_of(":"));
     nameToFill = line.substr(0, to);
+}
+
+bool UNAFold::DetFileParser::containMotif(const std::string& line) const
+{
+    bool ret = false;
+    if (line.find_first_of(":") == std::string::npos)
+    {
+        ret = false;
+    }
+    else
+    {
+        const size_t to = mili::ensure_found(line.find_first_of(":"));
+        const std::string nameMotif = line.substr(0, to);
+        if (nameMotif == INTERIOR_LOOP || nameMotif == HAIRPIN_LOOP || nameMotif == MULTI_LOOP || nameMotif == BULGE_LOOP)
+        {
+            ret = true;
+        }
+    }
+    return ret;
+}
+
+void UNAFold::DetFileParser::buildBlock(File& file, Block& block) const
+{
+    block.lines.clear();
+    std::string currentLine;
+    getline(file, currentLine);
+    std::string temporalLine;
+    removeConsecutiveWhiteSpaces(currentLine, temporalLine);
+    parseMotifLine(temporalLine, block);
+    std::string currentMotif = block.motifName;
+    while (currentMotif != HELIX && getline(file, currentLine))
+    {
+        removeConsecutiveWhiteSpaces(currentLine, temporalLine);
+        if (containMotif(temporalLine))
+        {
+            block.lines.clear();
+            parseMotifLine(temporalLine, block);
+        }
+        else
+        {
+            block.lines.push_back(temporalLine);
+            if (temporalLine.find_first_of(":") != std::string::npos)
+            {
+                parseStackLine(temporalLine, currentMotif);
+            }
+        }
+    }
 }
 
 void UNAFold::DetFileParser::parseBlock(const Block& block, IMotifObserver::Motif& motif)
@@ -259,7 +287,6 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
         buildBlock(fileToParse, currentBlock);
         parseBlock(currentBlock, motif);
         observer->processMotif(motif);
-        currentBlock.lines.clear();
     }
     observer->finalize();
 }

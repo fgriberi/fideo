@@ -66,7 +66,7 @@ public:
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
                          const biopp::NucSequence& shorterSeq) const;
-    
+
     /** @brief Destructor of class
     *
     */

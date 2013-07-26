@@ -31,14 +31,14 @@
  *
  */
 
-#include "fideo/IFoldIntermediate.h" 			    
+#include "fideo/IFoldIntermediate.h"
 
 namespace fideo
 {
 
 Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
- 	structureRNAm.clear();
+    structureRNAm.clear();
     structureRNAm.set_circular(isCircRNAm);
     etilico::Command cmd;
     IntermediateFiles files;

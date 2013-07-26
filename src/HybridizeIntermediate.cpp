@@ -31,13 +31,13 @@
  *
  */
 
-#include "fideo/IHybridizeIntermediate.h"                
+#include "fideo/IHybridizeIntermediate.h"
 
 namespace fideo
 {
 
 Fe IHybridizeIntermediate::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
-                         const biopp::NucSequence& shorterSeq) const
+                                     const biopp::NucSequence& shorterSeq) const
 {
     if (longerCirc)
     {

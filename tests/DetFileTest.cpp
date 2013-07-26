@@ -64,6 +64,25 @@ TEST(DetFileParserTestSuite, RemoveConsecutiveWhiteSpacesTest)
     EXPECT_EQ(dest2, expected2);
 }
 
+TEST(DetFileParserTestSuite, ContainMotifTest)
+{
+    UNAFold::DetFileParser temporalParser;
+    const std::string line1 = "Stack: ddG = -2.20 External closing pair is A( 2)-T( 204)";
+    EXPECT_FALSE(temporalParser.containMotif(line1));
+
+    const std::string line2 = "Bulge loop: ddG = +1.70 External closing pair is C( 59)-G( 186)";
+    EXPECT_TRUE(temporalParser.containMotif(line2));
+    
+    const std::string line3 = "Helix: ddG = -15.60 8 base pairs.";
+    EXPECT_FALSE(temporalParser.containMotif(line3));
+
+    const std::string line4 = "Interior loop: ddG =  -2.20 External closing pair is A( 2)-T( 204)";
+    EXPECT_TRUE(temporalParser.containMotif(line4));    
+
+    const std::string line5 = " ddG = -15.60 8 base pairs.";
+    EXPECT_FALSE(temporalParser.containMotif(line5));    
+}
+
 TEST(DetFileParserTestSuite, parseMotifLineTest)
 {
 
@@ -324,16 +343,21 @@ void getDetFilePath(std::string& path)
     path = temporalPath + DET_FILE_PATH;
 }
 
-TEST(DetFileParserTestSuite, builFirstBlockTest)
+void openTestFile(std::ifstream& file) 
 {
     std::string nameFile;
-    getDetFilePath(nameFile);
-    std::ifstream fileToParse;
-    fileToParse.open(nameFile.c_str());
-    if (!fileToParse)
+    getDetFilePath(nameFile);    
+    file.open(nameFile.c_str());
+    if (!file)
     {
         throw FileNotExist();
     }
+}
+
+TEST(DetFileParserTestSuite, builFirstBlockTest)
+{
+    std::ifstream fileToParse;
+    openTestFile(fileToParse);
     UNAFold::DetFileParser parser;
     parser.goToBegin(fileToParse);
     Block block;
@@ -353,15 +377,8 @@ TEST(DetFileParserTestSuite, builFirstBlockTest)
 
 TEST(DetFileParserTestSuite, builBlockAndParserBlockTest)
 {
-    std::string nameFile;
-    getDetFilePath(nameFile);
     std::ifstream fileToParse;
-    fileToParse.open(nameFile.c_str());
-    if (!fileToParse)
-    {
-        throw FileNotExist();
-    }
-
+    openTestFile(fileToParse);
     UNAFold::DetFileParser parser;
     parser.fillRules();
     parser.goToBegin(fileToParse);
@@ -400,6 +417,61 @@ TEST(DetFileParserTestSuite, builBlockAndParserBlockTest)
     ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
 }
 
+void advanceInTheFile(std::ifstream& file, UNAFold::DetFileParser& parser, const size_t pos, Block& block)
+{
+    openTestFile(file);
+    parser.fillRules();
+    parser.goToBegin(file);    
+    for (int i = 0; i < pos; ++i)
+    {
+        parser.buildBlock(file, block);
+    }
+}
+
+static const size_t ADVANCE_BLOCKS_1 = 8;
+TEST(DetFileParserTestSuite, AMotifWithoutStackTest)
+{
+    std::ifstream fileToParse;    
+    UNAFold::DetFileParser parser;
+    Block block;
+    advanceInTheFile(fileToParse, parser, ADVANCE_BLOCKS_1, block);
+   
+    Block expectedBlock;
+    expectedBlock.motifName = "Multi-loop";
+    expectedBlock.lines.push_back(": ddG = +1.90 External closing pair is C( 76)-G( 168)");
+    expectedBlock.lines.push_back(" 20 ss bases & 3 closing helices.");
+    expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 125)-T( 167)");
+    expectedBlock.lines.push_back("Stack: ddG = -0.60 External closing pair is A( 126)-T( 166)");
+    expectedBlock.lines.push_back("Stack: ddG = -2.50 External closing pair is G( 127)-T( 165)");
+    expectedBlock.lines.push_back("Stack: ddG = -2.10 External closing pair is C( 128)-G( 164)");
+    expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is T( 129)-A( 163)");
+    expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is T( 130)-A( 162)");
+    expectedBlock.lines.push_back("Helix: ddG = -7.90 7 base pairs.");
+
+    EXPECT_EQ(block.motifName, expectedBlock.motifName);
+    ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
+}
+
+static const size_t ADVANCE_BLOCKS_2 = 12;
+TEST(DetFileParserTestSuite, TwoMotifWithoutStackTest)
+{
+    std::ifstream fileToParse;    
+    UNAFold::DetFileParser parser;
+    Block block;
+    advanceInTheFile(fileToParse, parser, ADVANCE_BLOCKS_2, block);
+
+    Block expectedBlock;
+    expectedBlock.motifName = "Interior loop";
+    expectedBlock.lines.push_back(": ddG = +2.30 External closing pair is T( 97)-A( 116)");
+    expectedBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is G( 101)-C( 111)");
+    expectedBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 102)-T( 110)");
+    expectedBlock.lines.push_back("Helix: ddG = -3.30 3 base pairs.");
+    
+    EXPECT_EQ(block.motifName, expectedBlock.motifName);
+    ASSERT_TRUE(std::equal(expectedBlock.lines.begin(), expectedBlock.lines.end(), block.lines.begin()));
+    
+}
+
 TEST(DetFileParserTestSuite, parseDetFileNotExistTest)
 {
     std::string nameFile;
@@ -411,28 +483,13 @@ TEST(DetFileParserTestSuite, parseDetFileNotExistTest)
     EXPECT_THROW(parser.parseDet(fileInvalid, observer), FileNotExist);
 }
 
-static const size_t AMOUNT_OF_BLOCKS = 15;
-
+static const size_t ADVANCE_BLOCKS_3 = 15;
 TEST(DetFileParserTestSuite, builBlockWithLastBlockTest)
 {
-    std::string nameFile;
-    getDetFilePath(nameFile);
-    std::ifstream fileToParse;
-    fileToParse.open(nameFile.c_str());
-    if (!fileToParse)
-    {
-        throw FileNotExist();
-    }
-
+    std::ifstream fileToParse;    
     UNAFold::DetFileParser parser;
-    parser.fillRules();
-    parser.goToBegin(fileToParse);
     Block block;
-    for (int i = 0; i < AMOUNT_OF_BLOCKS; ++i)
-    {
-        block.lines.clear();
-        parser.buildBlock(fileToParse, block);
-    }
+    advanceInTheFile(fileToParse, parser, ADVANCE_BLOCKS_3, block);
 
     Block expectedBlock;
     expectedBlock.motifName = "Hairpin loop";

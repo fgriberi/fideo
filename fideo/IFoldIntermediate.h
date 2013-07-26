@@ -57,24 +57,52 @@ public:
     */
     typedef std::vector<std::string> ResultLine;
 
-    /** @brief Fold a RNA sequence
+
+    /** @brief Fold an RNA sequence and deletes all file generated
      *
      * @param seqRNAm: the RNA sequence to fold.
-     * @param isCircRNAm: if the sequence's circular.
+     * @param isCircRNAm: if the structure it's circular.
      * @param structureRNAm: the structure where to write the folding.
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm);
 
-    /** @brief Fold a RNA sequence
+    /** @brief Fold an RNA sequence and deletes all file generated
      *
      * @param seqRNAm: the RNA sequence to fold.
-     * @param isCircRNAm: if the sequence's circular.
+     * @param isCircRNAm: if the structure it's circular.
      * @param structureRNAm: the structure where to write the folding.
-     * @param motif: specific implementation of IMotifObserfer
+     * @param motifObserver: specific implementation of IMotifObserfer
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
+
+    /** @brief Generates file to fold
+     *
+     * @param seqRNAm: input RNA sequence.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param outputFile: generate output file
+     * @return void
+     */
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile);
+
+    /** @brief Fold a specific file
+     *
+     * @param inputFile: input file to fold
+     * @param structureRNAm: the structure where to write the folding.
+     * @return free energy
+     */
+    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm);
+
+    /** @brief Fold a specific file
+     *
+     * @param inputFile: input file to fold
+     * @param structureRNAm: the structure where to write the folding.
+     * @param motifObserver: specific implementation of IMotifObserfer
+     * @return free energy
+     */
+    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Destructor of class
     *

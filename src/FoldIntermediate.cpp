@@ -49,4 +49,13 @@ Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircR
     return freeEnergy;
 }
 
+void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile)
+{
+}
+
+Fe IFoldIntermediate::foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm)
+{
+    return 0; //temporal
+}
+
 } //namespace fideo

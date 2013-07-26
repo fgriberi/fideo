@@ -490,4 +490,9 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return freeEnergy;
     return 0;
 }
+
+Fe UNAFold::foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+{
+    return 0; //temporal
+}
 } // namespace fideo

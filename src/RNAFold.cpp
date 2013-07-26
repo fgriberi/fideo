@@ -153,4 +153,9 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return 0; //temporal
 }
 
+Fe RNAFold::foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+{
+    return 0; //temporal
+}
+
 } //namespace fideo

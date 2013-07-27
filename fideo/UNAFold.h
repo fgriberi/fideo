@@ -52,21 +52,28 @@ class UNAFold : public IFoldIntermediate
 private:
 
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
     virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
-    virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy);
+    virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy);
+    virtual void deleteObsoleteFiles(const std::string nameFile);
 
     /** @brief Destructor of class
      *
      */
     virtual ~UNAFold();
 
-    /** @brief Delete all files generated
+    /** @brief Delete .ct file generated
      *
-     * @param nameFile: file name to delete
      * @return void
      */
-    void deleteAllFiles();
+    void deleteCTFiles();
+
+    /** @brief Parse .det file using the observer
+    *
+    * @param observer: specific implementation if IMotifObserver
+    * @return void
+    */
+    void commonParse(IMotifObserver* observer);
 
     /** @brief Class that allows parsing the header of a file
      *

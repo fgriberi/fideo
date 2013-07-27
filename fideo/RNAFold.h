@@ -49,9 +49,10 @@ class RNAFold : public IFoldIntermediate
 private:
 
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
     virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
-    virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy);
+    virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy);
+    virtual void deleteObsoleteFiles(const std::string nameFile);
 
     /** @brief Destructor of class
     *
@@ -73,6 +74,13 @@ private:
     * @return void
     */
     static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
+
+    /** @brief Gets the size of the folded sequence from a file
+    *
+    * @param file: input file to read
+    * @return size of sequence
+    */
+    size_t getSizeOfSequence(const FilePath& file) const;
 
     static const FileLineNo LINE_NO;
     static const char OPEN_PAIR = '(';

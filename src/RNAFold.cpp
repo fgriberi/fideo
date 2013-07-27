@@ -111,6 +111,23 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
     }
 }
 
+size_t RNAFold::getSizeOfSequence(const FilePath& file) const
+{
+    File fileIn(file.c_str());
+    if (!fileIn)
+    {
+        throw NotFoundFileException();
+    }
+    std::string lineSequence;
+    getline(fileIn, lineSequence);
+    return lineSequence.length();
+}
+
+void RNAFold::deleteObsoleteFiles(const std::string nameFile)
+{
+    mili::assert_throw<UnlinkException>(unlink(nameFile.c_str()) == 0);
+}
+
 void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
 {
     FileLine sseq = sequence.getString();
@@ -133,8 +150,9 @@ void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
     command = ss.str(); /// RNAfold --noPS ("" | --circ) < inputFile > outputFile
 }
 
-void RNAFold::processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy)
+void RNAFold::processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy)
 {
+    const size_t sizeSequence = getSizeOfSequence(inputFiles[OUTPUT_FILE]);
     FileLine aux;
     helper::readLine(inputFiles[OUTPUT_FILE], LINE_NO, aux);
 
@@ -142,18 +160,19 @@ void RNAFold::processingResult(const bool isCirc, biopp::SecStructure& structure
     helper::readValue(aux, 0, sizeSequence, str);
     parseStructure(str, structureRNAm);
     readFreeEnergy(aux, sizeSequence, freeEnergy);
-    //delete temporal files
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[INPUT_FILE].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[OUTPUT_FILE].c_str()) == 0);
+    if (deleteOutputFile)
+    {
+        deleteObsoleteFiles(inputFiles[INPUT_FILE]);
+        deleteObsoleteFiles(inputFiles[OUTPUT_FILE]);
+    }
 }
-
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     return 0; //temporal
 }
 
-Fe RNAFold::foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+Fe RNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     return 0; //temporal
 }

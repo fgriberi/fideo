@@ -46,7 +46,7 @@
 
 using namespace fideo;
 
-TEST(UnaFoldBackendTestSuite1, BasicTest)
+TEST(UnaFoldBackendTestSuite1, FoldTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
@@ -62,6 +62,54 @@ TEST(UnaFoldBackendTestSuite1, BasicTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(UnaFoldBackendTestSuite1, FoldToTest)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+
+    IFold* p = Fold::new_class("UNAFold");
+    ASSERT_TRUE(p != NULL);
+
+    std::string filePath = "/tmp/new-fideo-unafold";
+    EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
+    delete p;
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    unlink(filePath.c_str());    
+}
+
+TEST(UnaFoldBackendTestSuite1, FoldFromTest)
+{
+    const FilePath fileName = "/tmp/fideo-fileTest.ct";
+    std::ofstream file(fileName.c_str());
+    file << "15  dG = 5.2    fideo-9RR4Qw \n";
+    file << "1   A   15  2   0   1   0   0 \n";
+    file << "2   U   1   3   0   2   0   0 \n";
+    file << "3   A   2   4   11  3   0   4 \n";
+    file << "4   G   3   5   10  4   3   0 \n";
+    file << "5   G   4   6   0   5   0   0 \n";
+    file << "6   C   5   7   0   6   0   0 \n";
+    file << "7   C   6   8   0   7   0   0 \n";
+    file << "8   C   7   9   0   8   0   0 \n";
+    file << "9   C   8   10  0   9   0   0 \n";
+    file << "10  C   9   11  4   10  0   11 \n";
+    file << "11  U   10  12  3   11  10  0 \n";
+    file << "12  U   11  13  0   12  0   0 \n";
+    file << "13  U   12  14  0   13  0   0 \n";
+    file << "14  U   13  15  0   14  0   0 \n";
+    file << "15  U   14  1   0   15  0   0";
+    file.close();
+
+    IFold* p = Fold::new_class("UNAFold");
+    ASSERT_TRUE(p != NULL);
+    biopp::SecStructure structure;
+    const Fe freeEnergy = p->foldFrom(fileName, structure);
+    delete p;
+    EXPECT_EQ(freeEnergy, 5.2);
+    EXPECT_TRUE(HelperTest::checkDirTmp());    
+    unlink(fileName.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
 TEST(UnaFoldBackendTestSuite1, InvalidBackend)
 {
     IFold* unafold = Fold::new_class("UNAFOLD");    
@@ -72,7 +120,6 @@ TEST(UnaFoldBackendTestSuite2, correctCommad1)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
-    
     IFoldIntermediate *unafold = new UNAFold();
     IntermediateFiles files;
     etilico::Command cmd;
@@ -83,10 +130,11 @@ TEST(UnaFoldBackendTestSuite2, correctCommad1)
     cmdExpected << "UNAFold.pl --max=1 --circular ";
     cmdExpected << files[IFoldIntermediate::INPUT_FILE];
     EXPECT_EQ(cmdExpected.str(), cmd);    
-    
-    etilico::runCommand(cmd);
-    delete unafold;
-    EXPECT_FALSE(HelperTest::checkDirTmp());
+    etilico::runCommand(cmd);    
+    Fe freeEnergy;
+    unafold->processingResult(secStructure, files, true, freeEnergy);
+    delete unafold;    
+    EXPECT_FALSE(HelperTest::checkDirTmp());   
 }
 
 TEST(UnaFoldBackendTestSuite2, correctCommad2)
@@ -104,6 +152,8 @@ TEST(UnaFoldBackendTestSuite2, correctCommad2)
     cmdExpected << files[IFoldIntermediate::INPUT_FILE];
     EXPECT_EQ(cmdExpected.str(), cmd);    
     etilico::runCommand(cmd);
+    Fe freeEnergy;
+    unafold->processingResult(secStructure, files, true, freeEnergy);
     delete unafold;
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
@@ -113,7 +163,7 @@ static const size_t COMMAND_NOT_FOUND = 127;
 TEST(UnaFoldBackendTestSuite2, incorrectCommad)
 {
     const etilico::Command cmd = "UNAFold.pl--max=1 file.in";
-    EXPECT_EQ(etilico::runCommand(cmd), COMMAND_NOT_FOUND    );
+    EXPECT_EQ(etilico::runCommand(cmd), COMMAND_NOT_FOUND);
 }
 
 TEST(UnaFoldBackendTestSuite2, InvalidHeaderParse)
@@ -127,11 +177,12 @@ TEST(UnaFoldBackendTestSuite2, InvalidHeaderParse)
     file.close();
     IFoldIntermediate *unafold = new UNAFold();
     IntermediateFiles files;   
-    files.push_back(fileTest);     
+    files.push_back(fileTest); 
+    files.push_back(fileName);     
     biopp::SecStructure secStructure;
     Fe freeEnergy;
 
-    EXPECT_THROW(unafold->processingResult(true, secStructure, 0, files, freeEnergy), InvalidaHeader);
+    EXPECT_THROW(unafold->processingResult(secStructure, files, true, freeEnergy), InvalidaHeader);
     //To avoid "Error unlink" when calling the destructor
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     secStructure.clear();
@@ -154,10 +205,11 @@ TEST(UnaFoldBackendTestSuite2, InvalidBodyLineParse)
     IFoldIntermediate *unafold = new UNAFold();
     IntermediateFiles files;   
     files.push_back(fileTest);     
+    files.push_back(fileName);     
     biopp::SecStructure secStructure;
     Fe freeEnergy;
 
-    EXPECT_THROW(unafold->processingResult(true, secStructure, 0, files, freeEnergy), InvalidBodyLine);
+    EXPECT_THROW(unafold->processingResult(secStructure, files, true, freeEnergy), InvalidBodyLine);
     //To avoid "Error unlink" when calling the destructor
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     secStructure.clear();
@@ -174,10 +226,11 @@ TEST(UnaFoldBackendTestSuite2, FileNotExist)
     IFoldIntermediate *unafold = new UNAFold();
     IntermediateFiles files;   
     files.push_back(fileTest);     
+    files.push_back(fileName);     
     biopp::SecStructure secStructure;
     Fe freeEnergy;
 
-    EXPECT_THROW(unafold->processingResult(true, secStructure, 0, files, freeEnergy), NotFoundFileException);
+    EXPECT_THROW(unafold->processingResult(secStructure, files, true, freeEnergy), NotFoundFileException);
     //To avoid "Error unlink" when calling the destructor
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     secStructure.clear();

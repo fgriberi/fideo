@@ -69,7 +69,7 @@ struct IFold
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) = 0;
 
-    /** @brief Fold an RNA sequence and deletes all file generated
+    /** @brief Fold an RNA sequence and deletes all file generated. Using observer
      *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
@@ -79,7 +79,7 @@ struct IFold
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
-    /** @brief Generates file to fold
+    /** @brief Generates file to fold.
      *
      * @param seqRNAm: input RNA sequence.
      * @param isCircRNAm: if the structure it's circular.
@@ -95,7 +95,7 @@ struct IFold
      * @param structureRNAm: the structure where to write the folding.
      * @return free energy
      */
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm) = 0;
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm) = 0;
 
     /** @brief Fold a specific file
      *
@@ -104,7 +104,7 @@ struct IFold
      * @param motifObserver: specific implementation of IMotifObserfer
      * @return free energy
      */
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Class destructor
      *

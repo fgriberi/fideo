@@ -46,7 +46,7 @@ namespace fideo
 /** @brief Represents intermediate files (input files and output files)
  *
  */
-typedef std::vector<std::string> IntermediateFiles;
+typedef std::vector<FilePath> IntermediateFiles;
 
 class IFoldIntermediate : public IFold
 {
@@ -93,7 +93,7 @@ public:
      * @param structureRNAm: the structure where to write the folding.
      * @return free energy
      */
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm);
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm);
 
     /** @brief Fold a specific file
      *
@@ -102,7 +102,7 @@ public:
      * @param motifObserver: specific implementation of IMotifObserfer
      * @return free energy
      */
-    virtual Fe foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Destructor of class
     *
@@ -113,6 +113,16 @@ public:
     static const size_t OUTPUT_FILE = 1;
 
 private:
+
+    /** @brief Call external tool to fold
+    *
+    * @param sequence: the RNA sequence to fold.
+    * @param isCirc: if the sequence's circular.
+    * @param structure: secondary structure
+    * @param files: files generated
+    * @return void
+    */
+    void commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, IntermediateFiles& files);
 
     /** @brief Prepare the necessary data for folding service
     *
@@ -126,14 +136,20 @@ private:
 
     /** @brief Processing folding results
      *
-     * @param isCirc: the sequence analyzed is circular
      * @param structureRNAm: structure to fill
      * @param sizeSequence: size of sequence
      * @param freeEnergy: to fill with free energy
      * @param inputFiles: temporal file names
      * @return void
      */
-    virtual void processingResult(const bool isCirc, biopp::SecStructure& structureRNAm, size_t sizeSequence, const IntermediateFiles& inputFiles, Fe& freeEnergy) = 0;
+    virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy) = 0;
+
+    /** @brief Delete all obsolete files
+     *
+     * @param nameFile: file name
+     * @return void
+     */
+    virtual void deleteObsoleteFiles(const std::string nameFile) = 0;
 };
 
 } //namespace fideo

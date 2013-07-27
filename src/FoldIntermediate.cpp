@@ -36,26 +36,43 @@
 namespace fideo
 {
 
+void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, IntermediateFiles& files)
+{
+    structure.clear();
+    structure.set_circular(isCirc);
+    etilico::Command cmd;
+    prepareData(sequence, isCirc, cmd, files);
+    etilico::runCommand(cmd);
+}
+
 Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
-    structureRNAm.clear();
-    structureRNAm.set_circular(isCircRNAm);
-    etilico::Command cmd;
-    IntermediateFiles files;
-    prepareData(seqRNAm, isCircRNAm, cmd, files);
-    etilico::runCommand(cmd);
+    IntermediateFiles intermediateFiles;
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, intermediateFiles);
+    const bool deleteOutput = true;
     Fe freeEnergy;
-    processingResult(isCircRNAm, structureRNAm, seqRNAm.length(), files, freeEnergy);
+    processingResult(structureRNAm, intermediateFiles, deleteOutput, freeEnergy);
     return freeEnergy;
 }
 
 void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile)
 {
+    IntermediateFiles intermediateFiles;
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, intermediateFiles);
+    deleteObsoleteFiles(intermediateFiles[INPUT_FILE]);
+    etilico::Command removeCmd = "mv " + intermediateFiles[OUTPUT_FILE] + " " + outputFile;
+    etilico::runCommand(removeCmd);
 }
 
-Fe IFoldIntermediate::foldFrom(FilePath& inputFile, biopp::SecStructure& structureRNAm)
+Fe IFoldIntermediate::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm)
 {
-    return 0; //temporal
+    IntermediateFiles intermediateFiles;
+    intermediateFiles.push_back("obsoleteFile");
+    intermediateFiles.push_back(inputFile);
+    Fe freeEnergy;
+    const bool deleteOutput = false;
+    processingResult(structureRNAm, intermediateFiles, deleteOutput, freeEnergy);
+    return freeEnergy;
 }
 
 } //namespace fideo

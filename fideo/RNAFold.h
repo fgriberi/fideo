@@ -52,7 +52,7 @@ private:
     virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
     virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
     virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy);
-    virtual void deleteObsoleteFiles(const std::string nameFile);
+    virtual void deleteObsoleteFiles(const std::string& nameFile);
 
     /** @brief Destructor of class
     *

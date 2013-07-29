@@ -149,7 +149,7 @@ private:
      * @param nameFile: file name
      * @return void
      */
-    virtual void deleteObsoleteFiles(const std::string nameFile) = 0;
+    virtual void deleteObsoleteFiles(const std::string& nameFile) = 0;
 };
 
 } //namespace fideo

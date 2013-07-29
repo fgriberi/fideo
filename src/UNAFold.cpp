@@ -102,7 +102,7 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     }
 }
 
-void UNAFold::deleteObsoleteFiles(const std::string nameFile)
+void UNAFold::deleteObsoleteFiles(const std::string& nameFile)
 {
     mili::assert_throw<UnlinkException>(unlink(nameFile.c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((nameFile + "_1.ct").c_str()) == 0);
@@ -116,7 +116,7 @@ void UNAFold::deleteObsoleteFiles(const std::string nameFile)
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".det").c_str()) == 0);
 }
 
-void UNAFold::deleteCTFiles()
+void UNAFold::deleteCTFile()
 {
     mili::assert_throw<UnlinkException>(unlink((temporalFileName + ".ct").c_str()) == 0);
 }
@@ -166,7 +166,7 @@ void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const Interme
     }
     if (deleteOutputFile)
     {
-        deleteCTFiles();
+        deleteCTFile();
     }
     freeEnergy = headerLine.deltaG;
 }

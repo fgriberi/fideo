@@ -46,6 +46,11 @@ struct IFoldInverse
 {
     typedef mili::FactoryRegistry<IFoldInverse, std::string, const InverseFoldParams&> Factory;
 
+    static IFoldInverse* factory(std::string backend, const InverseFoldParams& param) 
+    {
+        return IFoldInverse::Factory::new_class(backend, param);
+    }
+
     /**
      * Make the inverse folding
      * @param sequence the NucSequence to write to.

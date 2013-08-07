@@ -44,11 +44,9 @@ class IStartProvider;
  */
 struct IFoldInverse
 {
-    typedef mili::FactoryRegistry<IFoldInverse, std::string, const InverseFoldParams&> Factory;
-
-    static IFoldInverse* factory(std::string backend, const InverseFoldParams& param) 
+    static IFoldInverse* factory(const std::string& backend, const InverseFoldParams& param) 
     {
-        return IFoldInverse::Factory::new_class(backend, param);
+        return mili::FactoryRegistry<IFoldInverse, std::string, const InverseFoldParams&>::new_class(backend, param);
     }
 
     /**

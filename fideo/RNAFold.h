@@ -53,6 +53,7 @@ private:
     virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
     virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy);
     virtual void deleteObsoleteFiles(const std::string& nameFile);
+    virtual void renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile);
 
     /** @brief Destructor of class
     *

@@ -150,6 +150,32 @@ private:
      * @return void
      */
     virtual void deleteObsoleteFiles(const std::string& nameFile) = 0;
+
+    /** @brief Rename specific files
+     *
+     * @param nameFile: name file to rename
+     * @param newNameFile: new name of file
+     * @return void
+     */
+    virtual void renameNecessaryFiles(const std::string& nameFile, const std::string& newNameFile) = 0;
+
+protected:
+
+    /** @brief Rename a file
+     *
+     * @param fileToRename: The original name file
+     * @param nameFile: The new name
+     * @param void
+     */
+    void renameFile(const std::string& fileToRename, const std::string& nameFile);
+
+    /** @brief Get the name of sequence. This is a substring in the description sequence
+     *
+     * @param inputName: string to parse
+     * @param nameSequence: name of sequence
+     * @return void
+     */
+    void getNameOfSequence(const std::string& inputName, std::string& nameSequence);
 };
 
 } //namespace fideo

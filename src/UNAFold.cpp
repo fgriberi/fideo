@@ -40,6 +40,8 @@ namespace fideo
 
 using mili::operator>>;
 
+static const std::string DET = ".det";
+
 UNAFold::~UNAFold()
 {
     File file(temporalFileName.c_str());
@@ -113,7 +115,30 @@ void UNAFold::deleteObsoleteFiles(const std::string& nameFile)
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".run").c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".ss-count").c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".ann").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".det").c_str()) == 0);
+
+    File file((nameFile + DET).c_str());
+    if (file)
+    {
+        mili::assert_throw<UnlinkException>(unlink((temporalFileName + DET).c_str()) == 0);
+    }
+}
+
+static const size_t NAME_FILE = 0;
+void UNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile)
+{
+    //rename .ct file
+    renameFile(fileToRename, newNameFile);
+
+    std::stringstream ss(fileToRename);
+    ResultLine result;
+    ss >> mili::Separator(result, '.');
+    if (result.size() != 2)
+    {
+        throw RNABackendException("Name of file to rename is invalid.");
+    }
+
+    //rename .det file
+    renameFile(result[NAME_FILE] + DET, newNameFile + DET);
 }
 
 void UNAFold::deleteCTFile()
@@ -124,14 +149,12 @@ void UNAFold::deleteCTFile()
 void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
 {
     FileLine sseq = sequence.getString();
-    const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
     std::string temporalFile;
-    etilico::createTemporaryFile(temporalFile, path, prefix);
+    etilico::createTemporaryFile(temporalFile, PATH_TMP, prefix);
     temporalFileName = temporalFile;
     outputFiles.push_back(temporalFile);
     outputFiles.push_back(temporalFile + ".ct");
-
     helper::write(temporalFile, sseq);
     std::stringstream ss;
     ss << "UNAFold.pl --max=1 ";
@@ -293,7 +316,6 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
     goToBegin(fileToParse);
     Block currentBlock;
     IMotifObserver::Motif motif;
-    observer->start();
     while (!fileToParse.eof())
     {
         buildBlock(fileToParse, currentBlock);
@@ -497,8 +519,7 @@ void UNAFold::DetFileParser::BulgeRule::calculateAttrib(const Block& block, IMot
 void UNAFold::commonParse(IMotifObserver* observer)
 {
     DetFileParser parser;
-    const std::string detFile = temporalFileName + ".det";
-    parser.parseDet(detFile, observer);
+    parser.parseDet(temporalFileName + DET, observer);
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
@@ -511,6 +532,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
 Fe UNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = IFoldIntermediate::foldFrom(inputFile, structureRNAm);
+    temporalFileName = inputFile;
     commonParse(motifObserver);
     return freeEnergy;
 }

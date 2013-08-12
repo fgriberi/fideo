@@ -68,7 +68,7 @@ TEST(RNAFoldBackendTestSuite1, FoldToTest)
     IFold* p = Fold::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
-    std::string filePath = "/tmp/new-fideo-rnafold";
+    std::string filePath = "/tmp/new-fideoRnafold";
     EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
     delete p;
     EXPECT_FALSE(HelperTest::checkDirTmp());

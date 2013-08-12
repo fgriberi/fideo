@@ -123,6 +123,11 @@ size_t RNAFold::getSizeOfSequence(const FilePath& file) const
     return lineSequence.length();
 }
 
+void RNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile)
+{
+    renameFile(fileToRename, newNameFile);
+}
+
 void RNAFold::deleteObsoleteFiles(const std::string& nameFile)
 {
     mili::assert_throw<UnlinkException>(unlink(nameFile.c_str()) == 0);

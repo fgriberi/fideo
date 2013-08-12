@@ -36,6 +36,30 @@
 namespace fideo
 {
 
+static const size_t SIZE_EXPECTED = 2;
+static const size_t NAME = 1;
+
+void IFoldIntermediate::getNameOfSequence(const std::string& inputName, std::string& nameSequence)
+{
+    std::stringstream ss(inputName);
+    ResultLine result;
+    ss >> mili::Separator(result, '-');
+    if (result.size() != SIZE_EXPECTED)
+    {
+        throw RNABackendException("Invalid input name");
+    }
+    else
+    {
+        nameSequence = result[NAME];
+    }
+}
+
+void IFoldIntermediate::renameFile(const std::string& fileToRename, const std::string& nameFile)
+{
+    etilico::Command renameCmd = "mv " + fileToRename + " " + nameFile;
+    etilico::runCommand(renameCmd);
+}
+
 void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, IntermediateFiles& files)
 {
     structure.clear();
@@ -59,9 +83,8 @@ void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isC
 {
     IntermediateFiles intermediateFiles;
     commonFold(seqRNAm, isCircRNAm, structureRNAm, intermediateFiles);
+    renameNecessaryFiles(intermediateFiles[OUTPUT_FILE], outputFile);
     deleteObsoleteFiles(intermediateFiles[INPUT_FILE]);
-    etilico::Command removeCmd = "mv " + intermediateFiles[OUTPUT_FILE] + " " + outputFile;
-    etilico::runCommand(removeCmd);
 }
 
 Fe IFoldIntermediate::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm)

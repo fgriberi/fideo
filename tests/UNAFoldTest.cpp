@@ -70,11 +70,12 @@ TEST(UnaFoldBackendTestSuite1, FoldToTest)
     IFold* p = Fold::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
-    std::string filePath = "/tmp/new-fideo-unafold";
+    std::string filePath = "/tmp/new-fideoUnafold";
     EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
     delete p;
     EXPECT_FALSE(HelperTest::checkDirTmp());
     unlink(filePath.c_str());    
+    unlink("/tmp/fideoUnafold.det");
 }
 
 TEST(UnaFoldBackendTestSuite1, FoldFromTest)

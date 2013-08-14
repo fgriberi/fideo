@@ -70,11 +70,12 @@ private:
     void deleteCTFile();
 
     /** @brief Parse .det file using the observer
-    *
-    * @param observer: specific implementation if IMotifObserver
-    * @return void
-    */
-    void commonParse(IMotifObserver* observer);
+     *
+     * @param file: specific .det file
+     * @param observer: specific implementation if IMotifObserver
+     * @return void
+     */
+    void commonParse(const FilePath& file, IMotifObserver* observer);
 
     /** @brief Class that allows parsing the header of a file
      *

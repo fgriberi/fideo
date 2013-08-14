@@ -70,12 +70,10 @@ TEST(UnaFoldBackendTestSuite1, FoldToTest)
     IFold* p = Fold::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
 
-    std::string filePath = "/tmp/new-fideoUnafold";
+    std::string filePath = "/tmp/fideo-UnafoldTo";
     EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
     delete p;
-    EXPECT_FALSE(HelperTest::checkDirTmp());
-    unlink(filePath.c_str());    
-    unlink("/tmp/fideoUnafold.det");
+    EXPECT_FALSE(HelperTest::checkDirTmp());    
 }
 
 TEST(UnaFoldBackendTestSuite1, FoldFromTest)
@@ -103,11 +101,10 @@ TEST(UnaFoldBackendTestSuite1, FoldFromTest)
     IFold* p = Fold::new_class("UNAFold");
     ASSERT_TRUE(p != NULL);
     biopp::SecStructure structure;
-    const Fe freeEnergy = p->foldFrom(fileName, structure);
-    delete p;
+    const Fe freeEnergy = p->foldFrom(fileName, structure);    
     EXPECT_EQ(freeEnergy, 5.2);
     EXPECT_TRUE(HelperTest::checkDirTmp());    
-    unlink(fileName.c_str());
+    delete p;
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 

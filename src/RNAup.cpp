@@ -98,7 +98,11 @@ void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy
     BodyParser body;
     body.parse(outputFile);
 
-    mili::assert_throw<UnlinkException>(unlink(OUT_FILE.c_str()) == 0);
+    File outfile(OUT_FILE.c_str());
+    if (outfile)
+    {
+        mili::assert_throw<UnlinkException>(unlink(OUT_FILE.c_str()) == 0);
+    }
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
 

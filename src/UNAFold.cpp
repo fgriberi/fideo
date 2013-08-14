@@ -49,6 +49,7 @@ UNAFold::~UNAFold()
     {
         deleteObsoleteFiles(temporalFileName);
     }
+    etilico::runCommand("rm /tmp/fideo-*");
 }
 
 void UNAFold::HeaderParser::parse(File& file)
@@ -516,24 +517,23 @@ void UNAFold::DetFileParser::BulgeRule::calculateAttrib(const Block& block, IMot
 
 //----------------------------------- Fold with observer --------------------------------------
 
-void UNAFold::commonParse(IMotifObserver* observer)
+void UNAFold::commonParse(const FilePath& file, IMotifObserver* observer)
 {
     DetFileParser parser;
-    parser.parseDet(temporalFileName + DET, observer);
+    parser.parseDet(file + DET, observer);
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, structureRNAm);
-    commonParse(motifObserver);
+    commonParse(temporalFileName, motifObserver);
     return freeEnergy;
 }
 
 Fe UNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = IFoldIntermediate::foldFrom(inputFile, structureRNAm);
-    temporalFileName = inputFile;
-    commonParse(motifObserver);
+    commonParse(inputFile, motifObserver);
     return freeEnergy;
 }
 

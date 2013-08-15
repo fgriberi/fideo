@@ -40,10 +40,10 @@
 #undef RNA_FOLD_H
 
 /** @brief Temporal method requerid to execute remo
-*
-* @param derivedKey: name of derived class
-* @return pointer to the base class
-*/
+ *
+ * @param derivedKey: name of derived class
+ * @return pointer to the base class
+ */
 fideo::IFold* getDerivedFold(const std::string& derivedKey)
 {
     fideo::IFold* const ptr = fideo::Fold::new_class(derivedKey);
@@ -114,10 +114,7 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
 size_t RNAFold::getSizeOfSequence(const FilePath& file) const
 {
     File fileIn(file.c_str());
-    if (!fileIn)
-    {
-        throw NotFoundFileException();
-    }
+    mili::assert_throw<NotFoundFileException>(fileIn);    
     std::string lineSequence;
     getline(fileIn, lineSequence);
     return lineSequence.length();

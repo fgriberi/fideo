@@ -75,11 +75,11 @@ struct IHybridize
     virtual ~IHybridize() {}
 
     /** @brief Get availables backend
-    *
-    * Method that provide the available backends for hybridize service.
-    * @param slist: to fill with different backends
-    * @return void
-    */
+     *
+     * Method that provide the available backends for hybridize service.
+     * @param slist: to fill with different backends
+     * @return void
+     */
     static void getAvailableBackends(Backend& slist)
     {
         Factory::KeyIterator it(Hybridize::getConstructibleObjectsKeys());

@@ -37,10 +37,10 @@
 #undef INTA_RNA_H
 
 /** @brief Temporal method requerid to execute remo
-*
-* @param derivedKey: name of derived class
-* @return pointer to the base class
-*/
+ *
+ * @param derivedKey: name of derived class
+ * @return pointer to the base class
+ */
 fideo::IHybridize* getDerivedHybridize(const std::string& derivedKey)
 {
     fideo::IHybridize* const ptr = fideo::Hybridize::new_class(derivedKey);
@@ -97,20 +97,14 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     //move to the directory where is the folding
     std::string executablePath;
     etilico::Config::getInstance()->getPath(EXECUTABLE_PATH, executablePath);
-    if (chdir(executablePath.c_str()) != 0)
-    {
-        throw RNABackendException("Invalid path of IntaRNA executable.");
-    }
+    mili::assert_throw<InvalidIntaPath>(chdir(executablePath.c_str()) == 0);
     command = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
 }
 
 void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
     File outputFile(inputFiles[FILE_1].c_str());
-    if (!outputFile)
-    {
-        throw NotFoundFileException();
-    }
+    mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);

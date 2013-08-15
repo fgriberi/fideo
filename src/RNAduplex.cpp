@@ -43,10 +43,7 @@ void RNAduplex::BodyParser::parse(std::string& line)
     std::stringstream ss(line);
     ResultLine result;
     ss >> result;
-    if (result.size() != NumberOfColumns)
-    {
-        throw RNABackendException("Invalid output RNAduplex.");
-    }
+    mili::assert_throw<InvalidOutputRNADuplex>(result.size() == NumberOfColumns);
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
     helper::convertFromString(deltaG, dG);
 }
@@ -84,14 +81,11 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 
 void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
-    File OutputFile(inputFiles[FILE_2].c_str());
-    if (!OutputFile)
-    {
-        throw NotFoundFileException();
-    }
+    File outputFile(inputFiles[FILE_2].c_str());
+    mili::assert_throw<NotFoundFileException>(outputFile);   
     BodyParser body;
     std::string line;
-    getline(OutputFile, line);
+    getline(outputFile, line);
     body.parse(line);
 
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);

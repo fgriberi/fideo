@@ -56,31 +56,31 @@ private:
     virtual void renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile);
 
     /** @brief Destructor of class
-    *
-    */
+     *
+     */
     virtual ~RNAFold() {}
 
     /** @brief Read free energy of line
-    *
-    * @param file: to read
-    * @param energy: to fill with free energy
-    * @return index of first ")" in file
-    */
+     *
+     * @param file: to read
+     * @param energy: to fill with free energy
+     * @return index of first ")" in file
+     */
     size_t readFreeEnergy(FileLine& file, size_t offset, Fe& energy) const;
 
     /** @brief Obtain secondary structure
-    *
-    * @param str: to parse
-    * @param secStrucute: to fill with structure
-    * @return void
-    */
+     *
+     * @param str: to parse
+     * @param secStrucute: to fill with structure
+     * @return void
+     */
     static void parseStructure(std::string& str, biopp::SecStructure& secStructure);
 
     /** @brief Gets the size of the folded sequence from a file
-    *
-    * @param file: input file to read
-    * @return size of sequence
-    */
+     *
+     * @param file: input file to read
+     * @return size of sequence
+     */
     size_t getSizeOfSequence(const FilePath& file) const;
 
     static const FileLineNo LINE_NO;

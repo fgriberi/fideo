@@ -41,9 +41,9 @@
 namespace fideo
 {
 
-/** @brief IntaRNA is an implementation of IHybridize interface
-*
-*/
+/** @brief IntaRNA is an implementation of IHybridize interface 
+ *
+ */
 class IntaRNA : public IHybridizeIntermediate
 {
 private:

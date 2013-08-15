@@ -44,14 +44,8 @@ void IFoldIntermediate::getNameOfSequence(const std::string& inputName, std::str
     std::stringstream ss(inputName);
     ResultLine result;
     ss >> mili::Separator(result, '-');
-    if (result.size() != SIZE_EXPECTED)
-    {
-        throw RNABackendException("Invalid input name");
-    }
-    else
-    {
-        nameSequence = result[NAME];
-    }
+    mili::assert_throw<InvalidInputName>(result.size() == SIZE_EXPECTED);
+    nameSequence = result[NAME];    
 }
 
 void IFoldIntermediate::renameFile(const std::string& fileToRename, const std::string& nameFile)

@@ -117,7 +117,7 @@ TEST(RNAduplexBackendTestSuite2, InvalidFile)
     files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), RNABackendException);    
+    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), InvalidOutputRNADuplex);    
     unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
@@ -136,7 +136,7 @@ TEST(RNAduplexBackendTestSuite2, InvalidFile2)
     files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), RNABackendException);    
+    EXPECT_THROW(rnaduplex.processingResult(files, freeEnergy), InvalidOutputRNADuplex);    
     unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

@@ -130,7 +130,7 @@ TEST(RNAupBackendTestSuite1, InvalidFile)
     files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnaup.processingResult(files, freeEnergy), RNABackendException);    
+    EXPECT_THROW(rnaup.processingResult(files, freeEnergy), InvalidOutputRNAUp);    
     unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

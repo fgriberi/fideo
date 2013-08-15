@@ -115,7 +115,7 @@ TEST(RNAcofoldBackendTestSuite2, InvalidFile)
     files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), RNABackendException);    
+    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), InvalidOutputRNACofold);    
     unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
@@ -135,7 +135,7 @@ TEST(RNAcofoldBackendTestSuite2, InvalidFile2)
     files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), RNABackendException);    
+    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), InvalidOutputRNACofold);    
     unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

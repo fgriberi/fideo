@@ -53,10 +53,9 @@ class IFoldIntermediate : public IFold
 public:
 
     /** @brief Represent a string separated by a char
-    *
-    */
+     *
+     */
     typedef std::vector<std::string> ResultLine;
-
 
     /** @brief Fold an RNA sequence and deletes all file generated
      *
@@ -77,7 +76,7 @@ public:
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
-    /** @brief Generates file to fold
+    /** @brief Fold the RNA sequence and load result in a specific file
      *
      * @param seqRNAm: input RNA sequence.
      * @param isCircRNAm: if the structure it's circular.
@@ -95,7 +94,7 @@ public:
      */
     virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm);
 
-    /** @brief Fold a specific file
+    /** @brief Fold a specific file with motif
      *
      * @param inputFile: input file to fold
      * @param structureRNAm: the structure where to write the folding.
@@ -105,8 +104,8 @@ public:
     virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Destructor of class
-    *
-    */
+     *
+     */
     virtual ~IFoldIntermediate() {}
 
     static const size_t INPUT_FILE = 0;
@@ -115,23 +114,23 @@ public:
 private:
 
     /** @brief Call external tool to fold
-    *
-    * @param sequence: the RNA sequence to fold.
-    * @param isCirc: if the sequence's circular.
-    * @param structure: secondary structure
-    * @param files: files generated
-    * @return void
-    */
+     *
+     * @param sequence: the RNA sequence to fold.
+     * @param isCirc: if the sequence's circular.
+     * @param structure: secondary structure
+     * @param files: files generated
+     * @return void
+     */
     void commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, IntermediateFiles& files);
 
     /** @brief Prepare the necessary data for folding service
-    *
-    * @param sequence: the RNA sequence to fold.
-    * @param isCirc: if the sequence's circular.
-    * @param command: to fill with execute Command
-    * @param outputFiles: temporary file names created
-    * @return void
-    */
+     *
+     * @param sequence: the RNA sequence to fold.
+     * @param isCirc: if the sequence's circular.
+     * @param command: to fill with execute Command
+     * @param outputFiles: temporary file names created
+     * @return void
+     */
     virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles) = 0;
 
     /** @brief Processing folding results

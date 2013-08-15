@@ -94,10 +94,7 @@ void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 void RNAHybrid::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
     File outputFile(inputFiles[FILE_3].c_str());
-    if (!outputFile)
-    {
-        throw NotFoundFileException();
-    }
+    mili::assert_throw<NotFoundFileException>(outputFile);    
     BodyParser body;
     body.parse(outputFile);
 

@@ -57,10 +57,7 @@ void UNAFold::HeaderParser::parse(File& file)
     ResultLine aux;
     if (file >> aux)
     {
-        if (aux.size() != NumberOfColumns)
-        {
-            throw InvalidaHeader();
-        }
+        mili::assert_throw<InvalidaHeader>(aux.size() == NumberOfColumns);        
         helper::convertFromString(aux[ColNumberOfBases], numberOfBases);
         helper::convertFromString(aux[ColDeltaG], deltaG);
         sequenceName = aux[ColSeqName];
@@ -78,10 +75,7 @@ bool UNAFold::BodyLineParser::parse(File& file)
 
     if (ret)
     {
-        if (aux.size() != NumberOfColumns)
-        {
-            throw InvalidBodyLine();
-        }
+        mili::assert_throw<InvalidBodyLine>(aux.size() == NumberOfColumns);
         helper::convertFromString(aux[ColNucl], nuc);
         helper::convertFromString(aux[ColNucleotideNumber], nucNumber);
         helper::convertFromString(aux[ColPairedWith], pairedNuc);
@@ -133,11 +127,7 @@ void UNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::s
     std::stringstream ss(fileToRename);
     ResultLine result;
     ss >> mili::Separator(result, '.');
-    if (result.size() != 2)
-    {
-        throw RNABackendException("Name of file to rename is invalid.");
-    }
-
+    mili::assert_throw<InvalidName>(result.size() == 2);
     //rename .det file
     renameFile(result[NAME_FILE] + DET, newNameFile + DET);
 }
@@ -175,10 +165,7 @@ void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
 void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy)
 {
     File fileIn((inputFiles[OUTPUT_FILE]).c_str());
-    if (!fileIn)
-    {
-        throw NotFoundFileException();
-    }
+    mili::assert_throw<NotFoundFileException>(fileIn);    
     HeaderParser headerLine;
     headerLine.parse(fileIn);
     structureRNAm.set_sequence_size(headerLine.numberOfBases);
@@ -309,10 +296,7 @@ void UNAFold::DetFileParser::parseDet(const std::string& file, IMotifObserver* o
 {
     File fileToParse;
     fileToParse.open(file.c_str());
-    if (!fileToParse)
-    {
-        throw FileNotExist();
-    }
+    mili::assert_throw<FileNotExist>(fileToParse);          
     fillRules();
     goToBegin(fileToParse);
     Block currentBlock;
@@ -333,10 +317,7 @@ void UNAFold::DetFileParser::Rule::getSubstrInPos(const std::string& lineInput, 
     std::stringstream ss(lineInput);
     ResultLine result;
     ss >> mili::Separator(result, ' ');
-    if (pos > result.size())
-    {
-        throw IndexOutOfRange();
-    }
+    mili::assert_throw<IndexOutOfRange>(pos <= result.size());          
     res = result[pos];
 }
 

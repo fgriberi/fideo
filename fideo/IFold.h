@@ -79,7 +79,7 @@ struct IFold
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
-    /** @brief Generates file to fold.
+    /** @brief Fold the RNA sequence and load result in a specific file
      *
      * @param seqRNAm: input RNA sequence.
      * @param isCircRNAm: if the structure it's circular.
@@ -97,7 +97,7 @@ struct IFold
      */
     virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm) = 0;
 
-    /** @brief Fold a specific file
+    /** @brief Fold a specific file with observer
      *
      * @param inputFile: input file to fold
      * @param structureRNAm: the structure where to write the folding.

@@ -43,10 +43,7 @@ void RNAup::BodyParser::parse(File& file)
     ResultLine aux;
     if (file >> aux)
     {
-        if (aux.size() != NumberOfColumns)
-        {
-            throw RNABackendException("Invalid output RNAup.");
-        }
+        mili::assert_throw<InvalidOutputRNAUp>(aux.size() == NumberOfColumns);   
         const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
         helper::convertFromString(deltaG, dG);
     }
@@ -91,10 +88,7 @@ void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy
 {
 
     File outputFile(inputFiles[FILE_2].c_str());
-    if (!outputFile)
-    {
-        throw NotFoundFileException();
-    }
+    mili::assert_throw<NotFoundFileException>(outputFile);       
     BodyParser body;
     body.parse(outputFile);
 

@@ -39,10 +39,8 @@ namespace fideo
 Fe IHybridizeIntermediate::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
                                      const biopp::NucSequence& shorterSeq) const
 {
-    if (longerCirc)
-    {
-        throw RNABackendException("Unsupported Sequence.");
-    }
+
+    mili::assert_throw<UnsupportedException>(!longerCirc);
     IntermediateFiles files;
     etilico::Command cmd;
     prepareData(longerSeq, shorterSeq, cmd, files);

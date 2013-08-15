@@ -57,10 +57,16 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(FromStringException, FideoExceptionHierarchy, "Wr
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueUsingOffsetException, FideoExceptionHierarchy, "Could not read the value from given line, offset and length");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueException, FideoExceptionHierarchy, "Could not read the value from given line");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidStructureException, FideoExceptionHierarchy, "Invalid structure");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidIntaPath, FideoExceptionHierarchy, "Invalid path of IntaRNA executable");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, FideoExceptionHierarchy, "Error in string parser");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, FideoExceptionHierarchy, "Unsupported Sequence");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, FideoExceptionHierarchy, "Output file not found");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNACofold, FideoExceptionHierarchy, "Invalid output RNAcofold.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNADuplex, FideoExceptionHierarchy, "Invalid output RNAduplex.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNAUp, FideoExceptionHierarchy, "Invalid output RNAup.");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(UnlinkException, FideoExceptionHierarchy, "Error unlink");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidInputName, FideoExceptionHierarchy, "Invalid input name");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidName, FideoExceptionHierarchy, "Name of file to rename is invalid.");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, FideoExceptionHierarchy, "Invalid motif");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, FideoExceptionHierarchy, "The .det file not exist");
 DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, FideoExceptionHierarchy, "Index out of range");

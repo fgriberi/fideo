@@ -43,10 +43,7 @@ void RNAcofold::BodyParser::parse(std::string& line)
     std::stringstream ss(line);
     ResultLine result;
     ss >> mili::Separator(result, ' ');
-    if (result.size() != NumberOfColumns)
-    {
-        throw RNABackendException("Invalid output RNAcofold.");
-    }
+    mili::assert_throw<InvalidOutputRNACofold>(result.size() == NumberOfColumns);
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
     helper::convertFromString(deltaG, dG);
 }
@@ -82,11 +79,7 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
     File outputFile(inputFiles[FILE_2].c_str());
-    if (!outputFile)
-    {
-        throw NotFoundFileException();
-    }
-
+    mili::assert_throw<NotFoundFileException>(outputFile);
     std::string temp;
     getline(outputFile, temp);
     getline(outputFile, temp);

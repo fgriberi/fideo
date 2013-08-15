@@ -48,13 +48,13 @@ class IHybridizeIntermediate : public IHybridize
 public:
 
     /** @brief Represent intermediate files (input files and output files)
-    *
-    */
+     *
+     */
     typedef std::vector<std::string> IntermediateFiles;
 
     /** @brief Represent a string separated by a char
-    *
-    */
+     *
+     */
     typedef std::vector<std::string> ResultLine;
 
     /** @brief Hybridize an RNA sequence
@@ -68,8 +68,8 @@ public:
                          const biopp::NucSequence& shorterSeq) const;
 
     /** @brief Destructor of class
-    *
-    */
+     *
+     */
     virtual ~IHybridizeIntermediate() {}
 
     static const size_t FILE_1 = 0;
@@ -79,13 +79,13 @@ public:
 private:
 
     /** @brief Prepare the necessary data for hybridize service
-    *
-    * @param longerSeq: longer sequence to Hybridize.
-    * @param shorterSeq: shorter sequence to Hybridize
-    * @param command: to fill with execute Command
-    * @param outputFiles: created temporal file names
-    * @return void
-    */
+     *
+     * @param longerSeq: longer sequence to Hybridize.
+     * @param shorterSeq: shorter sequence to Hybridize
+     * @param command: to fill with execute Command
+     * @param outputFiles: created temporal file names
+     * @return void
+     */
     virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
                              etilico::Command& command, IntermediateFiles& outputFiles) const = 0;
 

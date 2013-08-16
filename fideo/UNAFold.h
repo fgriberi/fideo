@@ -90,9 +90,9 @@ private:
          */
         void parse(File& file);
 
-        biopp::SeqIndex numberOfBases;
-        Fe deltaG;
-        std::string sequenceName;
+        biopp::SeqIndex _numberOfBases;
+        Fe _deltaG;
+        std::string _sequenceName;
 
     private:
 
@@ -123,9 +123,9 @@ private:
          */
         bool parse(File& file);
 
-        char nuc;                  /// a nucleotid
-        biopp::SeqIndex nucNumber; /// starts at 1!. Number of nucleotid in sequence
-        biopp::SeqIndex pairedNuc; /// starts at 1!. Nucleotid paired.
+        char _nuc;                  /// a nucleotid
+        biopp::SeqIndex _nucNumber; /// starts at 1!. Number of nucleotid in sequence
+        biopp::SeqIndex _pairedNuc; /// starts at 1!. Nucleotid paired.
 
     private:
 
@@ -162,7 +162,7 @@ private:
     /** @brief To store the temporal file name generated
      *
      */
-    std::string temporalFileName;
+    std::string _temporalFileName;
 };
 
 /** @brief constant that represents motif name

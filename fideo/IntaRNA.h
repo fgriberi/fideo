@@ -41,7 +41,7 @@
 namespace fideo
 {
 
-/** @brief IntaRNA is an implementation of IHybridize interface 
+/** @brief IntaRNA is an implementation of IHybridize interface
  *
  */
 class IntaRNA : public IHybridizeIntermediate
@@ -67,7 +67,7 @@ private:
     class BodyParser
     {
     public:
-        Fe dG; ///free energy to read the file
+        Fe _dG; ///free energy to read the file
 
         /** @brief Parse the file and get the value dG
          *

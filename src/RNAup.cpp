@@ -43,9 +43,9 @@ void RNAup::BodyParser::parse(File& file)
     ResultLine aux;
     if (file >> aux)
     {
-        mili::assert_throw<InvalidOutputRNAUp>(aux.size() == NumberOfColumns);   
+        mili::assert_throw<InvalidOutputRNAUp>(aux.size() == NumberOfColumns);
         const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-        helper::convertFromString(deltaG, dG);
+        helper::convertFromString(deltaG, _dG);
     }
     else
     {
@@ -88,7 +88,7 @@ void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy
 {
 
     File outputFile(inputFiles[FILE_2].c_str());
-    mili::assert_throw<NotFoundFileException>(outputFile);       
+    mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
 
@@ -100,7 +100,7 @@ void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
 
-    freeEnergy = body.dG;
+    freeEnergy = body._dG;
 }
 
 }

@@ -43,7 +43,7 @@
  */
 typedef std::list<std::string> Body;
 
-/** @brief Represents the block name 
+/** @brief Represents the block name
  *
  */
 typedef std::string BlockName;
@@ -95,7 +95,7 @@ private:
     class BulgeRule;
 
     /** @brief Allows placing the file in the correct line
-     * 
+     *
      * @param file: file input
      * @return void
      */
@@ -162,7 +162,7 @@ private:
     /** @brief Rules to parse a '.det' file
      *
      */
-    Rules availableRules;
+    Rules _availableRules;
 };
 
 #define RULE_H

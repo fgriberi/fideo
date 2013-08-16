@@ -45,7 +45,7 @@ void IFoldIntermediate::getNameOfSequence(const std::string& inputName, std::str
     ResultLine result;
     ss >> mili::Separator(result, '-');
     mili::assert_throw<InvalidInputName>(result.size() == SIZE_EXPECTED);
-    nameSequence = result[NAME];    
+    nameSequence = result[NAME];
 }
 
 void IFoldIntermediate::renameFile(const std::string& fileToRename, const std::string& nameFile)

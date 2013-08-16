@@ -70,7 +70,7 @@ private:
          */
         void parse(std::string& line);
 
-        Fe dG; ///free energy
+        Fe _dG; ///free energy
 
     private:
         enum Columns

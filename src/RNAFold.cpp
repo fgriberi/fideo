@@ -114,7 +114,7 @@ void RNAFold::parseStructure(std::string& str, biopp::SecStructure& secStructure
 size_t RNAFold::getSizeOfSequence(const FilePath& file) const
 {
     File fileIn(file.c_str());
-    mili::assert_throw<NotFoundFileException>(fileIn);    
+    mili::assert_throw<NotFoundFileException>(fileIn);
     std::string lineSequence;
     getline(fileIn, lineSequence);
     return lineSequence.length();

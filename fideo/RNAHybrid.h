@@ -73,7 +73,7 @@ private:
          */
         void parse(File& file);
 
-        Fe dG; ///free energy
+        Fe _dG; ///free energy
         static const size_t OBSOLETE_dG = 1000; //no significant hybridization found
         static const size_t SIZE_LINE = 3;
         static const size_t DELTA_G = 1;

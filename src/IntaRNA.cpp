@@ -64,12 +64,12 @@ void IntaRNA::BodyParser::parse(File& file)
     ss >> mili::Separator(result, ' ');
     if (result.size() != SIZE_LINE)
     {
-        dG = OBSOLETE_dG;
+        _dG = OBSOLETE_dG;
     }
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);
+        helper::convertFromString(deltaG, _dG);
     }
 }
 
@@ -108,7 +108,7 @@ void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEner
     BodyParser body;
     body.parse(outputFile);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    freeEnergy = body.dG;
+    freeEnergy = body._dG;
 }
 
 } // namespace fideo

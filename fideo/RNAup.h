@@ -66,7 +66,7 @@ private:
     public:
         void parse(File& file);
 
-        Fe dG; ///free energy
+        Fe _dG; ///free energy
     private:
 
         /** @brief Represents the columns of the file to parse

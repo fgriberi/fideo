@@ -45,7 +45,7 @@ void RNAcofold::BodyParser::parse(std::string& line)
     ss >> mili::Separator(result, ' ');
     mili::assert_throw<InvalidOutputRNACofold>(result.size() == NumberOfColumns);
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].size() - 2);
-    helper::convertFromString(deltaG, dG);
+    helper::convertFromString(deltaG, _dG);
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
@@ -90,7 +90,7 @@ void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEn
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
 
-    freeEnergy = body.dG;
+    freeEnergy = body._dG;
 }
 } // namespace fideo
 

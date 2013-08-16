@@ -45,7 +45,7 @@ void RNAduplex::BodyParser::parse(std::string& line)
     ss >> result;
     mili::assert_throw<InvalidOutputRNADuplex>(result.size() == NumberOfColumns);
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-    helper::convertFromString(deltaG, dG);
+    helper::convertFromString(deltaG, _dG);
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
@@ -82,7 +82,7 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
     File outputFile(inputFiles[FILE_2].c_str());
-    mili::assert_throw<NotFoundFileException>(outputFile);   
+    mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     std::string line;
     getline(outputFile, line);
@@ -90,7 +90,7 @@ void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEn
 
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-    freeEnergy = body.dG;
+    freeEnergy = body._dG;
 }
 
 } // namespace fideo

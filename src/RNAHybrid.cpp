@@ -50,12 +50,12 @@ void RNAHybrid::BodyParser::parse(File& file)
     ss >> mili::Separator(result, ' ');
     if (result.size() != SIZE_LINE)
     {
-        dG = OBSOLETE_dG; //no significant hybridization found
+        _dG = OBSOLETE_dG; //no significant hybridization found
     }
     else
     {
         const std::string deltaG = result[DELTA_G];
-        helper::convertFromString(deltaG, dG);
+        helper::convertFromString(deltaG, _dG);
     }
 }
 
@@ -94,14 +94,14 @@ void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
 void RNAHybrid::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
 {
     File outputFile(inputFiles[FILE_3].c_str());
-    mili::assert_throw<NotFoundFileException>(outputFile);    
+    mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
 
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_3].c_str()) == 0);
-    freeEnergy = body.dG;
+    freeEnergy = body._dG;
 }
 
 } // namespace fideo

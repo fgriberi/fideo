@@ -221,8 +221,8 @@ TEST(DetFileParserTestSuite, InteriorRulecalculateAttribTest)
     interiorLoopBlock.lines.push_back(": ddG = +2.30 External closing pair is T( 97)-A( 116)");
     interiorLoopBlock.lines.push_back("Stack: ddG = -2.40 External closing pair is G( 101)-C( 111)");
     interiorLoopBlock.lines.push_back("Stack: ddG = -0.90 External closing pair is A( 102)-T( 110)");
-    interiorLoopBlock.lines.push_back("Helix: ddG = -3.30 3 base pairs.");
-
+    interiorLoopBlock.lines.push_back("Helix: ddG = -3.30 3 base pairs.")
+;
     const size_t attr = 5;
     const size_t stacks = 2;
 
@@ -334,7 +334,7 @@ TEST(DetFileParserTestSuite, BulgeRulecalculateAttribTest)
     EXPECT_EQ(motif.amountStacks, stacks);
 }
 
-static const std::string DET_FILE_PATH = "/projects/fideo/tests/fileToParse.det";
+static const std::string DET_FILE_PATH = "../../../projects/fideo/tests/fileToParse.det";
 
 void getDetFilePath(std::string& path)
 {
@@ -344,20 +344,15 @@ void getDetFilePath(std::string& path)
 }
 
 void openTestFile(std::ifstream& file) 
-{
-    std::string nameFile;
-    getDetFilePath(nameFile);    
-    file.open(nameFile.c_str());
-    if (!file)
-    {
-        throw FileNotExist();
-    }
+{    
+    file.open(DET_FILE_PATH.c_str());
+    mili::assert_throw<FileNotExist>(file);    
 }
 
 TEST(DetFileParserTestSuite, builFirstBlockTest)
 {
     std::ifstream fileToParse;
-    openTestFile(fileToParse);
+    openTestFile(fileToParse);          
     UNAFold::DetFileParser parser;
     parser.goToBegin(fileToParse);
     Block block;

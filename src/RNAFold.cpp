@@ -174,6 +174,9 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return 0; //temporal
 }
 
+void RNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver)
+{} //temporal
+
 Fe RNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     return 0; //temporal

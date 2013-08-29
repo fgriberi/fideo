@@ -500,20 +500,27 @@ void UNAFold::DetFileParser::BulgeRule::calculateAttrib(const Block& block, IMot
 void UNAFold::commonParse(const FilePath& file, IMotifObserver* observer)
 {
     DetFileParser parser;
-    parser.parseDet(file + _det, observer);
+    parser.parseDet(file, observer);
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, structureRNAm);
-    commonParse(_temporalFileName, motifObserver);
+    commonParse(_temporalFileName + _det, motifObserver);
     return freeEnergy;
+}
+
+void UNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver)
+{
+    IFoldIntermediate::foldTo(seqRNAm, isCircRNAm, structureRNAm, outputFile);
+    commonParse(outputFile + _det, motifObserver);
+
 }
 
 Fe UNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {
     const Fe freeEnergy = IFoldIntermediate::foldFrom(inputFile, structureRNAm);
-    commonParse(inputFile, motifObserver);
+    commonParse(inputFile + _det, motifObserver);
     return freeEnergy;
 }
 

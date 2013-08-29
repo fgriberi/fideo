@@ -77,7 +77,7 @@ TEST(RNAFoldBackendTestSuite1, FoldToTest)
 
 TEST(RNAFoldBackendTestSuite1, FoldFromTest)
 {    
-    FilePath fileName = "/tmp/fideo-output";
+    const FilePath fileName = "/tmp/fideo-output";
     std::ofstream file(fileName.c_str());
     file << "AAAAAAAAGGGGGGGGCCCCCCCCUUUUUUUU\n";
     file << "..((((((((((((....)))))))))))).. (-13.60)\n";    

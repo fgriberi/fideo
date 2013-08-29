@@ -40,7 +40,7 @@ namespace fideo
 
 using mili::operator>>;
 
-static const std::string DET = ".det";
+const std::string UNAFold::_det = ".det";
 
 UNAFold::~UNAFold()
 {
@@ -111,10 +111,10 @@ void UNAFold::deleteObsoleteFiles(const std::string& nameFile)
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".ss-count").c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((nameFile + ".ann").c_str()) == 0);
 
-    File file((nameFile + DET).c_str());
+    File file((nameFile + _det).c_str());
     if (file)
     {
-        mili::assert_throw<UnlinkException>(unlink((_temporalFileName + DET).c_str()) == 0);
+        mili::assert_throw<UnlinkException>(unlink((_temporalFileName + _det).c_str()) == 0);
     }
 }
 
@@ -129,7 +129,7 @@ void UNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::s
     ss >> mili::Separator(result, '.');
     mili::assert_throw<InvalidName>(result.size() == 2);
     //rename .det file
-    renameFile(result[NAME_FILE] + DET, newNameFile + DET);
+    renameFile(result[NAME_FILE] + _det, newNameFile + _det);
 }
 
 void UNAFold::deleteCTFile()
@@ -501,7 +501,7 @@ void UNAFold::DetFileParser::BulgeRule::calculateAttrib(const Block& block, IMot
 void UNAFold::commonParse(const FilePath& file, IMotifObserver* observer)
 {
     DetFileParser parser;
-    parser.parseDet(file + DET, observer);
+    parser.parseDet(file + _det, observer);
 }
 
 Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)

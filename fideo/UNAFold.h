@@ -163,6 +163,7 @@ private:
      *
      */
     std::string _temporalFileName;
+    const static std::string _det;
 };
 
 /** @brief constant that represents motif name

@@ -193,22 +193,21 @@ void UNAFold::DetFileParser::goToBegin(File& file) const
 
 void UNAFold::DetFileParser::removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest) const
 {
+    dest = "";
     bool previousWhite = false;
-    std::string current = "";
-    for (size_t i = 0; i < src.size(); ++i)
+    for (std::string::const_iterator it = src.begin(); it != src.end(); ++it)
     {
-        if (src[i] != ' ')
+        if (*it != ' ')
         {
-            current += src[i];
+            dest += *it;
             previousWhite = false;
         }
         else if (!previousWhite)
         {
-            current += src[i];
+            dest += *it;
             previousWhite = true;
         }
     }
-    dest = current;
 }
 
 void UNAFold::DetFileParser::parseMotifLine(const std::string& line, Block& block) const

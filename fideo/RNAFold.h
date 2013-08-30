@@ -49,11 +49,12 @@ class RNAFold : public IFoldIntermediate
 private:
 
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
-    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver);
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver);
     virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver);
-    virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles);
-    virtual void processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy);
-    virtual void deleteObsoleteFiles(const std::string& nameFile);
+    virtual void prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile);
+    virtual void processingResult(biopp::SecStructure& structureRNAm, const InputFile& inputFile, Fe& freeEnergy);
+    virtual void deleteAllFilesAfterProcessing(const InputFile& inFile, const OutputFile& outFile);
+    virtual void deleteObsoleteFiles(const InputFile& inFile);
     virtual void renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile);
 
     /** @brief Destructor of class

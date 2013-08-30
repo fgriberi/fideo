@@ -99,53 +99,49 @@ void UNAFold::fillStructure(const BodyLineParser& bodyLine, biopp::SecStructure&
     }
 }
 
-void UNAFold::deleteObsoleteFiles(const std::string& nameFile)
+void UNAFold::deleteObsoleteFiles(const InputFile& inFile)
 {
-    mili::assert_throw<UnlinkException>(unlink(nameFile.c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + "_1.ct").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".dG").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".h-num").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".rnaml").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".plot").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".run").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".ss-count").c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink((nameFile + ".ann").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink(inFile.c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + "_1.ct").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".dG").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".h-num").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".rnaml").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".plot").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".run").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".ss-count").c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink((inFile + ".ann").c_str()) == 0);
 
-    File file((nameFile + _det).c_str());
+    File file((inFile + _det).c_str());
     if (file)
     {
-        mili::assert_throw<UnlinkException>(unlink((_temporalFileName + _det).c_str()) == 0);
+        mili::assert_throw<UnlinkException>(unlink((inFile + _det).c_str()) == 0);
     }
 }
 
 static const size_t NAME_FILE = 0;
 void UNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile)
 {
-    //rename .ct file
-    renameFile(fileToRename, newNameFile);
+    const etilico::Command renameCtFile = "mv " + fileToRename + " " + newNameFile;
+    etilico::runCommand(renameCtFile);
 
     std::stringstream ss(fileToRename);
     ResultLine result;
     ss >> mili::Separator(result, '.');
     mili::assert_throw<InvalidName>(result.size() == 2);
-    //rename .det file
-    renameFile(result[NAME_FILE] + _det, newNameFile + _det);
+
+    const etilico::Command renameDetFile = "mv " + result[NAME_FILE] + _det + " " + newNameFile + _det;
+    etilico::runCommand(renameDetFile);
 }
 
-void UNAFold::deleteCTFile()
-{
-    mili::assert_throw<UnlinkException>(unlink((_temporalFileName + ".ct").c_str()) == 0);
-}
-
-void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
+void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile)
 {
     FileLine sseq = sequence.getString();
     std::string prefix = "fideo-XXXXXX";
     std::string temporalFile;
     etilico::createTemporaryFile(temporalFile, PATH_TMP, prefix);
     _temporalFileName = temporalFile;
-    outputFiles.push_back(temporalFile);
-    outputFiles.push_back(temporalFile + ".ct");
+    inputFile = temporalFile;
+    outputFile = temporalFile + ".ct";
     helper::write(temporalFile, sseq);
     std::stringstream ss;
     ss << "UNAFold.pl --max=1 ";
@@ -162,9 +158,9 @@ void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
     command = ss.str(); /// UNAFold.pl --max=1 ("" | --circular) temporalFile
 }
 
-void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy)
+void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const InputFile& inputFile, Fe& freeEnergy)
 {
-    File fileIn((inputFiles[OUTPUT_FILE]).c_str());
+    File fileIn(inputFile.c_str());
     mili::assert_throw<NotFoundFileException>(fileIn);
     HeaderParser headerLine;
     headerLine.parse(fileIn);
@@ -175,11 +171,13 @@ void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const Interme
     {
         fillStructure(bodyLine, structureRNAm);
     }
-    if (deleteOutputFile)
-    {
-        deleteCTFile();
-    }
     freeEnergy = headerLine._deltaG;
+}
+
+void UNAFold::deleteAllFilesAfterProcessing(const InputFile& inFile, const OutputFile& outFile)
+{
+    deleteObsoleteFiles(inFile);
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0); //.ct file
 }
 
 //------------------------------------- DetFileParser --------------------------------------
@@ -510,11 +508,10 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return freeEnergy;
 }
 
-void UNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver)
+void UNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver)
 {
     IFoldIntermediate::foldTo(seqRNAm, isCircRNAm, structureRNAm, outputFile);
     commonParse(outputFile + _det, motifObserver);
-
 }
 
 Fe UNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)

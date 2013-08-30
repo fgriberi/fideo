@@ -48,47 +48,39 @@ void IFoldIntermediate::getNameOfSequence(const std::string& inputName, std::str
     nameSequence = result[NAME];
 }
 
-void IFoldIntermediate::renameFile(const std::string& fileToRename, const std::string& nameFile)
-{
-    etilico::Command renameCmd = "mv " + fileToRename + " " + nameFile;
-    etilico::runCommand(renameCmd);
-}
-
-void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, IntermediateFiles& files)
+void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, InputFile& inputFile, OutputFile& outputFile)
 {
     structure.clear();
     structure.set_circular(isCirc);
     etilico::Command cmd;
-    prepareData(sequence, isCirc, cmd, files);
+    prepareData(sequence, isCirc, cmd, inputFile, outputFile);
     etilico::runCommand(cmd);
 }
 
 Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm)
 {
-    IntermediateFiles intermediateFiles;
-    commonFold(seqRNAm, isCircRNAm, structureRNAm, intermediateFiles);
-    const bool deleteOutput = true;
+    InputFile inFile;
+    OutputFile outFile;
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, inFile, outFile);
     Fe freeEnergy;
-    processingResult(structureRNAm, intermediateFiles, deleteOutput, freeEnergy);
+    processingResult(structureRNAm, outFile, freeEnergy);
+    deleteAllFilesAfterProcessing(inFile, outFile);
     return freeEnergy;
 }
 
-void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile)
+void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile)
 {
-    IntermediateFiles intermediateFiles;
-    commonFold(seqRNAm, isCircRNAm, structureRNAm, intermediateFiles);
-    renameNecessaryFiles(intermediateFiles[OUTPUT_FILE], outputFile);
-    deleteObsoleteFiles(intermediateFiles[INPUT_FILE]);
+    InputFile inFile;
+    OutputFile outFile;
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, inFile, outFile);
+    renameNecessaryFiles(outFile, outputFile);
+    deleteObsoleteFiles(inFile);
 }
 
 Fe IFoldIntermediate::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm)
 {
-    IntermediateFiles intermediateFiles;
-    intermediateFiles.push_back("obsoleteFile");
-    intermediateFiles.push_back(inputFile);
     Fe freeEnergy;
-    const bool deleteOutput = false;
-    processingResult(structureRNAm, intermediateFiles, deleteOutput, freeEnergy);
+    processingResult(structureRNAm, inputFile, freeEnergy);
     return freeEnergy;
 }
 

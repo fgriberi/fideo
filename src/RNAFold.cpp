@@ -122,51 +122,53 @@ size_t RNAFold::getSizeOfSequence(const FilePath& file) const
 
 void RNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::string& newNameFile)
 {
-    renameFile(fileToRename, newNameFile);
+    etilico::Command renameCmd = "mv " + fileToRename + " " + newNameFile;
+    etilico::runCommand(renameCmd);
 }
 
-void RNAFold::deleteObsoleteFiles(const std::string& nameFile)
+void RNAFold::deleteObsoleteFiles(const InputFile& inFile)
 {
-    mili::assert_throw<UnlinkException>(unlink(nameFile.c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink(inFile.c_str()) == 0);
 }
 
-void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, IntermediateFiles& outputFiles)
+void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile)
 {
     FileLine sseq = sequence.getString();
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
-    std::string inputFile;
-    etilico::createTemporaryFile(inputFile, path, prefix);
-    outputFiles.push_back(inputFile);
-    std::string outputFile;
-    etilico::createTemporaryFile(outputFile, path, prefix);
-    outputFiles.push_back(outputFile);
-    helper::write(inputFile, sseq);
+    std::string internalInputFile;
+    etilico::createTemporaryFile(internalInputFile, path, prefix);
+    inputFile = internalInputFile;
+    std::string internalOutputpuFile;
+    etilico::createTemporaryFile(internalOutputpuFile, path, prefix);
+    outputFile = internalOutputpuFile;
+    helper::write(internalInputFile, sseq);
     std::stringstream ss;
     ss << "RNAfold" << " --noPS ";
     if (isCirc)
     {
         ss << "--circ ";
     }
-    ss << "< " << inputFile << " > " << outputFile;
-    command = ss.str(); /// RNAfold --noPS ("" | --circ) < inputFile > outputFile
+    ss << "< " << internalInputFile << " > " << internalOutputpuFile;
+    command = ss.str(); /// RNAfold --noPS ("" | --circ) < internalInputFile > internalOutputpuFile
 }
 
-void RNAFold::processingResult(biopp::SecStructure& structureRNAm, const IntermediateFiles& inputFiles, const bool deleteOutputFile, Fe& freeEnergy)
+void RNAFold::processingResult(biopp::SecStructure& structureRNAm, const InputFile& inputFile, Fe& freeEnergy)
 {
-    const size_t sizeSequence = getSizeOfSequence(inputFiles[OUTPUT_FILE]);
+    const size_t sizeSequence = getSizeOfSequence(inputFile);
     FileLine aux;
-    helper::readLine(inputFiles[OUTPUT_FILE], LINE_NO, aux);
+    helper::readLine(inputFile, LINE_NO, aux);
 
     std::string str;
     helper::readValue(aux, 0, sizeSequence, str);
     parseStructure(str, structureRNAm);
     readFreeEnergy(aux, sizeSequence, freeEnergy);
-    if (deleteOutputFile)
-    {
-        deleteObsoleteFiles(inputFiles[INPUT_FILE]);
-        deleteObsoleteFiles(inputFiles[OUTPUT_FILE]);
-    }
+}
+
+void RNAFold::deleteAllFilesAfterProcessing(const InputFile& inFile, const OutputFile& outFile)
+{
+    mili::assert_throw<UnlinkException>(unlink(inFile.c_str()) == 0);
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
 Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
@@ -174,8 +176,9 @@ Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     return 0; //temporal
 }
 
-void RNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver)
-{} //temporal
+//temporal
+void RNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver)
+{}
 
 Fe RNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
 {

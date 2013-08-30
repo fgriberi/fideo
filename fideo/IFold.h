@@ -87,7 +87,7 @@ struct IFold
      * @param outputFile: generate output file
      * @return void
      */
-    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile) = 0;
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile) = 0;
 
     /** @brief Fold the RNA sequence and load result in a specific file with observer
      *
@@ -98,7 +98,7 @@ struct IFold
      * @param motifObserver: specific implementation of IMotifObserfer
      * @return void
      */
-    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, FilePath& outputFile, IMotifObserver* motifObserver) = 0;
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver) = 0;
 
     /** @brief Fold a specific file
      *

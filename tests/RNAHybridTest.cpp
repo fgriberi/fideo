@@ -59,7 +59,7 @@ TEST(RNAHybridBackendTestSuite1, BasicTest1)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = Hybridize::new_class("RNAHybrid");
+    IHybridize* const p = Hybridize::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
@@ -94,7 +94,7 @@ TEST(RNAHybridBackendTestSuite1, TestExampleInRNAhybridPackage)
     const biopp::NucSequence targetSequence(seq1);
     const biopp::NucSequence querySequence(seq2);
 
-    IHybridize* p = Hybridize::new_class("RNAHybrid");
+    IHybridize* const p = Hybridize::new_class("RNAHybrid");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(targetSequence, false, querySequence);
@@ -105,8 +105,9 @@ TEST(RNAHybridBackendTestSuite1, TestExampleInRNAhybridPackage)
 
 TEST(RNAHybridBackendTestSuite1, InvalidBackend)
 {
-    IHybridize* rnahybrid = Hybridize::new_class("RNAhybrid");
+    IHybridize* const rnahybrid = Hybridize::new_class("RNAhybrid");
     ASSERT_TRUE(rnahybrid == NULL);
+    delete rnahybrid;
 }
 
 TEST(RNAHybridBackendTestSuite2, correctCommad)
@@ -118,22 +119,23 @@ TEST(RNAHybridBackendTestSuite2, correctCommad)
 
     biopp::SecStructure secStructure;
     RNAHybrid rnahybrid;
-    IHybridizeIntermediate::IntermediateFiles files;
+    IHybridizeIntermediate::InputFiles inFiles;
+    IHybridizeIntermediate::OutputFile outFile;
     etilico::Command cmd;    
-    rnahybrid.prepareData(longer, shorter, cmd, files);
+    rnahybrid.prepareData(longer, shorter, cmd, inFiles, outFile);
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
     cmdExpected << "RNAhybrid -s 3utr_human -t ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_1];
+    cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " -q ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_2];
+    cmdExpected << inFiles[IHybridizeIntermediate::FILE_2];
     cmdExpected << " > ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_3];
+    cmdExpected << outFile;
     EXPECT_EQ(cmdExpected.str(), cmd);
-    unlink((files[IHybridizeIntermediate::FILE_1]).c_str());
-    unlink((files[IHybridizeIntermediate::FILE_2]).c_str());
-    unlink((files[IHybridizeIntermediate::FILE_3]).c_str());    
+    unlink((inFiles[IHybridizeIntermediate::FILE_1]).c_str());
+    unlink((inFiles[IHybridizeIntermediate::FILE_2]).c_str());
+    unlink(outFile.c_str());    
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
@@ -145,28 +147,18 @@ TEST(RNAHybridBackendTestSuite2, incorrectCommad)
 }
 
 TEST(RNAHybridBackendTestSuite2, FileNotExist)
-{
-    const std::string obsoleteFile1 = "/tmp/fideo-fileNotExist1";    
-    const std::string obsoleteFile2 = "/tmp/fideo-fileNotExist2";    
-    const std::string fileName = "/tmp/fideo-rnahybrid.test";    
+{    
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnahybrid.test";    
     RNAHybrid rnahybrid;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile1);    
-    files.push_back(obsoleteFile2);    
-    files.push_back(fileName);    
     Fe freeEnergy;
-    EXPECT_THROW(rnahybrid.processingResult(files, freeEnergy), NotFoundFileException);  
+    EXPECT_THROW(rnahybrid.processingResult(outFile, freeEnergy), NotFoundFileException);  
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite2, InvalidBodyFile)
 {    
-    const std::string obsoleteFile1 = "/tmp/fideo-invalidBodyFile1";
-    std::ofstream file1(obsoleteFile1.c_str());
-    const std::string obsoleteFile2 = "/tmp/fideo-invalidBodyFile2";    
-    std::ofstream file2(obsoleteFile2.c_str());
-    const std::string fileName = "/tmp/fideo-rnahybrid.test";
-    std::ofstream file(fileName.c_str());
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnahybrid.test";
+    std::ofstream file(outFile.c_str());
     file << "target: largerSequenceName\n\n";
     file << "length: 309\n";
     file << "miRNA : shorterSequenceName\n";
@@ -181,26 +173,19 @@ TEST(RNAHybridBackendTestSuite2, InvalidBodyFile)
     file << "            AAGG       GGUGU\n";
     file << "miRNA  3' CU    UUAAAAA     AGAA 5'\n";
     file.close();
-    RNAHybrid rnahybrid;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile1);    
-    files.push_back(obsoleteFile2);    
-    files.push_back(fileName);    
+    RNAHybrid rnahybrid;    
     Fe freeEnergy;
 
-    rnahybrid.processingResult(files, freeEnergy);
+    rnahybrid.processingResult(outFile, freeEnergy);
     EXPECT_EQ(freeEnergy, 1000);   //obsolete deltaG       
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAHybridBackendTestSuite2, InvalidLineDG)
 {
-    const std::string obsoleteFile1 = "/tmp/fideo-invalidLineDG1";
-    std::ofstream file1(obsoleteFile1.c_str());
-    const std::string obsoleteFile2 = "/tmp/fideo-invalidLineDG2";    
-    std::ofstream file2(obsoleteFile2.c_str());
-    const std::string fileName = "/tmp/fideo-rnahybrid.test";
-    std::ofstream file(fileName.c_str());
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnahybrid.test";
+    std::ofstream file(outFile.c_str());
     file << "target: HeadToTargetSequence\n";
     file << "length: 309\n";
     file << "miRNA : shorterSequenceName\n";
@@ -215,15 +200,10 @@ TEST(RNAHybridBackendTestSuite2, InvalidLineDG)
     file << "            AAGG       GGUGU\n";
     file << "miRNA  3' CU    UUAAAAA     AGAA 5'\n";
     file.close();
-
     RNAHybrid rnahybrid;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile1);    
-    files.push_back(obsoleteFile2);    
-    files.push_back(fileName);    
     Fe freeEnergy;
-
-    rnahybrid.processingResult(files, freeEnergy);
+    rnahybrid.processingResult(outFile, freeEnergy);
     EXPECT_EQ(freeEnergy, 1000);   //obsolete deltaG   
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

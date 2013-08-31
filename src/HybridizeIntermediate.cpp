@@ -39,16 +39,16 @@ namespace fideo
 Fe IHybridizeIntermediate::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
                                      const biopp::NucSequence& shorterSeq) const
 {
-
     mili::assert_throw<UnsupportedException>(!longerCirc);
-    IntermediateFiles files;
+    InputFiles inFiles;
+    OutputFile outFile;
     etilico::Command cmd;
-    prepareData(longerSeq, shorterSeq, cmd, files);
+    prepareData(longerSeq, shorterSeq, cmd, inFiles, outFile);
     etilico::runCommand(cmd);
 
     Fe freeEnergy;
-    processingResult(files, freeEnergy);
+    processingResult(outFile, freeEnergy);
+    deleteObsoleteFiles(inFiles, outFile);
     return freeEnergy;
 }
-
 } //namespace fideo

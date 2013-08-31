@@ -49,8 +49,10 @@ class RNAHybrid : public IHybridizeIntermediate
 {
 private:
 
-    virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const;
-    virtual void processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const;
+    virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const;
+    virtual void processingResult(const OutputFile& outFile, Fe& freeEnergy) const;
+    virtual void deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const;
 
     /** @brief Destructor of class
      *

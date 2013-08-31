@@ -50,7 +50,8 @@ void RNAduplex::BodyParser::parse(std::string& line)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -59,10 +60,10 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
+    inFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
     etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
+    outFile = outputTmpFile;
 
     ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -79,18 +80,24 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     command = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
 }
 
-void RNAduplex::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+void RNAduplex::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
 {
-    File outputFile(inputFiles[FILE_2].c_str());
+    File outputFile(outFile.c_str());
     mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     std::string line;
     getline(outputFile, line);
     body.parse(line);
-
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
     freeEnergy = body._dG;
+}
+
+void RNAduplex::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
 } // namespace fideo

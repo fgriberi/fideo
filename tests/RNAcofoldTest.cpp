@@ -51,7 +51,7 @@ TEST(RNAcofoldBackendTestSuite1, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = Hybridize::new_class("RNAcofold");
+    IHybridize* const p = Hybridize::new_class("RNAcofold");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -67,19 +67,20 @@ TEST(RNAcofoldBackendTestSuite2, correctCommad)
 
     biopp::SecStructure secStructure;
     RNAcofold rnacofold;
-    IHybridizeIntermediate::IntermediateFiles files;
+    IHybridizeIntermediate::InputFiles inFiles;
+    IHybridizeIntermediate::OutputFile outFile;
     etilico::Command cmd;    
-    rnacofold.prepareData(longer, shorter, cmd, files);
+    rnacofold.prepareData(longer, shorter, cmd, inFiles, outFile);
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
     cmdExpected << "RNAcofold < "; 
-    cmdExpected << files[IHybridizeIntermediate::FILE_1];
+    cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " > ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_2];
+    cmdExpected << outFile;
     EXPECT_EQ(cmdExpected.str(), cmd);
-    unlink((files[IHybridizeIntermediate::FILE_1]).c_str());
-    unlink((files[IHybridizeIntermediate::FILE_2]).c_str());
+    unlink((inFiles[IHybridizeIntermediate::FILE_1]).c_str());
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
@@ -91,51 +92,37 @@ TEST(RNAcofoldBackendTestSuite2, incorrectCommad)
 }
 
 TEST(RNAcofoldBackendTestSuite2, FileNotExist)
-{
-    const std::string obsoleteFile = "/tmp/fideo-fileNotExist";  
-    const std::string fileName = "/tmp/fideo-cofoldNotExist.test";        
+{    
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-cofoldNotExist.test";        
     RNAcofold rnacofold;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
     Fe freeEnergy;
-
-    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), NotFoundFileException);  
+    EXPECT_THROW(rnacofold.processingResult(outFile, freeEnergy), NotFoundFileException);  
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAcofoldBackendTestSuite2, InvalidFile)
-{
-    const std::string obsoleteFile = "/tmp/fideo-invalidFile"; 
-    const std::string fileName = "/tmp/fideo-rnacofold.test";
-    std::ofstream file(fileName.c_str());
+{        
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnacofold.test";
+    std::ofstream file(outFile.c_str());
     RNAcofold rnacofold;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), InvalidOutputRNACofold);    
-    unlink(fileName.c_str());
+    EXPECT_THROW(rnacofold.processingResult(outFile, freeEnergy), InvalidOutputRNACofold);    
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
 TEST(RNAcofoldBackendTestSuite2, InvalidFile2)
 {
-    const std::string obsoleteFile1 = "/tmp/fideo-invalidFile2";    
-    const std::string fileName = "/tmp/fideo-rnacofold.test";
-    std::ofstream file(fileName.c_str());
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnacofold.test";
+    std::ofstream file(outFile.c_str());
     file << "UGUUGACUGUUUUUUACCUAAGGGGAAAUUAUCA&AGAGUGUGAUG \n";
     file << "(((())))(((((((((((((()))))))&)))))))(-9.50)";   
     file.close();
-
     RNAcofold rnacofold;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile1);    
-    files.push_back(fileName);    
     Fe freeEnergy;
 
-    EXPECT_THROW(rnacofold.processingResult(files, freeEnergy), InvalidOutputRNACofold);    
-    unlink(fileName.c_str());
+    EXPECT_THROW(rnacofold.processingResult(outFile, freeEnergy), InvalidOutputRNACofold);    
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

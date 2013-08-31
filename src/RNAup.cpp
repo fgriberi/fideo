@@ -57,7 +57,8 @@ REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
 static const std::string OUT_FILE = "RNA_w25_u2.out"; ///file generated to RNAup
 
 
-void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                        etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -66,10 +67,10 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
+    inFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
     etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
+    outFile = outputTmpFile;
 
     ///Constructed as required by RNAup
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -84,23 +85,28 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
 }
 
-void RNAup::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+void RNAup::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
 {
-
-    File outputFile(inputFiles[FILE_2].c_str());
+    File outputFile(outFile.c_str());
     mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
 
-    File outfile(OUT_FILE.c_str());
-    if (outfile)
+    File outputfile(OUT_FILE.c_str());
+    if (outputfile)
     {
         mili::assert_throw<UnlinkException>(unlink(OUT_FILE.c_str()) == 0);
     }
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-
     freeEnergy = body._dG;
+}
+
+void RNAup::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
 }

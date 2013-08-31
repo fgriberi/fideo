@@ -48,7 +48,7 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCUUUGC");
 
-    IHybridize* p = Hybridize::new_class("IntaRNA");
+    IHybridize* const p = Hybridize::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -72,7 +72,7 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
     const biopp::NucSequence seq1(sequence1);
     const biopp::NucSequence seq2(sequence2);
 
-    IHybridize* p = Hybridize::new_class("IntaRNA");
+    IHybridize* const p = Hybridize::new_class("IntaRNA");
     ASSERT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -84,8 +84,9 @@ TEST(IntaRNABackendTestSuite, BasicTest2)
 
 TEST(IntaRNABackendTestSuite1, InvalidBackend)
 {
-    IHybridize* intarna = Hybridize::new_class("intaRNA");
+    IHybridize* const intarna = Hybridize::new_class("intaRNA");
     ASSERT_TRUE(intarna == NULL);
+    delete intarna;
 }
 
 TEST(IntaRNABackendTestSuite2, correctCommad)
@@ -96,9 +97,10 @@ TEST(IntaRNABackendTestSuite2, correctCommad)
     const biopp::NucSequence shorter(seq2);
     biopp::SecStructure secStructure;         
     IntaRNA intarna;
-    IHybridizeIntermediate::IntermediateFiles files;  
+    IHybridizeIntermediate::InputFiles inFiles;
+    IHybridizeIntermediate::OutputFile outFile;
     etilico::Command cmd;    
-    intarna.prepareData(longer, shorter, cmd, files);    
+    intarna.prepareData(longer, shorter, cmd, inFiles, outFile);    
     
     EXPECT_TRUE(HelperTest::checkDirTmp());    
     std::stringstream cmdExpected;
@@ -107,9 +109,9 @@ TEST(IntaRNABackendTestSuite2, correctCommad)
     cmdExpected << " ";
     cmdExpected << seq2;
     cmdExpected << " > ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_1];
+    cmdExpected << outFile;
     EXPECT_EQ(cmdExpected.str(), cmd);    
-    unlink((files[IHybridizeIntermediate::FILE_1]).c_str());
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());   
 }
 
@@ -122,20 +124,18 @@ TEST(IntaRNABackendTestSuite2, incorrectCommad)
 
 TEST(IntaRNABackendTestSuite2, FileNotExist)
 {
-    const std::string fileTest = "/tmp/fideo-fileNotExist";      
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-fileNotExist";      
     IntaRNA intarna;
-    IHybridizeIntermediate::IntermediateFiles files;  
-    files.push_back(fileTest);     
     biopp::SecStructure secStructure;
     Fe freeEnergy;
-    EXPECT_THROW(intarna.processingResult(files, freeEnergy), NotFoundFileException);      
+    EXPECT_THROW(intarna.processingResult(outFile, freeEnergy), NotFoundFileException);      
     EXPECT_FALSE(HelperTest::checkDirTmp());   
 }
 
 TEST(IntaRNABackendTestSuite2, InvalidFile)
 {    
-    const std::string fileName = "/tmp/fideo-intarna.test";
-    std::ofstream file(fileName.c_str());
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-intarna.test";
+    std::ofstream file(outFile.c_str());
     file << ">target RNA \n";
     file << ">ncRNA \n";
     file << "\n";
@@ -146,23 +146,21 @@ TEST(IntaRNABackendTestSuite2, InvalidFile)
     file << "energy:-7.67526/mol \n";
     file.close();
     IntaRNA intarna;
-    IHybridizeIntermediate::IntermediateFiles files;  
-    files.push_back(fileName);
     Fe freeEnergy;
-    intarna.processingResult(files,freeEnergy);
+    intarna.processingResult(outFile, freeEnergy);
     EXPECT_EQ(freeEnergy, 1000);   //obsolete deltaG       
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());      
 }
 
 TEST(IntaRNABackendTestSuite2, InvalidFile2)
-{
-    const std::string fileName = "/tmp/fideo-intarna.test";
-    std::ofstream file(fileName.c_str());    
+{    
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-intarna.test";
+    std::ofstream file(outFile.c_str());    
     IntaRNA intarna;
-    IHybridizeIntermediate::IntermediateFiles files;  
-    files.push_back(fileName);
     Fe freeEnergy;
-    intarna.processingResult(files,freeEnergy);
+    intarna.processingResult(outFile, freeEnergy);
     EXPECT_EQ(freeEnergy, 1000);   //obsolete deltaG   
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());      
 }

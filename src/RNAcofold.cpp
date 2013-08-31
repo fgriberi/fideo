@@ -50,7 +50,8 @@ void RNAcofold::BodyParser::parse(std::string& line)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
-void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -59,10 +60,10 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
     etilico::createTemporaryFile(inputTmpFile, path, prefix);
-    outputFiles.push_back(inputTmpFile);
+    inFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
     etilico::createTemporaryFile(outputTmpFile, path, prefix);
-    outputFiles.push_back(outputTmpFile);
+    outFile = outputTmpFile;
 
     std::ofstream toHybridize(inputTmpFile.c_str());
     toHybridize << seq1 << "&" << seq2;
@@ -76,9 +77,9 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     command = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
 }
 
-void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+void RNAcofold::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
 {
-    File outputFile(inputFiles[FILE_2].c_str());
+    File outputFile(outFile.c_str());
     mili::assert_throw<NotFoundFileException>(outputFile);
     std::string temp;
     getline(outputFile, temp);
@@ -86,11 +87,16 @@ void RNAcofold::processingResult(const IntermediateFiles& inputFiles, Fe& freeEn
 
     BodyParser body;
     body.parse(temp);
-
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-
     freeEnergy = body._dG;
+}
+
+void RNAcofold::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 } // namespace fideo
 

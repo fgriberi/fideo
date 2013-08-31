@@ -47,10 +47,11 @@ class IHybridizeIntermediate : public IHybridize
 {
 public:
 
-    /** @brief Represent intermediate files (input files and output files)
+    /** @brief Represent intermediate files (input files and output file)
      *
      */
-    typedef std::vector<std::string> IntermediateFiles;
+    typedef std::vector<FilePath> InputFiles;
+    typedef FilePath OutputFile;
 
     /** @brief Represent a string separated by a char
      *
@@ -74,7 +75,6 @@ public:
 
     static const size_t FILE_1 = 0;
     static const size_t FILE_2 = 1;
-    static const size_t FILE_3 = 2;
 
 private:
 
@@ -87,15 +87,23 @@ private:
      * @return void
      */
     virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                             etilico::Command& command, IntermediateFiles& outputFiles) const = 0;
+                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const = 0;
 
     /** @brief  Processing hybridize results
      *
-     * @param inputFiles: temporal file names
+     * @param outFileFiles: file to process
      * @param freeEnergy: to fill with free energy
      * @return void
      */
-    virtual void processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const = 0;
+    virtual void processingResult(const OutputFile& outFile, Fe& freeEnergy) const = 0;
+
+    /** Delete all files generated
+     *
+     * @param inFiles: input files generated to remove
+     * @param outFile: output file generated to remove
+     * @return void
+     */
+    virtual void deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const = 0;
 };
 
 } //namespace fideo

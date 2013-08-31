@@ -61,7 +61,8 @@ void RNAHybrid::BodyParser::parse(File& file)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
-void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
     ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();
@@ -71,13 +72,13 @@ void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     std::string prefix = "fideo-XXXXXX";
     std::string tmpTargetFile;
     etilico::createTemporaryFile(tmpTargetFile, path, prefix);
-    outputFiles.push_back(tmpTargetFile);
+    inFiles.push_back(tmpTargetFile);
     std::string tmpQueryFile;
     etilico::createTemporaryFile(tmpQueryFile, path, prefix);
-    outputFiles.push_back(tmpQueryFile);
+    inFiles.push_back(tmpQueryFile);
     std::string tmpOutputFile;
     etilico::createTemporaryFile(tmpOutputFile, path, prefix);
-    outputFiles.push_back(tmpOutputFile);
+    outFile = tmpOutputFile;
 
     helper::write(tmpTargetFile, targetSequence);
     helper::write(tmpQueryFile, querySequence);
@@ -91,16 +92,21 @@ void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     command = exec.str();  /// RNAhybrid -s 3utr_human -t fileRNAm -q filemiRNA > tmpOutputFile
 }
 
-void RNAHybrid::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+void RNAHybrid::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
 {
-    File outputFile(inputFiles[FILE_3].c_str());
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
+}
+
+void RNAHybrid::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
+{
+    File outputFile(outFile.c_str());
     mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
-
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_2].c_str()) == 0);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_3].c_str()) == 0);
     freeEnergy = body._dG;
 }
 

@@ -77,17 +77,19 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
-void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq, etilico::Command& command, IntermediateFiles& outputFiles) const
+void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                          etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
+
+    //ver si puedo cargar las dos secuencias en un archivo
 
     const std::string path = "/tmp/";
     std::string prefix = "fideo-XXXXXX";
     std::string tmpOutputFile;
     etilico::createTemporaryFile(tmpOutputFile, path, prefix);
-    outputFiles.push_back(tmpOutputFile);
-
+    outFile = tmpOutputFile;
     std::stringstream exec;
     exec << "./IntaRNA ";
     exec << seq1;
@@ -101,14 +103,18 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     command = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
 }
 
-void IntaRNA::processingResult(const IntermediateFiles& inputFiles, Fe& freeEnergy) const
+void IntaRNA::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
 {
-    File outputFile(inputFiles[FILE_1].c_str());
+    File outputFile(outFile.c_str());
     mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     body.parse(outputFile);
-    mili::assert_throw<UnlinkException>(unlink(inputFiles[FILE_1].c_str()) == 0);
     freeEnergy = body._dG;
+}
+
+void IntaRNA::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
 } // namespace fideo

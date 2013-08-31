@@ -49,7 +49,6 @@ namespace fideo
 typedef FilePath InputFile;
 typedef FilePath OutputFile;
 
-
 class IFoldIntermediate : public IFold
 {
 public:

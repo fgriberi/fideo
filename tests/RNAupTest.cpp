@@ -53,7 +53,7 @@ TEST(RNAupBackendTestSuite1, BasicTest)
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");
 
-    IHybridize* p = Hybridize::new_class("RNAup");
+    IHybridize* const p = Hybridize::new_class("RNAup");
     EXPECT_TRUE(p != NULL);
 
     double dG = p->hybridize(seq1, false, seq2);
@@ -65,8 +65,9 @@ TEST(RNAupBackendTestSuite1, BasicTest)
 
 TEST(RNAupBackendTestSuite1, InvalidBackend)
 {
-    IHybridize* rnaup = Hybridize::new_class("RNAUP");
+    IHybridize* const rnaup = Hybridize::new_class("RNAUP");
     ASSERT_TRUE(rnaup == NULL);
+    delete rnaup;
 }
 
 TEST(RNAupBackendTestSuite2, correctCommad)
@@ -77,20 +78,21 @@ TEST(RNAupBackendTestSuite2, correctCommad)
     const biopp::NucSequence shorter(seq2);
 
     biopp::SecStructure secStructure;
-    RNAup rnaup;
-    IHybridizeIntermediate::IntermediateFiles files;
+    RNAup rnaup;    
+    IHybridizeIntermediate::InputFiles inFiles;
+    IHybridizeIntermediate::OutputFile outFile;
     etilico::Command cmd;    
-    rnaup.prepareData(longer, shorter, cmd, files);
+    rnaup.prepareData(longer, shorter, cmd, inFiles, outFile);
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
     cmdExpected << "RNAup -u 3,4 -c SH < ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_1];
+    cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " > ";
-    cmdExpected << files[IHybridizeIntermediate::FILE_2];
+    cmdExpected << outFile;
     EXPECT_EQ(cmdExpected.str(), cmd);
-    unlink((files[IHybridizeIntermediate::FILE_1]).c_str());
-    unlink((files[IHybridizeIntermediate::FILE_2]).c_str());    
+    unlink((inFiles[IHybridizeIntermediate::FILE_1]).c_str());
+    unlink(outFile.c_str());    
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
@@ -102,35 +104,26 @@ TEST(RNAupBackendTestSuite2, incorrectCommad)
 }
 
 TEST(RNAupBackendTestSuite2, FileNotExist)
-{
-    const std::string obsoleteFile = "/tmp/fideo-fileNotExist";    
-    const std::string fileName = "/tmp/fideo-rnaup.test";
+{        
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnaup.test";
     RNAup rnaup;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);        
-    files.push_back(fileName);    
     Fe freeEnergy;
-    EXPECT_THROW(rnaup.processingResult(files, freeEnergy), NotFoundFileException);  
+    EXPECT_THROW(rnaup.processingResult(outFile, freeEnergy), NotFoundFileException);  
     EXPECT_FALSE(HelperTest::checkDirTmp());   
 }
 
 TEST(RNAupBackendTestSuite1, InvalidFile)
-{
-    const std::string obsoleteFile = "/tmp/fideo-invalidFile";    
-    const std::string fileName = "/tmp/fideo-rnaup.test";
-    std::ofstream file(fileName.c_str());
+{    
+    const IHybridizeIntermediate::OutputFile outFile = "/tmp/fideo-rnaup.test";
+    std::ofstream file(outFile.c_str());
     file << "((((((.&.))))))19,25:1,7   (-4.08 = -5.10 + 1.02) \n";
     file << "AUACUUU&AGAGUGU\n";
     file << "RNAup output in file: RNA_w25_u2.out\n";    
     file.close();
 
     RNAup rnaup;
-    IHybridizeIntermediate::IntermediateFiles files;       
-    files.push_back(obsoleteFile);    
-    files.push_back(fileName);    
     Fe freeEnergy;
-
-    EXPECT_THROW(rnaup.processingResult(files, freeEnergy), InvalidOutputRNAUp);    
-    unlink(fileName.c_str());
+    EXPECT_THROW(rnaup.processingResult(outFile, freeEnergy), InvalidOutputRNAUp);    
+    unlink(outFile.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }

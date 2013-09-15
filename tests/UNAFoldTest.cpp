@@ -55,10 +55,10 @@ TEST(UnaFoldBackendTestSuite1, FoldTest)
     ASSERT_TRUE(p != NULL);
 
     EXPECT_NO_THROW(p->fold(seq, true, secStructure));
-    delete p;
 
     EXPECT_EQ(32, secStructure.size());
     EXPECT_TRUE(secStructure.is_circular());
+    delete p;
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
@@ -72,7 +72,10 @@ TEST(UnaFoldBackendTestSuite1, FoldToTest)
 
     std::string filePath = "/tmp/fideo-UnafoldTo";
     EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
+    EXPECT_TRUE(HelperTest::checkDirTmp());    
     delete p;
+    unlink(filePath.c_str());
+    unlink((filePath + ".det").c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());    
 }
 
@@ -105,6 +108,7 @@ TEST(UnaFoldBackendTestSuite1, FoldFromTest)
     EXPECT_EQ(freeEnergy, 5.2);
     EXPECT_TRUE(HelperTest::checkDirTmp());    
     delete p;
+    unlink(fileName.c_str());
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
@@ -134,6 +138,7 @@ TEST(UnaFoldBackendTestSuite2, correctCommad1)
     Fe freeEnergy;
     unafold->processingResult(secStructure, outFile, freeEnergy);
     delete unafold;    
+    etilico::runCommand("rm /tmp/fideo-*");
     EXPECT_FALSE(HelperTest::checkDirTmp());   
 }
 
@@ -156,6 +161,7 @@ TEST(UnaFoldBackendTestSuite2, correctCommad2)
     Fe freeEnergy;
     unafold->processingResult(secStructure, outFile, freeEnergy);
     delete unafold;
+    etilico::runCommand("rm /tmp/fideo-*");
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 

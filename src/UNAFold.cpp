@@ -42,14 +42,13 @@ using mili::operator>>;
 
 const std::string UNAFold::_det = ".det";
 
-UNAFold::~UNAFold()
+    UNAFold::~UNAFold()
 {
     File file(_temporalFileName.c_str());
     if (file)
     {
         deleteObsoleteFiles(_temporalFileName);
-    }
-    etilico::runCommand("rm /tmp/fideo-*");
+    }    
 }
 
 void UNAFold::HeaderParser::parse(File& file)
@@ -115,6 +114,7 @@ void UNAFold::deleteObsoleteFiles(const InputFile& inFile)
     if (file)
     {
         mili::assert_throw<UnlinkException>(unlink((inFile + _det).c_str()) == 0);
+        ////////
     }
 }
 

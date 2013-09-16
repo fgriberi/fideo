@@ -42,13 +42,18 @@ using mili::operator>>;
 
 const std::string UNAFold::_det = ".det";
 
-    UNAFold::~UNAFold()
+UNAFold::~UNAFold()
 {
     File file(_temporalFileName.c_str());
     if (file)
     {
         deleteObsoleteFiles(_temporalFileName);
-    }    
+    }
+    File detFile((_temporalFileName + _det).c_str());
+    if (detFile)
+    {
+        mili::assert_throw<UnlinkException>(unlink((_temporalFileName + _det).c_str()) == 0);
+    }
 }
 
 void UNAFold::HeaderParser::parse(File& file)
@@ -109,13 +114,6 @@ void UNAFold::deleteObsoleteFiles(const InputFile& inFile)
     mili::assert_throw<UnlinkException>(unlink((inFile + ".run").c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((inFile + ".ss-count").c_str()) == 0);
     mili::assert_throw<UnlinkException>(unlink((inFile + ".ann").c_str()) == 0);
-
-    File file((inFile + _det).c_str());
-    if (file)
-    {
-        mili::assert_throw<UnlinkException>(unlink((inFile + _det).c_str()) == 0);
-        ////////
-    }
 }
 
 static const size_t NAME_FILE = 0;
@@ -505,6 +503,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
 {
     const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, structureRNAm);
     commonParse(_temporalFileName + _det, motifObserver);
+    mili::assert_throw<UnlinkException>(unlink((_temporalFileName + _det).c_str()) == 0);
     return freeEnergy;
 }
 

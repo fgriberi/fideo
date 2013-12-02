@@ -171,16 +171,16 @@ void RNAFold::deleteAllFilesAfterProcessing(const InputFile& inFile, const Outpu
     mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
-Fe RNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+Fe RNAFold::fold(const biopp::NucSequence& /*seqRNAm*/, const bool /*isCircRNAm*/, biopp::SecStructure& /*structureRNAm*/, IMotifObserver* /*motifObserver*/)
 {
     return 0; //temporal
 }
 
 //temporal
-void RNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver)
+void RNAFold::foldTo(const biopp::NucSequence& /*seqRNAm*/, const bool /*isCircRNAm*/, biopp::SecStructure& /*structureRNAm*/, const FilePath& /*outputFile*/, IMotifObserver* /*motifObserver*/)
 {}
 
-Fe RNAFold::foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+Fe RNAFold::foldFrom(const FilePath& /*inputFile*/, biopp::SecStructure& /*structureRNAm*/, IMotifObserver* /*motifObserver*/)
 {
     return 0; //temporal
 }

@@ -78,7 +78,7 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
 void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                          etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
+                          etilico::Command& command, InputFiles& /*inFiles*/, OutputFile& outFile) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -112,7 +112,7 @@ void IntaRNA::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
     freeEnergy = body._dG;
 }
 
-void IntaRNA::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+void IntaRNA::deleteObsoleteFiles(const InputFiles& /*inFiles*/, const OutputFile& outFile) const
 {
     mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }

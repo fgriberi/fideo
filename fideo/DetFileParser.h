@@ -27,7 +27,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <fstream>
@@ -39,23 +39,23 @@
 #endif
 
 /** @brief Represents a block lines
-*
-*/
+ *
+ */
 typedef std::list<std::string> Body;
 
 /** @brief Represents the block name
-*
-*/
+ *
+ */
 typedef std::string BlockName;
 
 /** @brief Represents the file name
-*
-*/
+ *
+ */
 typedef std::string FileName;
 
 /** @brief Represents a block of the file to parse
-*
-*/
+ *
+ */
 struct Block
 {
     BlockName motifName;
@@ -63,21 +63,30 @@ struct Block
 };
 
 /** @brief Interface to parse .det file.
-*
-*/
+ *
+ */
 class UNAFold::DetFileParser
 {
 public:
 
-    /** @brief Parse a det file
-    *
-    * @param file: file name to parse
-    * @param observer: specific implementacion
-    * @return void
-    */
+    /** @brief Parse a '.det' file
+     *
+     * @param file: file name to parse
+     * @param observer: specific implementacion
+     * @return void
+     */
     void parseDet(const FileName& file, IMotifObserver* observer);
 
+    /** @brief Destructor of class
+     *
+     */
+    ~DetFileParser();
+
 private:
+
+    /** @brief Predefinition of classes
+     *
+     */
     class Rule;
     class ExternalRule;
     class InteriorRule;
@@ -86,64 +95,74 @@ private:
     class BulgeRule;
 
     /** @brief Allows placing the file in the correct line
-    *
-    * @param file: file input
-    * @return void
-    */
-    void goToBegin(File& file);
+     *
+     * @param file: file input
+     * @return void
+     */
+    void goToBegin(File& file) const;
 
     /** @brief Prepares a block to parse
-    *
-    * @param file: file to read
-    * @param block: to fill with data of file
-    * @return void
-    */
-    void buildBlock(std::ifstream& file, Block& block);
+     *
+     * @param file: file to read
+     * @param block: to fill with data of file
+     * @return void
+     */
+    void buildBlock(std::ifstream& file, Block& block) const;
+
+    /** Determine whether the line contain a motif
+     *
+     * @param line: input line
+     * @return true if the line contain a motif, otherwise false
+     */
+    bool containMotif(const std::string& line) const;
 
     /** @brief Remove whitespace repeated
-    *
-    * @param src: string to analyze
-    * @param dest: strig without whitespace repeated
-    * @return void
-    */
-    void removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest);
+     *
+     * @param src: string to analyze
+     * @param dest: strig without whitespace repeated
+     * @return void
+     */
+    void removeConsecutiveWhiteSpaces(const std::string& src, std::string& dest) const;
 
     /** @brief Stored in block the motif name and the rest of the data
-    *
-    * @param line: line to parse
-    * @param block: block to fill
-    * @return void
-    */
-    void parseMotifLine(const std::string& line, Block& block);
+     *
+     * @param line: line to parse
+     * @param block: block to fill
+     * @return void
+     */
+    void parseMotifLine(const std::string& line, Block& block) const;
 
     /** @brief Parse a stack line.
-    *
-    * @param line: line to parse
-    * @param nameToFill: to fill with stack
-    * @return void
-    */
-    void parseStackLine(const std::string& line, std::string& nameToFill);
+     *
+     * @param line: line to parse
+     * @param nameToFill: to fill with stack
+     * @return void
+     */
+    void parseStackLine(const std::string& line, std::string& nameToFill) const;
 
     /** @brief Parse the current block and fill the motif
-    *
-    * @param block: block to parse
-    * @param motif: specific implementation of IMotifObserver
-    * @return void
-    */
+     *
+     * @param block: block to parse
+     * @param motif: specific implementation of IMotifObserver
+     * @return void
+     */
     void parseBlock(const Block& block, IMotifObserver::Motif& motif);
 
     /** @brief Load the available rules
-    *
-    * @return void
-    */
+     *
+     * @return void
+     */
     void fillRules();
 
     /** @brief To store the available rules
-    *
-    */
+     *
+     */
     typedef std::map<std::string, Rule*> Rules;
 
-    Rules availableRules;
+    /** @brief Rules to parse a '.det' file
+     *
+     */
+    Rules _availableRules;
 };
 
 #define RULE_H

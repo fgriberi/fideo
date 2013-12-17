@@ -1,17 +1,17 @@
 /*
- * @file   IFold.h
- * @brief  IFold provides the interface to folding service.
+ * @file     IFold.h
+ * @brief    IFold provides the interface to folding service.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing struct IFold.
+ * Contents: Header file for fideo providing struct IFold.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -51,16 +51,19 @@ namespace fideo
 
 struct IFold;
 
-typedef mili::FactoryRegistry<IFold, std::string> Folder;
+/** @brief Represent a factory registry type
+ *
+ */
+typedef mili::FactoryRegistry<IFold, std::string> Fold;
 
 /** @brief Interface for sequence's folding services.
-*
-*/
+ *
+ */
 struct IFold
 {
     typedef mili::Factory<std::string, IFold> Factory;
 
-    /** @brief Fold an RNA sequence
+    /** @brief Fold an RNA sequence and deletes all file generated
      *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
@@ -69,15 +72,53 @@ struct IFold
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm) = 0;
 
-    /** @brief Fold an RNA sequence
+    /** @brief Fold an RNA sequence and deletes all file generated. Using observer
      *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
      * @param structureRNAm: the structure where to write the folding.
-     * @param motif: specific implementation of IMotifObserfer
+     * @param motifObserver: specific implementation of IMotifObserfer
      * @return The free energy in the structure.
      */
     virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
+
+    /** @brief Fold the RNA sequence and load result in a specific file
+     *
+     * @param seqRNAm: input RNA sequence.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param outputFile: generate output file
+     * @return void
+     */
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile) = 0;
+
+    /** @brief Fold the RNA sequence and load result in a specific file with observer
+     *
+     * @param seqRNAm: input RNA sequence.
+     * @param isCircRNAm: if the structure it's circular.
+     * @param structureRNAm: the structure where to write the folding.
+     * @param outputFile: generate output file
+     * @param motifObserver: specific implementation of IMotifObserfer
+     * @return void
+     */
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver) = 0;
+
+    /** @brief Fold a specific file
+     *
+     * @param inputFile: input file to fold
+     * @param structureRNAm: the structure where to write the folding.
+     * @return free energy
+     */
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm) = 0;
+
+    /** @brief Fold a specific file with observer
+     *
+     * @param inputFile: input file to fold
+     * @param structureRNAm: the structure where to write the folding.
+     * @param motifObserver: specific implementation of IMotifObserfer
+     * @return free energy
+     */
+    virtual Fe foldFrom(const FilePath& inputFile, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
 
     /** @brief Class destructor
      *
@@ -92,7 +133,7 @@ struct IFold
      */
     static void getAvailableBackends(Backend& slist)
     {
-        Factory::KeyIterator it(Folder::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Fold::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

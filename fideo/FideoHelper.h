@@ -1,17 +1,17 @@
 /*
- * @file   FideoHelper.h
- * @brief  This header defines necessary methods in fideo
+ * @file     FideoHelper.h
+ * @brief    This header defines necessary methods in fideo
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing necessary methods
+ * Contents: Header file for fideo providing necessary methods
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date September 26, 2010, 5:25 PM
  *
@@ -37,15 +37,16 @@
 #ifndef FIDEO_HELPER_H
 #define FIDEO_HELPER_H
 
-#include <string>
-#include <list>
+#include <fstream>
+#include <cerrno>
+#include <unistd.h>
 #include "fideo/RnaBackendsException.h"
 
 namespace fideo
 {
 
-/**
- * Filename path
+/** @brief necessary typedef
+ *
  */
 typedef std::string FilePath;
 
@@ -53,7 +54,7 @@ typedef std::string FileLine;
 
 typedef std::ifstream File;
 
-typedef unsigned int FileLineNo;
+typedef size_t FileLineNo;
 
 typedef std::list<std::string> FileLinesCt;
 

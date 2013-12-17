@@ -1,14 +1,14 @@
 /*
- * @file   RNAup.cpp
- * @brief  RNAup is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     RNAup.cpp
+ * @brief    RNAup is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAup implementation.
+ * Contents: Source file for fideo providing backend RNAup implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 26, 2012, 7:48 PM
  *
@@ -31,55 +31,21 @@
  *
  */
 
-#include <etilico/etilico.h>
-#include "fideo/IHybridize.h"
+#define RNA_UP_H
+#include "fideo/RNAup.h"
+#undef RNA_UP_H
 
 namespace fideo
 {
 
-using namespace mili;
-
-//Vienna package
-class RNAup : public IHybridize
-{
-private:
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
-
-    class BodyParser
-    {
-    public:
-        void parse(File& file);
-
-        Fe dG; ///free energy
-    private:
-        enum Columns
-        {
-            ColRNAduplexResults,
-            ColIndiceIJ,
-            ColTwoPoints,
-            ColIndiceKL,
-            ColdGTotal,
-            ColEqualSymbol,
-            ColdGInt,
-            ColPlusSymbol,
-            ColdGu_l,
-            NumberOfColumns
-        };
-    };
-
-};
-
 void RNAup::BodyParser::parse(File& file)
 {
-    std::vector<std::string> aux;
+    ResultLine aux;
     if (file >> aux)
     {
-        if (aux.size() != NumberOfColumns)
-        {
-            throw RNABackendException("Invalid output RNAup.");
-        }
+        mili::assert_throw<InvalidOutputRNAUp>(aux.size() == NumberOfColumns);
         const std::string deltaG = aux[ColdGTotal].substr(1, aux[ColdGTotal].length());
-        helper::convertFromString(deltaG, dG);
+        helper::convertFromString(deltaG, _dG);
     }
     else
     {
@@ -88,21 +54,23 @@ void RNAup::BodyParser::parse(File& file)
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAup, std::string, "RNAup");
-static const std::string OUT_FILE = "RNA_w25_u3_4_up.out"; ///file generated to RNAup
+static const std::string OUT_FILE = "RNA_w25_u2.out"; ///file generated to RNAup
 
-Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+
+void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                        etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
-    if (longerCirc)
-    {
-        throw RNABackendException("Unsupported Sequence.");
-    }
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
-    etilico::createTemporaryFile(inputTmpFile);
+    etilico::createTemporaryFile(inputTmpFile, path, prefix);
+    inFiles.push_back(inputTmpFile);
     std::string outputTmpFile;
-    etilico::createTemporaryFile(outputTmpFile);
+    etilico::createTemporaryFile(outputTmpFile, path, prefix);
+    outFile = outputTmpFile;
 
     ///Constructed as required by RNAup
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -114,21 +82,31 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     cmd2 << "< " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    const etilico::Command cmd = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
-    etilico::runCommand(cmd);
-
-    File fileOutput(outputTmpFile.c_str());
-    if (!fileOutput)
-    {
-        throw NotFoundFileException();
-    }
-    BodyParser body;
-    body.parse(fileOutput);
-
-    mili::assert_throw<ExceptionUnlink>(unlink(OUT_FILE.c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink(outputTmpFile.c_str()) == 0);
-
-    return body.dG;
+    command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
 }
+
+void RNAup::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
+{
+    File outputFile(outFile.c_str());
+    mili::assert_throw<NotFoundFileException>(outputFile);
+    BodyParser body;
+    body.parse(outputFile);
+
+    File outputfile(OUT_FILE.c_str());
+    if (outputfile)
+    {
+        mili::assert_throw<UnlinkException>(unlink(OUT_FILE.c_str()) == 0);
+    }
+    freeEnergy = body._dG;
+}
+
+void RNAup::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
+}
+
 }

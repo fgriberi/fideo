@@ -38,28 +38,40 @@ namespace fideo
 {
 
 /** @brief Interface for process motif services.
-*
-*/
+ *
+ */
 struct IMotifObserver
 {
     /** @brief Represent a Motif
-    *
-    */
+     *
+     */
     struct Motif
     {
         std::string nameMotif;
         size_t attribute;
-        size_t stacks;
+        size_t amountStacks;
     };
 
-    /** @brief
+    /** @brief Start observer
      *
-     * @param mot: represent motif
      * @return void
      */
-    virtual void processMotif(Motif& motif) = 0;
+    virtual void start() = 0;
 
-    /** @brief Class destructor
+    /** @brief Processes the motif
+     *
+     * @param motif: current motif
+     * @return void
+     */
+    virtual void processMotif(const Motif& Motif) = 0;
+
+    /** @brief Finalize observer
+     *
+     * @return void
+     */
+    virtual void finalize() = 0;
+
+    /** @brief Destructor of class
      *
      */
     virtual ~IMotifObserver() {}

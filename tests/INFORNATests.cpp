@@ -20,7 +20,6 @@ public:
     MOCK_METHOD1(get_complete_start, void(IFoldInverse* const));
 };
 
-
 class INFORNATest : public Test
 {
 protected:
@@ -62,7 +61,6 @@ TEST_F(INFORNATest, FoldInverse)
     EXPECT_CALL(provider, get_partial_start(inverse))
     .Times(1)
     .WillOnce(Invoke(this, &INFORNATest::fake_provider));
-
 
     inverse->query_start(&provider);
 

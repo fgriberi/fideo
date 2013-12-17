@@ -23,11 +23,11 @@
  *
  * fideo is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with vac-o.  If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef RULE_H
@@ -35,94 +35,130 @@
 #endif
 
 /** @brief Provides an interface used to parse.
-*
-*/
+ *
+ */
 class UNAFold::DetFileParser::Rule
 {
 public:
 
-    /** @brief permite calcular los atributos de un motif
-    *
-    * @param block:
-    * @param motif:
-    * @return void
-    */
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const = 0;
+    /** @brief To calculate the attributes of a motif
+     *
+     * @param block: input block
+     * @param motif: to fill with attributes of block
+     * @return void
+     */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const = 0;
 
     /** @brief Destructor of class
-    *
-    */
+     *
+     */
     virtual ~Rule() {}
 
 protected:
 
     /** @brief Get the substring that is in a certain position
-    *
-    * @param lineInput: line input
-    * @param pos: specific position
-    * @param res: substring output
-    * @return init position of nucleotid
-    */
-    static void getSubstrInPos(const std::string& lineInput, size_t pos, std::string& res);
+     *
+     * @param lineInput: line input
+     * @param pos: specific position
+     * @param res: substring output
+     * @return void
+     */
+    static void getSubstrInPos(const std::string& lineInput, const size_t pos, std::string& res);
 
     /** @brief Get init position
-    *
-    * @param line: line inut
-    * @param motifName: specific motif name
-    * @return end position of nucleotid
-    */
-    static size_t getInitPosOfNucleotid(const std::string line, const std::string motifName);
+     *
+     * @param line: line input
+     * @param motifName: specific motif name
+     * @return init position of nucleotid
+     */
+    static size_t getInitPosOfNucleotid(const std::string& line, const std::string& motifName);
 
-    /** @brief Get
-    *
-    * @param line: line input
-    * @param motifName: specific motif name
-    * @return
-    */
-    static size_t getEndPosOfNucleotid(const std::string line, const std::string motifName);
+    /** @brief Get end position
+     *
+     * @param line: line input
+     * @param motifName: specific motif name
+     * @return end position of nucleotid
+     */
+    static size_t getEndPosOfNucleotid(const std::string& line, const std::string& motifName);
 
     /** @brief Get second element of list
-    *
-    * @param list: list to find
-    * @param element: to fill with second of list
-    * @return void
-    */
+     *
+     * @param list: list to find
+     * @param element: to fill with second of list
+     * @return void
+     */
     static void getSecondElement(const Body& list, std::string& element);
 };
 
 static const size_t EXPECTED_DIFFERENCE = 1;
 
+/** @brief External rule
+ *
+ */
 class UNAFold::DetFileParser::ExternalRule : public Rule
 {
 private:
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+
+    /** @brief Calculate the amount of ss bases on the block
+     *
+     */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~ExternalRule() {}
 };
 
+/** @brief Interior rule
+ *
+ */
 class UNAFold::DetFileParser::InteriorRule : public Rule
 {
 private:
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+
+    /** @brief Calculate the amount of nucleotide on the block and determines the type
+     *          of interior loop (symmetric or asymmetric)
+     *
+    */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~InteriorRule() {}
 };
 
+/** @brief Hairpin rule
+ *
+ */
 class UNAFold::DetFileParser::HairpinRule : public Rule
 {
 private:
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+
+    /** @brief Calculate the amout of nucleotide on the hairpin loop
+     *
+     */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~HairpinRule() {}
 };
 
+/** @brief Multi rule
+ *
+ */
 class UNAFold::DetFileParser::MultiRule : public Rule
 {
 private:
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+
+    /** @brief Calculate the amount of ss bases on the block
+     *
+     */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~MultiRule() {}
 };
 
+/** @brief Bulge rule
+ *
+ */
 class UNAFold::DetFileParser::BulgeRule : public Rule
 {
 private:
-    virtual void calcAttrib(const Block& block, IMotifObserver::Motif& motif) const;
+
+    /** @brief Calculate the amount of nucleotide on the bulge loop
+     *
+     */
+    virtual void calculateAttrib(const Block& block, IMotifObserver::Motif& motif) const;
     virtual ~BulgeRule() {}
 };

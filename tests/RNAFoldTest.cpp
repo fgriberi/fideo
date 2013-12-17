@@ -27,25 +27,29 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with fideo. If not, see <http://www.gnu.org/licenses/>.
+ * along with fideo. If not, see <http://www.gnu.org/licenses/>.+
  *
  */
 
-#include <string>
-#include <fstream>
+#define private public
+
 #include <fideo/fideo.h>
+#include <etilico/etilico.h>
 #include <biopp/biopp.h>
 #include <gtest/gtest.h>
 #include "HelperTest.h"
+#define RNA_FOLD_H
+#include "fideo/RNAFold.h"
+#undef RNA_FOLD_H
 
 using namespace fideo;
 
-TEST(RNAFoldBackendTestSuite, BasicTest)
+TEST(RNAFoldBackendTestSuite1, FoldTest)
 {
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;
 
-    IFold* p = Folder::new_class("RNAFold");
+    IFold* const p = Fold::new_class("RNAFold");
     ASSERT_TRUE(p != NULL);
 
     Fe result = p->fold(seq, true, secStructure);
@@ -53,6 +57,156 @@ TEST(RNAFoldBackendTestSuite, BasicTest)
 
     EXPECT_DOUBLE_EQ(result, -18.70);
     EXPECT_TRUE(secStructure.is_circular());
-
     EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
+TEST(RNAFoldBackendTestSuite1, FoldToTest)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+
+    IFold* const p = Fold::new_class("RNAFold");
+    ASSERT_TRUE(p != NULL);
+
+    const std::string filePath = "/tmp/new-fideoRnafold";
+    EXPECT_NO_THROW(p->foldTo(seq, true, secStructure, filePath));
+    delete p;
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    unlink(filePath.c_str());    
+}
+
+TEST(RNAFoldBackendTestSuite1, FoldFromTest)
+{    
+    const FilePath fileName = "/tmp/fideo-output";
+    std::ofstream file(fileName.c_str());
+    file << "AAAAAAAAGGGGGGGGCCCCCCCCUUUUUUUU\n";
+    file << "..((((((((((((....)))))))))))).. (-13.60)\n";    
+    file.close();
+
+    IFold* const p = Fold::new_class("RNAFold");
+    ASSERT_TRUE(p != NULL);
+    biopp::SecStructure structure;
+    const Fe freeEnergy = p->foldFrom(fileName, structure);
+    
+    delete p;
+    EXPECT_EQ(freeEnergy, -13.6);
+    EXPECT_TRUE(HelperTest::checkDirTmp());    
+    unlink(fileName.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());    
+}
+
+TEST(RNAFoldBackendTestSuite1, InvalidBackend)
+{
+    IFold* const rnafold = Fold::new_class("RNAfold");    
+    ASSERT_TRUE(rnafold == NULL);
+    delete rnafold;
+}
+
+TEST(RNAFoldBackendTestSuite1, getSizeOfSequence)
+{
+    const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTTCCCCCCCCTCCATTTTTTTTT");
+    biopp::SecStructure secStructure;
+    RNAFold rnafold;
+    InputFile inFile;
+    OutputFile outFile;    
+    etilico::Command cmd;
+    rnafold.prepareData(seq, true, cmd, inFile, outFile);   
+    etilico::runCommand(cmd);
+
+    EXPECT_EQ(rnafold.getSizeOfSequence(outFile), seq.length());
+    unlink(inFile.c_str());
+    unlink(outFile.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());    
+}
+
+TEST(RNAFoldBackendTestSuite2, correctCommad1)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+    RNAFold rnafold;
+    InputFile inFile;
+    OutputFile outFile;    
+    etilico::Command cmd;
+    rnafold.prepareData(seq, true, cmd, inFile, outFile);
+
+    EXPECT_TRUE(HelperTest::checkDirTmp());
+    std::stringstream cmdExpected;
+    cmdExpected << "RNAfold --noPS --circ < ";
+    cmdExpected << inFile; 
+    cmdExpected << " > ";
+    cmdExpected << outFile;     
+
+    EXPECT_EQ(cmdExpected.str(), cmd);    
+    unlink(inFile.c_str());
+    unlink(outFile.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
+TEST(RNAFoldBackendTestSuite2, correctCommad2)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+    RNAFold rnafold;
+    InputFile inFile;
+    OutputFile outFile;    
+    etilico::Command cmd;
+    rnafold.prepareData(seq, false, cmd, inFile, outFile);
+
+    EXPECT_TRUE(HelperTest::checkDirTmp());
+    std::stringstream cmdExpected;
+    cmdExpected << "RNAfold --noPS < ";
+    cmdExpected << inFile; 
+    cmdExpected << " > ";
+    cmdExpected << outFile;     
+    EXPECT_EQ(cmdExpected.str(), cmd);
+    unlink(inFile.c_str());
+    unlink(outFile.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());   
+}
+
+static const size_t UNRECOGNIZED_OPTION = 1;
+
+TEST(RNAFoldBackendTestSuite2, incorrectCommad)
+{
+    const etilico::Command cmd = "RNAfold -nPS -c < fileInput > fileOutput";    
+    EXPECT_EQ(etilico::runCommand(cmd), UNRECOGNIZED_OPTION);
+}
+
+TEST(RNAFoldBackendTestSuite2, FileNotExist)
+{
+    const std::string fileTest = "/tmp/fideo-FileNotExist";
+    RNAFold rnafold;
+    biopp::SecStructure secStructure;
+    Fe freeEnergy;
+    EXPECT_THROW(rnafold.processingResult(secStructure, fileTest, freeEnergy), NotFoundFileException);    
+    EXPECT_FALSE(HelperTest::checkDirTmp());      
+}
+
+TEST(RNAFoldBackendTestSuite2, InvalidFile)
+{
+    const std::string fileName = "/tmp/fideo-rnafold.test";
+    std::ofstream file(fileName.c_str());
+    file << "AAUUAAAAAAGGGGGGGUUGCAACCCCCCCUUUUUUUU \n";    
+    file.close();
+    RNAFold rnafold;    
+    biopp::SecStructure secStructure;
+    Fe freeEnergy;    
+    EXPECT_THROW(rnafold.processingResult(secStructure, fileName, freeEnergy), RNABackendException);           
+    unlink(fileName.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());         
+}
+
+TEST(RNAFoldBackendTestSuite2, InvalidFile2)
+{
+    const std::string fileName = "/tmp/fideo-rnafold.test";
+    std::ofstream file(fileName.c_str());
+    file << "AAUUAAAAAAGGGGGGGUUGCAACCCCCCCUUUUUUUU \n";    
+    file << "\n";
+    file.close();
+    RNAFold rnafold;
+    biopp::SecStructure secStructure;
+    fideo::Fe freeEnergy;
+    EXPECT_THROW(rnafold.processingResult(secStructure, fileName, freeEnergy), RNABackendException);           
+    unlink(fileName.c_str());
+    EXPECT_FALSE(HelperTest::checkDirTmp());            
 }

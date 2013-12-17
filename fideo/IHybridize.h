@@ -1,17 +1,17 @@
 /*
- * @file   IHybridize.h
- * @brief  IHybridize provides the interface to hybridize service.
+ * @file     IHybridize.h
+ * @brief    IHybridize provides the interface to hybridize service.
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing struct IHybridize.
+ * Contents: Header file for fideo providing struct IHybridize.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 26, 2012, 7:37 PM
  *
@@ -48,11 +48,16 @@
 namespace fideo
 {
 
+/** @brief Represent a factory registry type
+ *
+ */
 struct IHybridize;
 
-typedef mili::FactoryRegistry<IHybridize, std::string> Hybridizer;
+typedef mili::FactoryRegistry<IHybridize, std::string> Hybridize;
 
-///Interface for sequence's hybridize services.
+/** @brief Interface for sequence's hybridize services.
+ *
+ */
 struct IHybridize
 {
 
@@ -65,7 +70,7 @@ struct IHybridize
      * @param longerCirc: if the longerSeq it's circular.
      * @return The free energy.
      */
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
+    virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq) const = 0;
 
     /** @brief Class destructor
      *
@@ -73,14 +78,14 @@ struct IHybridize
     virtual ~IHybridize() {}
 
     /** @brief Get availables backend
-    *
-    * Method that provide the available backends for hybridize service.
-    * @param slist: to fill with different backends
-    * @return void
-    */
+     *
+     * Method that provide the available backends for hybridize service.
+     * @param slist: to fill with different backends
+     * @return void
+     */
     static void getAvailableBackends(Backend& slist)
     {
-        Factory::KeyIterator it(Hybridizer::getConstructibleObjectsKeys());
+        Factory::KeyIterator it(Hybridize::getConstructibleObjectsKeys());
         while (!it.end())
         {
             slist.push_back(*it);

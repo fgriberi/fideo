@@ -1,14 +1,14 @@
 /*
- * @file   RNAduplex.cpp
- * @brief  RNAduplex is the implementation of IHybridize interface. It's a specific backend to hybridize.
+ * @file     RNAduplex.cpp
+ * @brief    RNAduplex is an implementation of IHybridize interface. It's a specific backend to hybridize.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing backend RNAduplex implementation.
+ * Contents: Source file for fideo providing backend RNAduplex implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 26, 2012, 7:48 PM
  *
@@ -31,74 +31,39 @@
  *
  */
 
-#include <etilico/etilico.h>
-#include "fideo/IHybridize.h"
+#define RNA_DUPLEX_H
+#include "fideo/RNAduplex.h"
+#undef RNA_DUPLEX_H
 
 namespace fideo
 {
 
-using namespace mili;
-
-//Vienna package
-class RNAduplex : public IHybridize
-{
-private:
-    virtual Fe hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const;
-
-    ///Class that allows parsing the body of a file
-    class BodyParser
-    {
-    public:
-        /** @brief Parse the line and get the value dG
-         *
-         * @param line: line to parser
-         * @return void
-         */
-        void parse(std::string& line);
-
-        Fe dG; /// free energy
-
-    private:
-        enum Columns
-        {
-            ColRNAResults,
-            ColIndiceIJ,
-            ColTwoPoints,
-            ColIndiceKL,
-            ColdG,
-            NumberOfColumns
-        };
-    };
-};
-
 void RNAduplex::BodyParser::parse(std::string& line)
 {
     std::stringstream ss(line);
-    std::vector<std::string> result;
+    ResultLine result;
     ss >> result;
-    if (result.size() != NumberOfColumns)
-    {
-        throw RNABackendException("Invalid output RNAduplex.");
-    }
+    mili::assert_throw<InvalidOutputRNADuplex>(result.size() == NumberOfColumns);
     const std::string deltaG = result[ColdG].substr(1, result[ColdG].length() - 2);
-    helper::convertFromString(deltaG, dG);
+    helper::convertFromString(deltaG, _dG);
 }
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
-Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const biopp::NucSequence& shorterSeq) const
+void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
 {
-    if (longerCirc)
-    {
-        throw RNABackendException("Unsupported Sequence.");
-    }
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
 
+    const std::string path = "/tmp/";
+    std::string prefix = "fideo-XXXXXX";
     std::string inputTmpFile;
-    etilico::createTemporaryFile(inputTmpFile);
-    std::string outpTmpFile;
-    etilico::createTemporaryFile(outpTmpFile);
+    etilico::createTemporaryFile(inputTmpFile, path, prefix);
+    inFiles.push_back(inputTmpFile);
+    std::string outputTmpFile;
+    etilico::createTemporaryFile(outputTmpFile, path, prefix);
+    outFile = outputTmpFile;
 
     ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());
@@ -110,24 +75,29 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     std::stringstream cmd2;
     cmd2 << "RNAduplex ";
     cmd2 << "< " << inputTmpFile;
-    cmd2 << " > " << outpTmpFile;
+    cmd2 << " > " << outputTmpFile;
 
-    const etilico::Command cmd = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
-    etilico::runCommand(cmd);
+    command = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+}
 
-    File fileOutput(outpTmpFile.c_str());
-    if (!fileOutput)
-    {
-        throw NotFoundFileException();
-    }
+void RNAduplex::processingResult(const OutputFile& outFile, Fe& freeEnergy) const
+{
+    File outputFile(outFile.c_str());
+    mili::assert_throw<NotFoundFileException>(outputFile);
     BodyParser body;
     std::string line;
-    getline(fileOutput, line);
+    getline(outputFile, line);
     body.parse(line);
-
-    mili::assert_throw<ExceptionUnlink>(unlink(inputTmpFile.c_str()) == 0);
-    mili::assert_throw<ExceptionUnlink>(unlink(outpTmpFile.c_str()) == 0);
-
-    return body.dG;
+    freeEnergy = body._dG;
 }
+
+void RNAduplex::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const
+{
+    for (size_t i(0); i < inFiles.size(); ++i)
+    {
+        mili::assert_throw<UnlinkException>(unlink(inFiles[i].c_str()) == 0);
+    }
+    mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
+}
+
 } // namespace fideo

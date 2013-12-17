@@ -76,9 +76,8 @@ TEST_F(RNAinverseTest, BadStart1)
     fideo::IFoldInverse* const inverse = fideo::IFoldInverse::factory("RNAinverseTest", fideo::InverseFoldParams(str, 4, 5, 10));
     StartProviderMock provider;
     EXPECT_CALL(provider, get_partial_start(inverse))
-    .Times(1)
-    .WillOnce(Invoke(this, &RNAinverseTest::fake_bad1_provider));
-
+        .Times(1)
+        .WillOnce(Invoke(this, &RNAinverseTest::fake_bad1_provider));
 
     EXPECT_THROW(inverse->query_start(&provider), fideo::RNABackendException);
 

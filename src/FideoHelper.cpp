@@ -1,14 +1,14 @@
 /*
- * @file   FideoHelper.cpp
- * @brief  This is the implementation of FideoHelper interface.
+ * @file     FideoHelper.cpp
+ * @brief    This is the implementation of FideoHelper interface.
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Source file for fideo providing class FideoHelper implementation.
+ * Contents: Source file for fideo providing class FideoHelper implementation.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date April 2013
  *
@@ -31,17 +31,8 @@
  *
  */
 
-#include <fstream>
-#include <cerrno>
-#include <unistd.h>
-
+#include <mili/mili.h>
 #include "fideo/FideoHelper.h"
-
-/// Temporal functions
-int linkFictitious()
-{
-    return 1;
-}
 
 namespace fideo
 {

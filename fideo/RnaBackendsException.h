@@ -1,17 +1,17 @@
 /*
- * @file   rna_backends_exceptions.h
- * @brief  This header defines all fideo exceptions
+ * @file     rna_backends_exceptions.h
+ * @brief    This header defines all fideo exceptions
  *
- * @author Santiago Videla
- * @email  santiago.videla AT gmail.com
+ * @author   Santiago Videla
+ * @email    santiago.videla AT gmail.com
  *
- * @author Franco Riberi
- * @email  fgriberi AT gmail.com
+ * @author   Franco Riberi
+ * @email    fgriberi AT gmail.com
  *
- * Contents:  Header file for fideo providing system exceptions definitions.
+ * Contents: Header file for fideo providing system exceptions definitions.
  *
- * System:    fideo: Folding Interface Dynamic Exchange Operations
- * Language:  C++
+ * System:   fideo: Folding Interface Dynamic Exchange Operations
+ * Language: C++
  *
  * @date October 27, 2010, 6:42 PM
  *
@@ -38,43 +38,44 @@
 #define _RNA_BACKENDS_EXCEPTIONS_H
 
 #include <mili/mili.h>
-#ifndef NO_THROW_SPEC
-#       define THROW(x) throw x
-#else
-#       define THROW(x)
-#endif
 
 namespace fideo
 {
-class RNABackendExceptionRoot {};
 
-DEFINE_SPECIFIC_EXCEPTION_TEXT(RNABackendException, RNABackendExceptionRoot, "RNABackend");
+struct FideoExceptionHierarchy {};
+typedef mili::GenericException<FideoExceptionHierarchy> FideoException;
 
-DEFINE_SPECIFIC_EXCEPTION_TEXT(FromStringException, RNABackendExceptionRoot, "Wrong column type");
+//State exception
+class StateException: public FideoException
+{
+public:
+    StateException(const std::string& description): FideoException(description) {}
+};
 
-DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueUsingOffsetException, RNABackendExceptionRoot, "Could not read the value from given line, offset and length");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueException, RNABackendExceptionRoot, "Could not read the value from given line");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidStructureException, RNABackendExceptionRoot, "Invalid structure");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, RNABackendExceptionRoot, "Error in string parser");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, RNABackendExceptionRoot, "Unsupported Sequence");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, RNABackendExceptionRoot, "Output file not found");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(ExceptionUnlink, RNABackendExceptionRoot, "Error unlink");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, RNABackendExceptionRoot, "Invalid motif");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, RNABackendExceptionRoot, "The .det file not exist");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, RNABackendExceptionRoot, "Index out of range");
-
-DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, RNABackendExceptionRoot, "Combinator Exception");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(RNABackendException, FideoExceptionHierarchy, "RNABackend");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FromStringException, FideoExceptionHierarchy, "Wrong column type");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueUsingOffsetException, FideoExceptionHierarchy, "Could not read the value from given line, offset and length");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotReadValueException, FideoExceptionHierarchy, "Could not read the value from given line");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidStructureException, FideoExceptionHierarchy, "Invalid structure");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidIntaPath, FideoExceptionHierarchy, "Invalid path of IntaRNA executable");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(SeparatorException, FideoExceptionHierarchy, "Error in string parser");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(UnsupportedException, FideoExceptionHierarchy, "Unsupported Sequence");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(NotFoundFileException, FideoExceptionHierarchy, "Output file not found");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNACofold, FideoExceptionHierarchy, "Invalid output RNAcofold.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNADuplex, FideoExceptionHierarchy, "Invalid output RNAduplex.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidOutputRNAUp, FideoExceptionHierarchy, "Invalid output RNAup.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(UnlinkException, FideoExceptionHierarchy, "Error unlink");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidInputName, FideoExceptionHierarchy, "Invalid input name");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidName, FideoExceptionHierarchy, "Name of file to rename is invalid.");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidMotif, FideoExceptionHierarchy, "Invalid motif");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FileNotExist, FideoExceptionHierarchy, "The .det file not exist");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(IndexOutOfRange, FideoExceptionHierarchy, "Index out of range");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidDerived, FideoExceptionHierarchy, "Invalid derived class");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidBodyLine, FideoExceptionHierarchy, "Invalid BodyLine");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(InvalidaHeader, FideoExceptionHierarchy, "Invalid Header");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(FailOperation, FideoExceptionHierarchy, "Failured operation >>");
+DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, FideoExceptionHierarchy, "Combinator Exception");
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
-
 

@@ -499,17 +499,17 @@ void UNAFold::commonParse(const FilePath& file, IMotifObserver* observer)
     parser.parseDet(file, observer);
 }
 
-Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver)
+Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver, const Temperature temp)
 {
-    const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, temp, structureRNAm);
+    const Fe freeEnergy = IFoldIntermediate::fold(seqRNAm, isCircRNAm, structureRNAm, temp);
     commonParse(_temporalFileName + _det, motifObserver);
     mili::assert_throw<UnlinkException>(unlink((_temporalFileName + _det).c_str()) == 0);
     return freeEnergy;
 }
 
-void UNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver)
+void UNAFold::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver, const Temperature temp)
 {
-    IFoldIntermediate::foldTo(seqRNAm, isCircRNAm, temp, structureRNAm, outputFile);
+    IFoldIntermediate::foldTo(seqRNAm, isCircRNAm, structureRNAm, outputFile, temp);
     commonParse(outputFile + _det, motifObserver);
 }
 

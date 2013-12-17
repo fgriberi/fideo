@@ -62,45 +62,45 @@ public:
      *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
-     * @param temp: temperature to fold. By default is 37 grades.
      * @param structureRNAm: the structure where to write the folding.
+     * @param temp: temperature to fold. By default is 37 grades.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm);
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const Temperature temp = 37);
 
     /** @brief Fold an RNA sequence and deletes all file generated
      *
      * @param seqRNAm: the RNA sequence to fold.
      * @param isCircRNAm: if the structure it's circular.
-     * @param temp: temperature to fold. By default is 37 grades.
      * @param structureRNAm: the structure where to write the folding.
      * @param motifObserver: specific implementation of IMotifObserfer
+     * @param temp: temperature to fold. By default is 37 grades.
      * @return The free energy in the structure.
      */
-    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver) = 0;
+    virtual Fe fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, IMotifObserver* motifObserver, const Temperature temp = 37) = 0;
 
     /** @brief Fold the RNA sequence and load result in a specific file
      *
      * @param seqRNAm: input RNA sequence.
      * @param isCircRNAm: if the structure it's circular.
-     * @param temp: temperature to fold. By default is 37 grades.
      * @param structureRNAm: the structure where to write the folding.
      * @param outputFile: generate output file
+     * @param temp: temperature to fold. By default is 37 grades.
      * @return void
      */
-    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, const FilePath& outputFile);
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, const Temperature temp);
 
     /** @brief Fold the RNA sequence and load result in a specific file with observer
      *
      * @param seqRNAm: input RNA sequence.
      * @param isCircRNAm: if the structure it's circular.
-     * @param temp: temperature to fold. By default is 37 grades.
      * @param structureRNAm: the structure where to write the folding.
      * @param outputFile: generate output file
      * @param motifObserver: specific implementation of IMotifObserfer
+     * @param temp: temperature to fold. By default is 37 grades.
      * @return void
      */
-    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver) = 0;
+    virtual void foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, IMotifObserver* motifObserver, const Temperature temp) = 0;
 
     /** @brief Fold a specific file
      *

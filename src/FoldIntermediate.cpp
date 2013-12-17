@@ -57,7 +57,7 @@ void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const boo
     etilico::runCommand(cmd);
 }
 
-Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm)
+Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const Temperature temp)
 {
     InputFile inFile;
     OutputFile outFile;
@@ -68,7 +68,7 @@ Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircR
     return freeEnergy;
 }
 
-void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, const Temperature temp, biopp::SecStructure& structureRNAm, const FilePath& outputFile)
+void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp::SecStructure& structureRNAm, const FilePath& outputFile, const Temperature temp)
 {
     InputFile inFile;
     OutputFile outFile;

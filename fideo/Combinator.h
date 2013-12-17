@@ -36,7 +36,6 @@
 namespace fideo
 {
 
-
 /**
  * Iterator over the combinations for a given container.
  */
@@ -73,6 +72,7 @@ public:
      * @param n the size of the combinations.
      */
     Combinator(size_t range, size_t n);
+
 private:
     typedef typename C::const_iterator ConstIterator;
     C elements;
@@ -93,111 +93,10 @@ private:
 typedef Combinator<std::list<biopp::SeqIndex> > SeqIndexesCombinator;
 typedef Combinator<std::list<biopp::SeqIndex> >::Combination SeqIndexesCombination;
 
-/**
- * Implementation
- */
-
-template<class C>
-Combinator<C>::Combinator(const C& e, size_t n)
-    : elements(e),
-      combination(n),
-      k(n),
-      end(),
-      start(),
-      kit()
-{
-    if (e.size() < n)
-        throw CombinatorException();
-
-    begin();
-}
-
-template<class C>
-Combinator<C>::Combinator(size_t range, size_t n)
-    : elements(range),
-      combination(n),
-      k(n),
-      end(),
-      start(),
-      kit()
-{
-    if (range < n)
-        throw CombinatorException();
-
-    C range_ct;
-    for (size_t i = 0; i < range; ++i)
-    {
-        insert_into(range_ct, i);
-    }
-    elements = range_ct;
-    begin();
-}
-
-template<class C>
-void Combinator<C>::update(size_t n)
-{
-    k = n;
-    combination.clear();
-    combination.resize(n);
-    begin();
-}
-
-template<class C>
-void Combinator<C>::begin()
-{
-    start = elements.begin();
-    end = elements.end();
-    move();
-}
-
-template<class C>
-void Combinator<C>::move()
-{
-    if (k == 0)
-        kit = end;
-    else
-    {
-        ConstIterator it = start;
-        for (size_t i = 0; i < k; ++i)
-        {
-            combination[i] = *it;
-            if (i == k - 1)
-                kit = it;
-            ++it;
-        }
-    }
-}
-
-template<class C>
-bool Combinator<C>::next(Combination& comb)
-{
-    bool more(true);
-
-    if (kit != end)
-    {
-        comb = combination;
-        ++kit;
-        if (kit == end && k > 1)
-        {
-            ++start;
-            move();
-        }
-        else
-            combination[k - 1] = *kit;
-    }
-    else
-    {
-        more = false;
-        //Make it cyclic
-        begin();
-        comb = combination;
-    }
-
-    return more;
-}
+#define _COMBINATOR_INLINE_H
+#include "CombinatorInline.h"
+#undef _COMBINATOR_INLINE_H
 
 }//namespace fideo
 
-
 #endif  /* _COMBINATOR_H */
-

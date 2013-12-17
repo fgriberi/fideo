@@ -117,5 +117,4 @@ void RNAStartInverse::change_start()
     }
 }
 
-
 } //end namespace fideo

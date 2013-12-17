@@ -37,6 +37,13 @@ namespace fideo
 
 class INFORNA : public RNAStartInverse
 {
+public:
+    /**
+     * @brief Constructor of class
+     */
+    INFORNA(const InverseFoldParams& params);
+
+private:
     static const FilePath OUT;
     static const FileLineNo LINE_NO;
 
@@ -46,10 +53,9 @@ class INFORNA : public RNAStartInverse
 
     virtual void execute(std::string&, Distance&, Similitude&);
     virtual void query_start(IStartProvider*);
+    
 protected:
     virtual void getProgram(std::string&) const;
-public:
-    INFORNA(const InverseFoldParams& params);
 };
 
 REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, INFORNA, std::string, "INFORNA", const InverseFoldParams&);
@@ -171,15 +177,20 @@ size_t INFORNA::read_structure_distance(FileLine& line, size_t offset, Similitud
 
 class INFORNATest : public INFORNA
 {
+public:
+    /**
+     * @brief Constructor of class
+     */
+    INFORNATest(const InverseFoldParams& params)
+        : INFORNA(params)
+    {}
+
 protected:
+
     virtual void getProgram(std::string& executablePath) const
     {
         etilico::Config::getInstance()->getPath("INFORNAMock", executablePath);
     }
-public:
-    INFORNATest(const InverseFoldParams& params)
-        : INFORNA(params)
-    {}
 };
 
 REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, INFORNATest, std::string, "INFORNATest", const InverseFoldParams&);

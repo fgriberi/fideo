@@ -109,4 +109,4 @@ void RNAup::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& out
     mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
 
-}
+} // end namespace

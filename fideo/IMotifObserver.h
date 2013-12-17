@@ -78,4 +78,5 @@ struct IMotifObserver
 };
 
 } //namespace fideo
+
 #endif  /* _IMOTIF_OBSERVER_H */

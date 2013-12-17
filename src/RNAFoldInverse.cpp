@@ -179,5 +179,4 @@ public:
 
 REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, RNAinverseTest, std::string, "RNAinverseTest", const InverseFoldParams&);
 
-
 } //end namespace fideo

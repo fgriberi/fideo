@@ -31,8 +31,6 @@
 #include "fideo/IStartProvider.h"
 #include "fideo/RnaBackendsTypes.h"
 
-
-
 namespace fideo
 {
 
@@ -87,4 +85,3 @@ struct InverseFoldParams
 } //namespace fideo
 
 #endif  /* _IFOLDINVERSE_H */
-

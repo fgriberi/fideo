@@ -190,4 +190,5 @@ protected:
 };
 
 } //namespace fideo
+
 #endif  /* _IFOLD_INTERMEDIATE_H */

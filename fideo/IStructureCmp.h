@@ -54,4 +54,5 @@ struct IStructureCmp
 };
 
 } //End namespace
+
 #endif  /* _ISTRUCTURECMP_H */

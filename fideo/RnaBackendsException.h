@@ -78,4 +78,3 @@ DEFINE_SPECIFIC_EXCEPTION_TEXT(CombinatorException, FideoExceptionHierarchy, "Co
 
 }// namespace fideo
 #endif  /* _RNA_BACKENDS_EXCEPTIONS_H */
-

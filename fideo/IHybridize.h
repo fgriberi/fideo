@@ -95,4 +95,5 @@ struct IHybridize
 };
 
 } //namespace fideo
+
 #endif  /* _IHYBRIDIZE_H */

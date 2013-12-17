@@ -107,4 +107,5 @@ private:
 };
 
 } //namespace fideo
+
 #endif  /* _IHYBRIDIZE_INTERMEDIATE_H */

@@ -70,6 +70,6 @@ typedef std::set<std::string> StringSequencesCt;
  */
 typedef unsigned int CombinationAttempts;
 
-
 }
+
 #endif  /* _RNA_BACKENDS_TYPES_H */

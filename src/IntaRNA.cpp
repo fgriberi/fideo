@@ -117,4 +117,3 @@ void IntaRNA::deleteObsoleteFiles(const InputFiles& /*inFiles*/, const OutputFil
 }
 
 } // namespace fideo
-

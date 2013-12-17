@@ -98,5 +98,5 @@ void RNAcofold::deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile&
     }
     mili::assert_throw<UnlinkException>(unlink(outFile.c_str()) == 0);
 }
-} // namespace fideo
 
+} // namespace fideo

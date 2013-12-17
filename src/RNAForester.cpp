@@ -26,7 +26,6 @@
 #ifndef _RNAFORESTER_H
 #define _RNAFORESTER_H
 
-
 #include <sstream>
 #include <etilico/etilico.h>
 #include "fideo/FideoHelper.h"
@@ -58,8 +57,7 @@ const std::string RNAForester::RNAforester_PROG = "RNAforester";
 Similitude RNAForester::compare(const biopp::SecStructure& struct1, const biopp::SecStructure& struct2) const
 {
     std::stringstream ss;
-    ss << RNAforester_PROG << " -r --score -f "
-       << IN << " > " << OUT;
+    ss << RNAforester_PROG << " -r --score -f " << IN << " > " << OUT;
 
     const etilico::Command CMD = ss.str();
 
@@ -86,4 +84,3 @@ Similitude RNAForester::compare(const biopp::SecStructure& struct1, const biopp:
 }//end namespace
 
 #endif  /* _RNAFORESTER_H */
-

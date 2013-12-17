@@ -39,4 +39,5 @@
 
 void setTestMode();
 bool isTestMode();
+
 #endif

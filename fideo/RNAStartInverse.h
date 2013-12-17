@@ -43,8 +43,24 @@ namespace fideo
  * and change the free positions in the start sequence
  * when the attempts for each combination it's reached.
  */
+
 class RNAStartInverse : public IFoldInverse
 {
+public:
+    /**
+     * @brief Constructor of class
+     *
+     */
+    RNAStartInverse(const InverseFoldParams&);
+
+    /**
+     * @brief Destructor of class
+     *
+     */
+    ~RNAStartInverse();
+
+private:
+
     static const char WILDCARD = 'N';
     std::string rstart;
     StringSequencesCt found;
@@ -56,7 +72,9 @@ class RNAStartInverse : public IFoldInverse
     virtual void set_start(const biopp::NucSequence&);
 
     void change_start();
+    
 protected:
+
     std::string start;
     const biopp::SecStructure structure;
     const Similitude max_structure_distance;
@@ -71,14 +89,9 @@ protected:
      */
     virtual void execute(std::string&, Distance&, Similitude&) = 0;
 
-public:
-    RNAStartInverse(const InverseFoldParams&);
-
-    ~RNAStartInverse();
 };
 
 
 }//namespace fideo
 
 #endif  /* _RNASTARTINVERSE_H */
-

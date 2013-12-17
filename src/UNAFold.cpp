@@ -39,6 +39,7 @@
 namespace fideo
 {
 
+using namespace std;
 using namespace mili;
 
 //UNAFold package
@@ -211,7 +212,7 @@ Fe UNAFold::fold(const biopp::NucSequence& seqRNAm, const bool isCircRNAm, biopp
     FileLine sseq = seqRNAm.getString();
 
     std::string temporalFile;
-    etilico::createTemporaryFilename(temporalFile);
+    etilico::createTemporaryFile(temporalFile);
     temporalFileName = temporalFile;
 
     helper::write(temporalFile, sseq);

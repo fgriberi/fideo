@@ -31,7 +31,6 @@
  *
  */
 
-#include <unistd.h>
 #include <etilico/etilico.h>
 #include "fideo/IHybridize.h"
 
@@ -108,8 +107,8 @@ Fe IntaRNA::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, cons
     const std::string seq2 = shorterSeq.getString();
 
     std::string tmpFileOutput;
-    etilico::createTemporaryFilename(tmpFileOutput);
-
+    etilico::createTemporaryFile(tmpFileOutput);
+             
     std::stringstream exec;
     exec << "./IntaRNA ";
     exec << seq1;

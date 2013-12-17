@@ -41,7 +41,7 @@
 using namespace fideo;
 
 static const std::string FILE_NAME = "RNA_w25_u3_4_up.out";
-TEST(RNAupBackendTestSuite, BasicTest)
+TEST(RNAupBackendTestSuite, DISABLED_BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");

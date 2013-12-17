@@ -37,6 +37,9 @@
 #ifndef _IHYBRIDIZE_H
 #define _IHYBRIDIZE_H
 
+#include <fstream>
+#include <cerrno>
+#include <unistd.h>
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include "fideo/FideoHelper.h"

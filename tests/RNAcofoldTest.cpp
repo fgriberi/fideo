@@ -40,7 +40,7 @@
 
 using namespace fideo;
 
-TEST(RNAcofoldBackendTestSuite, BasicTest)
+TEST(RNAcofoldBackendTestSuite, DISABLED_BasicTest)
 {
     const biopp::NucSequence seq1("GGAGUAGGUUAUCCUCUGUU");
     const biopp::NucSequence seq2("AGGACAACCU");

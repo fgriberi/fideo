@@ -100,9 +100,9 @@ Fe RNAup::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, const 
     const std::string seq2 = shorterSeq.getString();
 
     std::string inputTmpFile;
-    etilico::createTemporaryFilename(inputTmpFile);
+    etilico::createTemporaryFile(inputTmpFile);
     std::string outputTmpFile;
-    etilico::createTemporaryFilename(outputTmpFile);
+    etilico::createTemporaryFile(outputTmpFile);
 
     ///Constructed as required by RNAup
     std::ofstream toHybridize(inputTmpFile.c_str());

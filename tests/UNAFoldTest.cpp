@@ -40,7 +40,7 @@
 
 using namespace fideo;
 
-TEST(UnaFoldBackendTestSuite, BasicTest)
+TEST(UnaFoldBackendTestSuite, DISABLED_BasicTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
     biopp::SecStructure secStructure;

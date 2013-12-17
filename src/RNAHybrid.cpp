@@ -95,11 +95,11 @@ Fe RNAHybrid::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     FileLine querySequence = ">HeadToQuerySequence \n" + shorterSeq.getString();
 
     std::string fileTmpTarget;
-    etilico::createTemporaryFilename(fileTmpTarget);
+    etilico::createTemporaryFile(fileTmpTarget);
     std::string fileTmpQuery;
-    etilico::createTemporaryFilename(fileTmpQuery);
+    etilico::createTemporaryFile(fileTmpQuery);
     std::string fileTmpOutput;
-    etilico::createTemporaryFilename(fileTmpOutput);
+    etilico::createTemporaryFile(fileTmpOutput);
 
     helper::write(fileTmpTarget, targetSequence);
     helper::write(fileTmpQuery, querySequence);

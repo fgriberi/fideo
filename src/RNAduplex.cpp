@@ -96,9 +96,9 @@ Fe RNAduplex::hybridize(const biopp::NucSequence& longerSeq, bool longerCirc, co
     const std::string seq2 = shorterSeq.getString();
 
     std::string inputTmpFile;
-    etilico::createTemporaryFilename(inputTmpFile);
+    etilico::createTemporaryFile(inputTmpFile);
     std::string outpTmpFile;
-    etilico::createTemporaryFilename(outpTmpFile);
+    etilico::createTemporaryFile(outpTmpFile);
 
     ///Constructed as required by RNAduplex
     std::ofstream toHybridize(inputTmpFile.c_str());

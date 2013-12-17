@@ -37,6 +37,9 @@
 #ifndef _IFOLD_H
 #define _IFOLD_H
 
+#include <fstream>
+#include <cerrno>
+#include <unistd.h>
 #include <biopp/biopp.h>
 #include <mili/mili.h>
 #include "fideo/RnaBackendsTypes.h"

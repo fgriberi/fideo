@@ -131,7 +131,7 @@ void UNAFold::renameNecessaryFiles(const std::string& fileToRename, const std::s
     etilico::runCommand(renameDetFile);
 }
 
-void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile)
+void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile, const Temperature temp)
 {
     FileLine sseq = sequence.getString();
     std::string prefix = "fideo-XXXXXX";
@@ -147,13 +147,13 @@ void UNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
     {
         ss << "--circular ";
     }
+    ss << "--temp=" << temp << " ";
     ss << temporalFile;
-
     if (chdir(PATH_TMP.c_str()) != 0)
     {
         throw RNABackendException("Invalid path of temp files.");
     }
-    command = ss.str(); /// UNAFold.pl --max=1 ("" | --circular) temporalFile
+    command = ss.str(); /// UNAFold.pl --max=1 ("" | --circular) --temp=(37 | temp) temporalFile
 }
 
 void UNAFold::processingResult(biopp::SecStructure& structureRNAm, const InputFile& inputFile, Fe& freeEnergy)

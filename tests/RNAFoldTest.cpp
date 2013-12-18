@@ -131,7 +131,7 @@ TEST(RNAFoldBackendTestSuite2, correctCommad1)
 
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "RNAfold --noPS --circ < ";
+    cmdExpected << "RNAfold --noPS --circ --temp=37 < ";
     cmdExpected << inFile; 
     cmdExpected << " > ";
     cmdExpected << outFile;     
@@ -154,7 +154,7 @@ TEST(RNAFoldBackendTestSuite2, correctCommad2)
 
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "RNAfold --noPS < ";
+    cmdExpected << "RNAfold --noPS --temp=37 < ";
     cmdExpected << inFile; 
     cmdExpected << " > ";
     cmdExpected << outFile;     
@@ -168,7 +168,7 @@ static const size_t UNRECOGNIZED_OPTION = 1;
 
 TEST(RNAFoldBackendTestSuite2, incorrectCommad)
 {
-    const etilico::Command cmd = "RNAfold -nPS -c < fileInput > fileOutput";    
+    const etilico::Command cmd = "RNAfold -nPS -c -temp < fileInput > fileOutput";    
     EXPECT_EQ(etilico::runCommand(cmd), UNRECOGNIZED_OPTION);
 }
 

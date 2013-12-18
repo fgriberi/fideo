@@ -131,7 +131,7 @@ void RNAFold::deleteObsoleteFiles(const InputFile& inFile)
     mili::assert_throw<UnlinkException>(unlink(inFile.c_str()) == 0);
 }
 
-void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile)
+void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc, etilico::Command& command, InputFile& inputFile, OutputFile& outputFile, const Temperature temp)
 {
     FileLine sseq = sequence.getString();
     const std::string path = "/tmp/";
@@ -149,8 +149,9 @@ void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
     {
         ss << "--circ ";
     }
-    ss << "< " << internalInputFile << " > " << internalOutputpuFile;
-    command = ss.str(); /// RNAfold --noPS ("" | --circ) < internalInputFile > internalOutputpuFile
+    ss << "--temp=" << temp; 
+    ss << " < " << internalInputFile << " > " << internalOutputpuFile;
+    command = ss.str(); /// RNAfold --noPS ("" | --circ) --temp=(37 | temp) < internalInputFile > internalOutputpuFile
 }
 
 void RNAFold::processingResult(biopp::SecStructure& structureRNAm, const InputFile& inputFile, Fe& freeEnergy)

@@ -48,12 +48,12 @@ void IFoldIntermediate::getNameOfSequence(const std::string& inputName, std::str
     nameSequence = result[NAME];
 }
 
-void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, const Temperature temp, biopp::SecStructure& structure, InputFile& inputFile, OutputFile& outputFile)
+void IFoldIntermediate::commonFold(const biopp::NucSequence& sequence, const bool isCirc, biopp::SecStructure& structure, InputFile& inputFile, OutputFile& outputFile, const Temperature temp)
 {
     structure.clear();
     structure.set_circular(isCirc);
     etilico::Command cmd;
-    prepareData(sequence, isCirc, cmd, inputFile, outputFile);
+    prepareData(sequence, isCirc, cmd, inputFile, outputFile, temp);
     etilico::runCommand(cmd);
 }
 
@@ -61,7 +61,7 @@ Fe IFoldIntermediate::fold(const biopp::NucSequence& seqRNAm, const bool isCircR
 {
     InputFile inFile;
     OutputFile outFile;
-    commonFold(seqRNAm, isCircRNAm, temp, structureRNAm, inFile, outFile);
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, inFile, outFile, temp);
     Fe freeEnergy;
     processingResult(structureRNAm, outFile, freeEnergy);
     deleteAllFilesAfterProcessing(inFile, outFile);
@@ -72,7 +72,7 @@ void IFoldIntermediate::foldTo(const biopp::NucSequence& seqRNAm, const bool isC
 {
     InputFile inFile;
     OutputFile outFile;
-    commonFold(seqRNAm, isCircRNAm, temp, structureRNAm, inFile, outFile);
+    commonFold(seqRNAm, isCircRNAm, structureRNAm, inFile, outFile, temp);
     renameNecessaryFiles(outFile, outputFile);
     deleteObsoleteFiles(inFile);
 }

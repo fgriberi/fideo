@@ -131,7 +131,7 @@ TEST(UnaFoldBackendTestSuite2, correctCommad1)
 
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "UNAFold.pl --max=1 --circular ";
+    cmdExpected << "UNAFold.pl --max=1 --circular --temp=37 ";
     cmdExpected << inFile;
     EXPECT_EQ(cmdExpected.str(), cmd);    
     etilico::runCommand(cmd);    
@@ -154,7 +154,7 @@ TEST(UnaFoldBackendTestSuite2, correctCommad2)
 
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "UNAFold.pl --max=1 ";
+    cmdExpected << "UNAFold.pl --max=1 --temp=37 ";
     cmdExpected << inFile;
     EXPECT_EQ(cmdExpected.str(), cmd);    
     etilico::runCommand(cmd);

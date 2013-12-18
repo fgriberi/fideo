@@ -60,6 +60,23 @@ TEST(RNAFoldBackendTestSuite1, FoldTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+
+TEST(RNAFoldBackendTestSuite1, FoldTestWithTemperature)
+{
+    const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+
+    IFold* const p = Fold::new_class("RNAFold");
+    ASSERT_TRUE(p != NULL);
+
+    Fe result = p->fold(seq, true, secStructure, 38.5);
+    delete p;
+
+    EXPECT_DOUBLE_EQ(result, -18.10);
+    EXPECT_TRUE(secStructure.is_circular());
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
 TEST(RNAFoldBackendTestSuite1, FoldToTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");

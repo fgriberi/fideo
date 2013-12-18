@@ -62,6 +62,23 @@ TEST(UnaFoldBackendTestSuite1, FoldTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(UnaFoldBackendTestSuite1, FoldTestWithTemperature)
+{
+    const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");
+    biopp::SecStructure secStructure;
+
+    IFold* const p = Fold::new_class("UNAFold");
+    ASSERT_TRUE(p != NULL);
+    
+    Fe result;
+    EXPECT_NO_THROW(result = p->fold(seq, true, secStructure, 12.3));
+
+    EXPECT_EQ(result, -20.936);
+    EXPECT_TRUE(secStructure.is_circular());
+    delete p;
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
 TEST(UnaFoldBackendTestSuite1, FoldToTest)
 {
     const biopp::NucSequence seq("AAAAAAAAGGGGGGGGCCCCCCCCTTTTTTTT");

@@ -149,7 +149,7 @@ void RNAFold::prepareData(const biopp::NucSequence& sequence, const bool isCirc,
     {
         ss << "--circ ";
     }
-    ss << "--temp=" << temp; 
+    ss << "--temp=" << temp;
     ss << " < " << internalInputFile << " > " << internalOutputpuFile;
     command = ss.str(); /// RNAfold --noPS ("" | --circ) --temp=(37 | temp) < internalInputFile > internalOutputpuFile
 }

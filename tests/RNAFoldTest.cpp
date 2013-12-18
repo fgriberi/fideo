@@ -60,7 +60,6 @@ TEST(RNAFoldBackendTestSuite1, FoldTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
-
 TEST(RNAFoldBackendTestSuite1, FoldTestWithTemperature)
 {
     const biopp::NucSequence seq("AATTAAAAAAGGGGGGGTTGCAACCCCCCCTTTTTTTT");

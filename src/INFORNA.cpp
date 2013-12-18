@@ -53,7 +53,7 @@ private:
 
     virtual void execute(std::string&, Distance&, Similitude&);
     virtual void query_start(IStartProvider*);
-    
+
 protected:
     virtual void getProgram(std::string&) const;
 };

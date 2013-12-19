@@ -74,7 +74,7 @@ TEST(RNAcofoldBackendTestSuite2, correctCommad)
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "RNAcofold < "; 
+    cmdExpected << "RNAcofold --temp=37 < "; 
     cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " > ";
     cmdExpected << outFile;

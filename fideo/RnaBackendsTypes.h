@@ -70,6 +70,11 @@ typedef std::set<std::string> StringSequencesCt;
  */
 typedef unsigned int CombinationAttempts;
 
+/**
+ * Represents a temperature to fold.
+ */
+typedef double Temperature;	
+
 }
 
 #endif  /* _RNA_BACKENDS_TYPES_H */

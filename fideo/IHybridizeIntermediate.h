@@ -63,10 +63,11 @@ public:
      * @param longerSeq: longer sequence the RNA sequence to Hybridize.
      * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
      * @param longerCirc: if the longerSeq it's circular.
+     * @param temp: temperature to fold. By default is 37 grades. 
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
-                         const biopp::NucSequence& shorterSeq) const;
+                         const biopp::NucSequence& shorterSeq, const Temperature temp = 37) const;
 
     /** @brief Destructor of class
      *
@@ -84,10 +85,11 @@ private:
      * @param shorterSeq: shorter sequence to Hybridize
      * @param command: to fill with execute Command
      * @param outputFiles: created temporal file names
+     * @param temp: temperature to fold. By default is 37 grades. 
      * @return void
      */
     virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const = 0;
+                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature temp = 37) const = 0;
 
     /** @brief  Processing hybridize results
      *

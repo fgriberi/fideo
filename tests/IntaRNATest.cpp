@@ -104,7 +104,7 @@ TEST(IntaRNABackendTestSuite2, correctCommad)
     
     EXPECT_TRUE(HelperTest::checkDirTmp());    
     std::stringstream cmdExpected;
-    cmdExpected << "./IntaRNA ";
+    cmdExpected << "./IntaRNA -T 37 ";
     cmdExpected << seq1;
     cmdExpected << " ";
     cmdExpected << seq2;

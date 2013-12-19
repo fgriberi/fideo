@@ -86,7 +86,7 @@ TEST(RNAupBackendTestSuite2, correctCommad)
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "RNAup -u 3,4 -c SH < ";
+    cmdExpected << "RNAup -u 3,4 -c SH --temp=37 < ";
     cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " > ";
     cmdExpected << outFile;

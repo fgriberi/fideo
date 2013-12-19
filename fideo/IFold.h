@@ -61,12 +61,7 @@ typedef mili::FactoryRegistry<IFold, std::string> Fold;
  */
 struct IFold
 {
-    typedef mili::Factory<std::string, IFold> Factory;
-
-    /**
-     * @brief Represents a temperature to fold.
-     */
-    typedef double Temperature;
+    typedef mili::Factory<std::string, IFold> Factory;    
 
     /** @brief Fold an RNA sequence and deletes all file generated
      *

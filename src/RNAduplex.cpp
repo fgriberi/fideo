@@ -51,7 +51,7 @@ void RNAduplex::BodyParser::parse(std::string& line)
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAduplex, std::string, "RNAduplex");
 
 void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature temp) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -73,11 +73,11 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     toHybridize.close();
 
     std::stringstream cmd2;
-    cmd2 << "RNAduplex ";
-    cmd2 << "< " << inputTmpFile;
+    cmd2 << "RNAduplex --temp=" << temp;
+    cmd2 << " < " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    command = cmd2.str();   ///RNAduplex < outputTmpFile > outputTmpFile
+    command = cmd2.str();   ///RNAduplex --temp=temp < outputTmpFile > outputTmpFile
 }
 
 void RNAduplex::processingResult(const OutputFile& outFile, Fe& freeEnergy) const

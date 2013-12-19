@@ -51,7 +51,7 @@ void RNAcofold::BodyParser::parse(std::string& line)
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAcofold, std::string, "RNAcofold");
 
 void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature temp) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -70,11 +70,11 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     toHybridize.close();
 
     std::stringstream exec;
-    exec << "RNAcofold ";
-    exec << "< " << inputTmpFile;
+    exec << "RNAcofold --temp=" << temp;
+    exec << " < " << inputTmpFile;
     exec << " > " << outputTmpFile;
 
-    command = exec.str(); /// RNAcofold < inputTmpFile > outputTmpFile
+    command = exec.str(); /// RNAcofold --temp=temp < inputTmpFile > outputTmpFile
 }
 
 void RNAcofold::processingResult(const OutputFile& outFile, Fe& freeEnergy) const

@@ -61,8 +61,9 @@ void RNAHybrid::BodyParser::parse(File& file)
 
 REGISTER_FACTORIZABLE_CLASS(IHybridize, RNAHybrid, std::string, "RNAHybrid");
 
+///Hybrid backend does not support the temperature parameter
 void RNAHybrid::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
+                            etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature /*temp*/) const
 {
     ///Add obsolete description in sequence. RNAHybrid requires FASTA formatted file
     FileLine targetSequence = ">HeadToTargetSequence \n" + longerSeq.getString();

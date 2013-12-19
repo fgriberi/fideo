@@ -49,7 +49,7 @@ class RNAcofold : public IHybridizeIntermediate
 private:
 
     virtual void prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const;
+                             etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature temp = 37) const;
     virtual void processingResult(const OutputFile& outFile, Fe& freeEnergy) const;
     virtual void deleteObsoleteFiles(const InputFiles& inFiles, const OutputFile& outFile) const;
 

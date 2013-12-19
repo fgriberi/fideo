@@ -58,7 +58,7 @@ static const std::string OUT_FILE = "RNA_w25_u2.out"; ///file generated to RNAup
 
 
 void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                        etilico::Command& command, InputFiles& inFiles, OutputFile& outFile) const
+                        etilico::Command& command, InputFiles& inFiles, OutputFile& outFile, const Temperature temp) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -78,11 +78,11 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     toHybridize.close();
 
     std::stringstream cmd2;
-    cmd2 << "RNAup -u 3,4 -c SH ";
-    cmd2 << "< " << inputTmpFile;
+    cmd2 << "RNAup -u 3,4 -c SH --temp=" << temp;
+    cmd2 << " < " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 
-    command = cmd2.str();  //RNAup -u 3,4 -c SH < inputTmpFile > outputTmpFile
+    command = cmd2.str();  //RNAup -u 3,4 -c SH --temp=temp < inputTmpFile > outputTmpFile
 }
 
 void RNAup::processingResult(const OutputFile& outFile, Fe& freeEnergy) const

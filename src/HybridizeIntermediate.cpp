@@ -37,13 +37,13 @@ namespace fideo
 {
 
 Fe IHybridizeIntermediate::hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc,
-                                     const biopp::NucSequence& shorterSeq) const
+                                     const biopp::NucSequence& shorterSeq, const Temperature temp) const
 {
     mili::assert_throw<UnsupportedException>(!longerCirc);
     InputFiles inFiles;
     OutputFile outFile;
     etilico::Command cmd;
-    prepareData(longerSeq, shorterSeq, cmd, inFiles, outFile);
+    prepareData(longerSeq, shorterSeq, cmd, inFiles, outFile, temp);
     etilico::runCommand(cmd);
 
     Fe freeEnergy;

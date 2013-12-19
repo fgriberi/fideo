@@ -75,7 +75,7 @@ TEST(RNAduplexBackendTestSuite2, correctCommad)
     
     EXPECT_TRUE(HelperTest::checkDirTmp());
     std::stringstream cmdExpected;
-    cmdExpected << "RNAduplex < "; 
+    cmdExpected << "RNAduplex --temp=37 < "; 
     cmdExpected << inFiles[IHybridizeIntermediate::FILE_1];
     cmdExpected << " > ";
     cmdExpected << outFile;

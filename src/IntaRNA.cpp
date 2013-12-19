@@ -78,7 +78,7 @@ static const std::string EXECUTABLE_PATH = "runIntaRNA"; ///name executable to f
 REGISTER_FACTORIZABLE_CLASS(IHybridize, IntaRNA, std::string, "IntaRNA");
 
 void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSequence& shorterSeq,
-                          etilico::Command& command, InputFiles& /*inFiles*/, OutputFile& outFile) const
+                          etilico::Command& command, InputFiles& /*inFiles*/, OutputFile& outFile, const Temperature temp) const
 {
     const std::string seq1 = longerSeq.getString();
     const std::string seq2 = shorterSeq.getString();
@@ -90,7 +90,8 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     etilico::createTemporaryFile(tmpOutputFile, path, prefix);
     outFile = tmpOutputFile;
     std::stringstream exec;
-    exec << "./IntaRNA ";
+    exec << "./IntaRNA -T ";
+    exec << temp << " ";
     exec << seq1;
     exec << " " << seq2;
     exec << " > " << tmpOutputFile;
@@ -99,7 +100,7 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     std::string executablePath;
     etilico::Config::getInstance()->getPath(EXECUTABLE_PATH, executablePath);
     mili::assert_throw<InvalidIntaPath>(chdir(executablePath.c_str()) == 0);
-    command = exec.str();   ///./IntaRNA seq1 seq2 > /temp/myTmpFile-******
+    command = exec.str();   ///./IntaRNA -T temp seq1 seq2 > /temp/myTmpFile-******
 }
 
 void IntaRNA::processingResult(const OutputFile& outFile, Fe& freeEnergy) const

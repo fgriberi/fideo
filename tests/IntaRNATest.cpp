@@ -58,6 +58,21 @@ TEST(IntaRNABackendTestSuite, BasicTest1)
     EXPECT_FALSE(HelperTest::checkDirTmp());    
 }
 
+TEST(IntaRNABackendTestSuite, BasicTest1WithTemperature)
+{
+    const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGACAACCUUUGC");
+
+    IHybridize* const p = Hybridize::new_class("IntaRNA");
+    ASSERT_TRUE(p != NULL);
+
+    double dG = p->hybridize(seq1, false, seq2, 18.5);
+    EXPECT_DOUBLE_EQ(dG, -5.75357);
+    delete p;
+
+    EXPECT_FALSE(HelperTest::checkDirTmp());    
+}
+
 TEST(IntaRNABackendTestSuite, BasicTest2)
 {
     const std::string sequence1 = "AAGGTCAGTTCCACATTGGCATCTGAACTCGGTATCACGGCCGAGGATGCAAGGCTTGTTTCAGAGATTG"

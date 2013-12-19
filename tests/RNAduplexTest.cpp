@@ -61,6 +61,21 @@ TEST(RNAduplexBackendTestSuite1, BasicTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(RNAduplexBackendTestSuite1, BasicTestWithTemperature)
+{
+    const biopp::NucSequence seq1("GGAGUGGAGUAGGGGCCGCAAUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGACAACCUUUGC");
+
+    IHybridize* const p = Hybridize::new_class("RNAduplex");
+    ASSERT_TRUE(p != NULL);
+
+    double dG = p->hybridize(seq1, false, seq2, 49);
+    EXPECT_DOUBLE_EQ(dG, -5.61);
+    delete p;
+
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
 TEST(RNAduplexBackendTestSuite2, correctCommad)
 {	
     const biopp::NucSequence longer("AAAAAAAAGGGGGGGGCCCCCCCCTTTAAGGGGGGGGCCCCCCCCTTTTTTTT");

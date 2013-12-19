@@ -63,6 +63,21 @@ TEST(RNAupBackendTestSuite1, BasicTest)
     EXPECT_FALSE(std::ifstream(FILE_NAME.c_str()));
 }
 
+TEST(RNAupBackendTestSuite1, BasicTestWithTemperature)
+{
+    const biopp::NucSequence seq1("GGAGGGAGUAGGUUAUCCUUUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGAAAACCU");
+
+    IHybridize* const p = Hybridize::new_class("RNAup");
+    EXPECT_TRUE(p != NULL);
+
+    double dG = p->hybridize(seq1, false, seq2, 14);
+    EXPECT_DOUBLE_EQ(dG, -7.06);
+    delete p;
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+    EXPECT_FALSE(std::ifstream(FILE_NAME.c_str()));
+}
+
 TEST(RNAupBackendTestSuite1, InvalidBackend)
 {
     IHybridize* const rnaup = Hybridize::new_class("RNAUP");

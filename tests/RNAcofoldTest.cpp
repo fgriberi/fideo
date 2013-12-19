@@ -60,6 +60,20 @@ TEST(RNAcofoldBackendTestSuite1, BasicTest)
     EXPECT_FALSE(HelperTest::checkDirTmp());
 }
 
+TEST(RNAcofoldBackendTestSuite1, BasicTestWithTemperature)
+{
+    const biopp::NucSequence seq1("GGAGUAGGUCUCUGUUUAUCCUCUGUU");
+    const biopp::NucSequence seq2("AGGACA");
+
+    IHybridize* const p = Hybridize::new_class("RNAcofold");
+    ASSERT_TRUE(p != NULL);
+
+    double dG = p->hybridize(seq1, false, seq2, 21.1);
+    EXPECT_DOUBLE_EQ(dG, -10.37);
+    delete p;
+    EXPECT_FALSE(HelperTest::checkDirTmp());
+}
+
 TEST(RNAcofoldBackendTestSuite2, correctCommad)
 {
     const biopp::NucSequence longer("AAAAAAAAGGGGGGGGCCCCCCCCTTTAAGGGGGGGGCCCCCCCCTTTTTTTT");

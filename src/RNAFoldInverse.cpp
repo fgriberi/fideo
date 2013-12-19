@@ -51,7 +51,7 @@ class RNAinverse : public RNAStartInverse
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
     size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
 
-    virtual void execute(std::string&, Distance&, Similitude&);
+    virtual void execute(std::string&, Distance&, Similitude&, const Temperature);
     virtual void query_start(IStartProvider*);
 protected:
     virtual void getProgram(std::string& name) const;
@@ -81,7 +81,7 @@ void RNAinverse::getProgram(std::string& executablePath) const
     etilico::Config::getInstance()->getPath("RNAinverse", executablePath);
 }
 
-void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
+void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd, const Temperature temp)
 {
     FileLinesCt lines;
     std::string structure_str;
@@ -96,10 +96,10 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd)
     std::string executablePath;
     getProgram(executablePath);
 
-    ss << executablePath << " -R " << repeat << " -a ATGC < " << IN << " > " << OUT;
+    ss << executablePath << " -R " << repeat << " -a ATGC --temp=" << temp << " < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
-    //CMD looks like "RNAinverse -R -1 -a ATGC < inverse.in > inverse.out"
+    //CMD looks like "RNAinverse -R -1 -a ATGC --temp=temp < inverse.in > inverse.out"
     etilico::runCommand(CMD);
 
     //BUG: inverse.out looks like "TGCCTGTACTCATTAATGGAACTTCcuaccagucgcgau    6"

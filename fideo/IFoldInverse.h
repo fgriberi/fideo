@@ -50,8 +50,9 @@ struct IFoldInverse
     /**
      * Make the inverse folding
      * @param sequence the NucSequence to write to.
+     * @param temp: temperature to inverse fold. By default is 37 grades. 
      */
-    virtual void fold_inverse(biopp::NucSequence&) = 0;
+    virtual void fold_inverse(biopp::NucSequence&, const Temperature temp = 37) = 0;
     /**
      * Sets the start sequence for the backend.
      * @param seq the NucSequence.

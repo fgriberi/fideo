@@ -42,7 +42,7 @@ RNAStartInverse::~RNAStartInverse()
     delete combinator;
 }
 
-void RNAStartInverse::fold_inverse(biopp::NucSequence& sequence)
+void RNAStartInverse::fold_inverse(biopp::NucSequence& sequence, const Temperature temp)
 {
     std::string seq;
     Distance hd;
@@ -55,7 +55,7 @@ void RNAStartInverse::fold_inverse(biopp::NucSequence& sequence)
         --i;
         do
         {
-            execute(seq, hd, sd);
+            execute(seq, hd, sd, temp);
         }
         while (sd > max_structure_distance);
 

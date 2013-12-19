@@ -68,7 +68,7 @@ struct IHybridize
      * @param longerSeq: longer sequence the RNA sequence to Hybridize.
      * @param shorterSeq: shorter sequence the RNA sequence to Hybridize
      * @param longerCirc: if the longerSeq it's circular.
-     * @param temp: temperature to fold. By default is 37 grades. 
+     * @param temp: temperature to hybridize. By default is 37 grades. 
      * @return The free energy.
      */
     virtual Fe hybridize(const biopp::NucSequence& longerSeq, const bool longerCirc, const biopp::NucSequence& shorterSeq, const Temperature temp = 37) const = 0;

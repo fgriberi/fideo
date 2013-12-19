@@ -51,7 +51,7 @@ private:
     size_t read_hamming_distance(FileLine&, size_t, Distance&) const;
     size_t read_structure_distance(FileLine&, size_t, Similitude&) const;
 
-    virtual void execute(std::string&, Distance&, Similitude&);
+    virtual void execute(std::string&, Distance&, Similitude&, const Temperature);
     virtual void query_start(IStartProvider*);
 
 protected:
@@ -79,7 +79,7 @@ void INFORNA::getProgram(std::string& executablePath) const
     etilico::Config::getInstance()->getPath("INFORNA", executablePath);
 }
 
-void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd)
+void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd, const Temperature /*temp*/)
 {
     std::stringstream ss;
     const int repeat = max_structure_distance == 0 ? -1 : 1;

@@ -13,17 +13,10 @@ struct StartProviderMock : public fideo::IStartProvider
     MOCK_METHOD1(get_complete_start, void(fideo::IFoldInverse* const));
 };
 
-
 class RNAinverseTest : public ::testing::Test
 {
-protected:
-    biopp::SecStructure str;
-    biopp::NucSequence s;
-    void SetUp()
-    {
-        fideo::ViennaParser::parseStructure("(..((.....))..)", str);
-    }
 public:
+
     void fake_provider(fideo::IFoldInverse* const inv)
     {
         biopp::NucSequence s("GCACGCGTATGCCGC");
@@ -44,6 +37,14 @@ public:
     {
         biopp::NucSequence s("GCACGCGTATGCCGCAAGGCCA"); // >15
         inv->set_start(s);
+    }
+    
+protected:
+    biopp::SecStructure str;
+    biopp::NucSequence s;
+    void SetUp()
+    {
+        fideo::ViennaParser::parseStructure("(..((.....))..)", str);
     }
 };
 

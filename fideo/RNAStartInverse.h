@@ -68,7 +68,7 @@ private:
     SeqIndexesCombinator* const combinator;
     SeqIndexesCombination positions;
 
-    virtual void fold_inverse(biopp::NucSequence&);
+    virtual void fold_inverse(biopp::NucSequence&, const Temperature temp = 37);
     virtual void set_start(const biopp::NucSequence&);
 
     void change_start();
@@ -83,11 +83,12 @@ protected:
     /**
      * To be implemented in the concrete backend.
      * Should call the backend algorithm and parse the result correctly.
-     * @param seq to write the sequence found.
-     * @param hd  to write the hamming distance between the start and found.
-     * @param sd  to write the structure distance between the found and target
+     * @param seq  to write the sequence found.
+     * @param hd   to write the hamming distance between the start and found.
+     * @param sd   to write the structure distance between the found and target
+     * @param temp temperature to inverse fold. By default is 37 grades. 
      */
-    virtual void execute(std::string&, Distance&, Similitude&) = 0;
+    virtual void execute(std::string&, Distance&, Similitude&, const Temperature temp = 37) = 0;
 
 };
 

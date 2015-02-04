@@ -53,9 +53,6 @@ private:
 
     virtual void execute(std::string&, Distance&, Similitude&, const Temperature);
     virtual void query_start(IStartProvider*);
-
-protected:
-    virtual void getProgram(std::string&) const;
 };
 
 REGISTER_FACTORIZABLE_CLASS_WITH_ARG(IFoldInverse, INFORNA, std::string, "INFORNA", const InverseFoldParams&);
@@ -74,22 +71,14 @@ void INFORNA::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void INFORNA::getProgram(std::string& executablePath) const
-{
-    etilico::Config::getInstance()->getPath("INFORNA", executablePath);
-}
-
 void INFORNA::execute(std::string& seq, Distance& hd, Similitude& sd, const Temperature /*temp*/)
 {
     std::stringstream ss;
     const int repeat = max_structure_distance == 0 ? -1 : 1;
     std::string structure_str;
-    ViennaParser::toString(structure, structure_str);
+    ViennaParser::toString(structure, structure_str);    
 
-    std::string program;
-    getProgram(program);
-
-    ss << program << " '" << structure_str << "'"
+    ss << "INFO-RNA-2.1.2 '" << structure_str << "'"
        << " -c '" << start << "'"
        << " -R " << repeat << " > " << OUT;
 

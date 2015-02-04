@@ -64,10 +64,13 @@ TEST_F(INFORNATest, FoldInverse)
 
     inverse->query_start(&provider);
 
-    NucSequence expected("GTAGCTTTATGCCGC");
-
+    NucSequence expected("GUAGCCGUAUGCCGC");
+                           
     NucSequence seq;
     inverse->fold_inverse(seq);
+
+    std::string toStrg = seq.getString();
+
     for (size_t i = 0; i < str.size(); ++i)
     {
         EXPECT_EQ(seq[i], expected[i]);

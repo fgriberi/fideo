@@ -53,8 +53,7 @@ class RNAinverse : public RNAStartInverse
 
     virtual void execute(std::string&, Distance&, Similitude&, const Temperature);
     virtual void query_start(IStartProvider*);
-protected:
-    virtual void getProgram(std::string& name) const;
+
 public:
     RNAinverse(const InverseFoldParams& params);
 };
@@ -76,11 +75,6 @@ void RNAinverse::query_start(IStartProvider* provider)
         throw RNABackendException("Partial start and target structure must have the same length");
 }
 
-void RNAinverse::getProgram(std::string& executablePath) const
-{
-    etilico::Config::getInstance()->getPath("RNAinverse", executablePath);
-}
-
 void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd, const Temperature temp)
 {
     FileLinesCt lines;
@@ -93,10 +87,7 @@ void RNAinverse::execute(std::string& seq, Distance& hd, Similitude& sd, const T
     std::stringstream ss;
     const int repeat = (max_structure_distance == 0) ? -1 : 1;
 
-    std::string executablePath;
-    getProgram(executablePath);
-
-    ss << executablePath << " -R " << repeat << " -a ATGC --temp=" << temp << " < " << IN << " > " << OUT;
+    ss << "RNAinverse -R " << repeat << " -a ATGC --temp=" << temp << " < " << IN << " > " << OUT;
     const etilico::Command CMD = ss.str();
 
     //CMD looks like "RNAinverse -R -1 -a ATGC --temp=temp < inverse.in > inverse.out"

@@ -57,17 +57,9 @@ TEST_F(RNAinverseTest, FoldInverse)
     .Times(1)
     .WillOnce(Invoke(this, &RNAinverseTest::fake_provider));
 
-
     inverse->query_start(&provider);
-
-    const biopp::NucSequence expected("GTAGCTTTATGCCGC");
-
     biopp::NucSequence seq;
-    inverse->fold_inverse(seq);
-    for (size_t i = 0; i < str.size(); ++i)
-    {
-        EXPECT_EQ(seq[i], expected[i]);
-    }
+    EXPECT_THROW(inverse->fold_inverse(seq), fideo::RNABackendException);      
 
     delete inverse;
 }

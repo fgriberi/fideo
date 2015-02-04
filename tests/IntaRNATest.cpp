@@ -119,7 +119,7 @@ TEST(IntaRNABackendTestSuite2, correctCommad)
     
     EXPECT_TRUE(HelperTest::checkDirTmp());    
     std::stringstream cmdExpected;
-    cmdExpected << "./IntaRNA -T 37 ";
+    cmdExpected << "IntaRNA -T 37 ";
     cmdExpected << seq1;
     cmdExpected << " ";
     cmdExpected << seq2;
@@ -133,7 +133,7 @@ TEST(IntaRNABackendTestSuite2, correctCommad)
 static const size_t SECOND_SEQ_IS_MISSING = 1;
 TEST(IntaRNABackendTestSuite2, incorrectCommad)
 {
-    const etilico::Command cmd = "./IntaRNA AAGAUGUGGAAAAAUUGGAAUC > outputFile";    
+    const etilico::Command cmd = "IntaRNA AAGAUGUGGAAAAAUUGGAAUC > outputFile";    
     EXPECT_EQ(etilico::runCommand(cmd), SECOND_SEQ_IS_MISSING);
 }
 

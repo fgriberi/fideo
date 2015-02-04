@@ -90,17 +90,12 @@ void IntaRNA::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucS
     etilico::createTemporaryFile(tmpOutputFile, path, prefix);
     outFile = tmpOutputFile;
     std::stringstream exec;
-    exec << "./IntaRNA -T ";
+    exec << "IntaRNA -T ";
     exec << temp << " ";
     exec << seq1;
     exec << " " << seq2;
     exec << " > " << tmpOutputFile;
-
-    //move to the directory where is the folding
-    std::string executablePath;
-    etilico::Config::getInstance()->getPath(EXECUTABLE_PATH, executablePath);
-    mili::assert_throw<InvalidIntaPath>(chdir(executablePath.c_str()) == 0);
-    command = exec.str();   ///./IntaRNA -T temp seq1 seq2 > /temp/myTmpFile-******
+    command = exec.str();   ///IntaRNA -T temp seq1 seq2 > /temp/myTmpFile-******
 }
 
 void IntaRNA::processingResult(const OutputFile& outFile, Fe& freeEnergy) const

@@ -47,6 +47,7 @@
 using namespace fideo;
 using namespace biopp;
 
+
 TEST(DetFileParserTestSuite, RemoveConsecutiveWhiteSpacesTest)
 {
     const std::string src1 = "Stack:           ddG =  -2.20 External closing pair is A(     2)-T(   204)";
@@ -417,7 +418,7 @@ void advanceInTheFile(std::ifstream& file, UNAFold::DetFileParser& parser, const
     openTestFile(file);
     parser.fillRules();
     parser.goToBegin(file);    
-    for (int i = 0; i < pos; ++i)
+    for (size_t i = 0u; i < pos; ++i)
     {
         parser.buildBlock(file, block);
     }

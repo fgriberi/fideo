@@ -78,7 +78,7 @@ void RNAup::prepareData(const biopp::NucSequence& longerSeq, const biopp::NucSeq
     toHybridize.close();
 
     std::stringstream cmd2;
-    cmd2 << "RNAup -u 3,4 -c SH --temp=" << temp;
+    cmd2 << "RNAup -u 3,4 -c SH -T " << temp;
     cmd2 << " < " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 

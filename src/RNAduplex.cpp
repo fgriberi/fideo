@@ -73,7 +73,7 @@ void RNAduplex::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     toHybridize.close();
 
     std::stringstream cmd2;
-    cmd2 << "RNAduplex --temp=" << temp;
+    cmd2 << "RNAduplex -T " << temp;
     cmd2 << " < " << inputTmpFile;
     cmd2 << " > " << outputTmpFile;
 

@@ -70,7 +70,7 @@ void RNAcofold::prepareData(const biopp::NucSequence& longerSeq, const biopp::Nu
     toHybridize.close();
 
     std::stringstream exec;
-    exec << "RNAcofold --temp=" << temp;
+    exec << "RNAcofold -T " << temp;
     exec << " < " << inputTmpFile;
     exec << " > " << outputTmpFile;
 

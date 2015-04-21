@@ -1,1 +1,6 @@
-See: http://code.google.com/p/fideo
+fideo: Folding Interface Dynamic Exchange Operations
+
+Library to interface RNA and DNA folding applications (mfold, unafold, vienna 
+package, etc.) for direct and reverse folding, and hybridization calculus.
+
+This project belongs to [FuDePAN](http://www.fudepan.org.ar/).
